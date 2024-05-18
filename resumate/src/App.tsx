@@ -45,7 +45,7 @@ function App() {
           <span style={{ color: "#707070" }}>Generating your resume...</span>
         </div>}
         {resume && !isGenerating &&
-          <span>
+          <span style={{ fontSize: 12, whiteSpace: 'break-spaces' }}>
             {resume}
           </span>
         }

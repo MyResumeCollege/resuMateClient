@@ -9,12 +9,13 @@ type IntroFormProps = {
 const IntroForm = ({ onSubmit }: IntroFormProps) => {
 	const [name, setName] = useState<string>("");
 	const [job, setJob] = useState<string>("");
+	const [education, setEducation] = useState<string>("")	
 	const [experience, setExperience] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		onSubmit({ name, job, experience, description })
+		onSubmit({ name, job, education, experience, description })
 	};
 
 	return (
@@ -37,6 +38,13 @@ const IntroForm = ({ onSubmit }: IntroFormProps) => {
 				value={job}
 				placeholder='Software Engineer'
 				onChange={(e) => setJob(e.target.value)}
+			/>
+			<label />
+			Education
+			<input
+				type="text"
+				value={education}
+				onChange={(e) => setEducation(e.target.value)}
 			/>
 			<label />
 			What is your experience?

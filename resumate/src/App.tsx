@@ -12,6 +12,7 @@ function App() {
 
   const generatingResume = async ({ name,
     job,
+    education,
     experience,
     description }: GenerateResumeInput) => {
     try {
@@ -19,6 +20,7 @@ function App() {
       const generatedResume = await generateResume(
         name,
         job,
+        education,
         experience,
         description
       );
@@ -45,7 +47,7 @@ function App() {
           <span style={{ color: "#707070" }}>Generating your resume...</span>
         </div>}
         {resume && !isGenerating &&
-          <span style={{ fontSize: 12, whiteSpace: 'break-spaces' }}>
+          <span style={{ fontSize: 16, whiteSpace: 'break-spaces' }}>
             {resume}
           </span>
         }

@@ -40,11 +40,11 @@ const IntroForm = ({ onSubmit }: IntroFormProps) => {
 				onChange={(e) => setJob(e.target.value)}
 			/>
 			<label />
-			Education
+			Tell us about your education
 			<input
 				type="text"
 				value={education}
-				placeholder='computer science student - college of management'
+				placeholder='second year computer science student - college of management'
 				onChange={(e) => setEducation(e.target.value)}
 			/>
 			<label />

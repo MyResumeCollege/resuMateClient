@@ -44,6 +44,7 @@ const IntroForm = ({ onSubmit }: IntroFormProps) => {
 			<input
 				type="text"
 				value={education}
+				placeholder='computer science student - college of management'
 				onChange={(e) => setEducation(e.target.value)}
 			/>
 			<label />

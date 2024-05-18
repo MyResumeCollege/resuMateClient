@@ -1,0 +1,24 @@
+.intro-form {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.intro-form .form-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.intro-form > input, 
+.intro-form > textarea {
+    margin: 7px 0px 20px 0px;
+}
+
+
+.generate-button {
+    margin-top: auto;
+    @apply bg-black text-white rounded-lg py-4;
+}

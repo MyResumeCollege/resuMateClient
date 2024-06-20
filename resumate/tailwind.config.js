@@ -10,6 +10,9 @@ export default {
         primary: 'var(--color-primary)',
         bg: 'var(--bg-color)'
       },
+      fontFamily: {
+        poppins: ["Poppins"]
+      }
     },
   },
   plugins: [],

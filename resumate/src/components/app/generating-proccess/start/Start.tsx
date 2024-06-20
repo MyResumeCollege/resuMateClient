@@ -10,6 +10,10 @@ export const Start = () => {
     navigate('background');
   }
 
+  const continueToImportExisting = () => {
+    navigate('loading');
+  }
+
   return (
     <main className="flex-1 flex items-center pt-[200px] flex-col">
       <h1 className='font-bold text-3xl text-center height-fit mb-[6px]'>Let's start building your CV</h1>
@@ -21,7 +25,7 @@ export const Start = () => {
           <span className='font-light text-sm opacity-80'>by a few questions</span>
 
         </div>
-        <div>
+        <div onClick={continueToImportExisting}>
           <img src={AddFileIcon} alt="Your SVG" />
           <h2 className='font-medium text-lg'>Import existing CV</h2>
           <span className='font-light text-sm opacity-80'>upload Cv in PDF format</span>

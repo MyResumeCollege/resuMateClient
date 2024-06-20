@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { GenerateResumeInput } from '../../types/resume';
+import { GenerateResumeInput } from '@/types/resume';
 import './IntroForm.css';
 
 type IntroFormProps = {
 	onSubmit: (generateInput: GenerateResumeInput) => void;
 }
 
-const IntroForm = ({ onSubmit }: IntroFormProps) => {
+export const IntroForm = ({ onSubmit }: IntroFormProps) => {
 	const [name, setName] = useState<string>("");
 	const [job, setJob] = useState<string>("");
 	const [education, setEducation] = useState<string>("")	
@@ -71,5 +71,3 @@ const IntroForm = ({ onSubmit }: IntroFormProps) => {
 		</form>
 	)
 };
-
-export default IntroForm;

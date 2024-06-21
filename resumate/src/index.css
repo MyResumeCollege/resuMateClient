@@ -10,6 +10,8 @@
 
   --color-primary: #5b3fd5;
   --bg-color: #ebebeb;
+  --input-color: #dddddd;
+  --accent-color: #a9a9a9;
 }
 
 #root {
@@ -25,7 +27,8 @@
 }
 
 .inputstyle {
-  @apply bg-zinc-100 rounded-md p-[10px] 
+  @apply rounded-md p-[10px];
+  background: var(--input-color);
 }
 
 input {

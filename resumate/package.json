@@ -10,14 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.5",
     "@types/react-lottie": "^1.2.10",
+    "axios": "^1.7.2",
+    "loadash": "^1.0.0",
+    "lodash": "^4.17.21",
     "openai": "^4.45.0",
     "preline": "^2.3.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-lottie": "^1.2.4",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",

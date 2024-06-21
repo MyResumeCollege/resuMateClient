@@ -1,13 +1,14 @@
-import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/shared/button/Button";
+import { useNavigate } from "react-router-dom";
 
 export const Dashboard = () => {
     const navigate = useNavigate();
 
     const generateCV = () => {
-        navigate('/generate');
+        navigate('/build-cv');
     }
 
     return <main>
-        <button onClick={generateCV}>Generate CV</button>
+        <Button text="Build CV" onClick={generateCV}/>
     </main>
 }

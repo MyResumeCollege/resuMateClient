@@ -1,6 +1,6 @@
 import { Dashboard } from "@/components/app/dashboard/Dashboard";
 import { BackgroundQuestionnaire } from "@/components/app/generating-proccess/background-questionnaire/BackgroundQuestionnaire";
-import { Loading } from "@/components/app/generating-proccess/loading/Loading";
+import { Generate } from "@/components/app/generating-proccess/generate/Generate";
 import { Start } from "@/components/app/generating-proccess/start/Start";
 import { ViewCV } from "@/components/app/generating-proccess/view-cv/ViewCV";
 import { createBrowserRouter } from "react-router-dom";
@@ -11,12 +11,13 @@ export const router = createBrowserRouter([
         element: <Dashboard />
     },
     {
-        path: "/generate",
+        path: "/build-cv",
         children: [
             { path: "", element: <Start /> },
             { path: "background", element: <BackgroundQuestionnaire /> },
-            { path: "loading", element: <Loading /> },
+            { path: "generate", element: <Generate /> },
             { path: "view", element: <ViewCV /> },
+            // { path: "background/old", element: <BackgroundTest /> },
         ]
     },
 ]);

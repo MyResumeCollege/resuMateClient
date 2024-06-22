@@ -28,7 +28,7 @@ export const Generate = () => {
           const improvedResume = await uploadResume(existCV);
 
           // TODO - convert text to pdf and download pdf
-          console.log(improvedResume.data);
+          console.log(improvedResume.data.CVTextContent);
         }
       } catch (error) {
         toast.error("Failed to upload the file. Please try again.");

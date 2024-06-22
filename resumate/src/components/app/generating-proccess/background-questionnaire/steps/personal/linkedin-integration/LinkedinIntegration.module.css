@@ -1,0 +1,8 @@
+.linkedinButton {
+  transition: all 0.15s;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 3px 3px 19px -6px hsl(0deg 0% 0% / 30%);
+  }
+}

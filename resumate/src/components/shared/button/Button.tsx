@@ -6,10 +6,11 @@ type ButtonProps = {
     disabled?: boolean;
     dense?: boolean;
     variant?: ButtonVariant;
+    loading?: boolean;
     onClick?: () => void;
 }
 
-export const Button = ({ text = 'Text is missing', disabled = false, children, dense = false, variant = 'primary', onClick }: ButtonProps) => {
+export const Button = ({ text = 'Text is missing', disabled = false, loading = false, children, dense = false, variant = 'primary', onClick }: ButtonProps) => {
     const classesByVariant: Record<ButtonVariant, string> = {
         primary: 'bg-primary',
         secondary: 'bg-accent'
@@ -22,6 +23,8 @@ export const Button = ({ text = 'Text is missing', disabled = false, children, d
         type="button"
         onClick={onClick}
         className={`transition-all w-full h-fit ${classesByDense} inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white disabled:opacity-50 disabled:pointer-events-none hover:brightness-90 ${classesByVariant[variant]}`}>
-        {children || text}
+        {loading ?
+            <span className="animate-spin inline-block size-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading"></span>
+            : (children || text)}
     </button>
 }

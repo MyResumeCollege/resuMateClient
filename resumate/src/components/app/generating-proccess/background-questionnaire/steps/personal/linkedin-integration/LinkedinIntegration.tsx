@@ -1,13 +1,13 @@
 import LinkedinLogo from '@/assets/images/linkedin_logo.png';
-import styles from './LinkedinIntegration.module.css';
-import { getLinkedinData } from '@/services/linkedinIntegration';
-import { useSetRecoilState } from 'recoil';
 import { fullNameState, summaryState } from '@/components/app/generating-proccess/store/state';
-import toast from 'react-hot-toast';
-import { Dialog, DialogPanel, DialogTitle, DialogBackdrop } from '@headlessui/react';
-import { useState } from 'react';
 import { Button } from '@/components/shared/button/Button';
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput';
+import { getLinkedinData } from '@/services/linkedinIntegration';
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useSetRecoilState } from 'recoil';
+import styles from './LinkedinIntegration.module.css';
 
 export const LinkedinIntegration = () => {
     const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
@@ -73,12 +73,11 @@ export const LinkedinIntegration = () => {
                                 onChange={setProfileUrl} />
                             <div className="mt-4">
                                 <Button
+                                    loading={isLoading}
                                     disabled={isLoading}
-                                    onClick={importData}>
-                                    {isLoading ?
-                                        <span className="animate-spin inline-block size-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading"></span>
-                                        : 'Import data from my profile'}
-                                </Button>
+                                    onClick={importData}
+                                    text='Import data from my profile'
+                                />
                             </div>
                         </DialogPanel>
                     </div>

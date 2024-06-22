@@ -7,8 +7,8 @@ export const fullNameState = atom({
     default: '',
 });
 
-export const bioState = atom({
-    key: 'bio',
+export const summaryState = atom({
+    key: 'summary',
     default: '',
 });
 

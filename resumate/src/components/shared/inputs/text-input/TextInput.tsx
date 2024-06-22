@@ -1,10 +1,11 @@
 import { InputProps } from "../input-props";
 
-export const TextInput = ({ value, disabled = false, label, wrapperClassName, onChange, type = 'text', placholder, icon }: InputProps) => {
+export const TextInput = ({ value, disabled = false, autoFocus = false, label, wrapperClassName, onChange, type = 'text', placholder, icon }: InputProps) => {
     return (<div className={`space-y-3 ${wrapperClassName}`}>
         <div className="relative flex flex-col gap-[5px]">
             {label && <label className="text-sm">{label}</label>}
             <input
+                autoFocus={autoFocus}
                 type={type}
                 value={value}
                 disabled={disabled}

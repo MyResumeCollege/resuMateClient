@@ -2,7 +2,7 @@ import Lottie from "react-lottie";
 import AiLoadingAnimation from "@/assets/lotties/ai-loading.json";
 import { useRecoilValue } from "recoil";
 import {
-  bioState,
+  summaryState,
   educationState,
   fullNameState,
   jobTitleState,
@@ -17,7 +17,7 @@ export const Generate = () => {
   const { existCV } = location.state || {};
 
   const fullName = useRecoilValue(fullNameState);
-  const bio = useRecoilValue(bioState);
+  const bio = useRecoilValue(summaryState);
   const education = useRecoilValue(educationState);
   const jobTitle = useRecoilValue(jobTitleState);
 
@@ -28,6 +28,7 @@ export const Generate = () => {
           const improvedResume = await uploadResume(existCV);
 
           // TODO - convert text to pdf and download pdf
+          // Amit comment: download logic shouldn't be here, but on the CV view page
           console.log(improvedResume.data.CVTextContent);
         }
       } catch (error) {

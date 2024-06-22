@@ -1,12 +1,13 @@
-import { useRecoilState } from "recoil";
-import { bioState, educationState, fullNameState } from "../../../store/state";
 import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
 import { TextArea } from "@/components/shared/inputs/textarea/TextArea";
+import { useRecoilState } from "recoil";
+import { fullNameState, summaryState } from "../../../store/state";
+import { LinkedinIntegration } from "./linkedin-integration/LinkedinIntegration";
 
 export const Personal = () => {
   const [fullName, setFullName] = useRecoilState(fullNameState);
-  const [bio, setBio] = useRecoilState(bioState);
-  const [education, setEducation] = useRecoilState(educationState);
+  const [bio, setBio] = useRecoilState(summaryState);
+  // const [education, setEducation] = useRecoilState(educationState);
 
   return (
     <section className="personal flex-1 flex flex-col pt-[100px] items-center">
@@ -14,6 +15,7 @@ export const Personal = () => {
         Tell Us More <br />
         About You
       </h2>
+      <LinkedinIntegration />
       <div className="mb-5">
         <TextInput
           wrapperClassName="w-[400px]"
@@ -31,7 +33,7 @@ export const Personal = () => {
           onChange={setBio}
         />
       </div>
-      <div className="mb-5">
+      {/* <div className="mb-5">
         <TextArea
           wrapperClassName="w-[400px]"
           label="What is your education?"
@@ -39,7 +41,7 @@ export const Personal = () => {
           rows={5}
           onChange={setEducation}
         />
-      </div>
+      </div> */}
     </section>
   );
 };

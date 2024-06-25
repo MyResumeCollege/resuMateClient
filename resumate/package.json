@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.0",
     "@types/lodash": "^4.17.5",
     "@types/react-lottie": "^1.2.10",
     "axios": "^1.7.2",

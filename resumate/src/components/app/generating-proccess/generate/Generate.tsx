@@ -23,7 +23,7 @@ export const Generate = () => {
   const jobTitle = useRecoilValue(jobTitleState)
 
   const generateCV = async () => {
-    if (fullName == '' && bio == '' && education == '' && jobTitle == '') {
+    if (existCV) {
       try {
         if (existCV instanceof File) {
           const improvedResume = await uploadResume(existCV)

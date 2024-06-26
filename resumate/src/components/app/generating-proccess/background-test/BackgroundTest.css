@@ -1,7 +1,0 @@
-.background-test {
-  @apply flex;
-}
-
-.background-test > * {
-  flex: 1;
-}

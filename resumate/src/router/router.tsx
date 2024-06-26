@@ -17,7 +17,6 @@ export const router = createBrowserRouter([
             { path: "background", element: <BackgroundQuestionnaire /> },
             { path: "generate", element: <Generate /> },
             { path: "view", element: <ViewCV /> },
-            // { path: "background/old", element: <BackgroundTest /> },
         ]
     },
 ]);

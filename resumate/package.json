@@ -14,6 +14,8 @@
     "@types/lodash": "^4.17.5",
     "@types/react-lottie": "^1.2.10",
     "axios": "^1.7.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "loadash": "^1.0.0",
     "lodash": "^4.17.21",
     "openai": "^4.45.0",

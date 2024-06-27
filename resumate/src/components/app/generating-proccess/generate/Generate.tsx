@@ -1,55 +1,63 @@
-import Lottie from 'react-lottie'
-import AiLoadingAnimation from '@/assets/lotties/ai-loading.json'
-import { useRecoilValue } from 'recoil'
+import Lottie from "react-lottie";
+import AiLoadingAnimation from "@/assets/lotties/ai-loading.json";
+import { useRecoilValue } from "recoil";
 import {
   summaryState,
   educationState,
   fullNameState,
   jobTitleState,
-} from '../store/state'
-import { useEffect } from 'react'
-import { uploadResume } from '../../../../services/uploadResume'
-import toast from 'react-hot-toast'
-import { useLocation } from 'react-router-dom'
-import apiClient from '@/services/httpCommon'
+} from "../store/state";
+import { useEffect, useState } from "react";
+import { uploadResume } from "../../../../services/uploadResume";
+import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
+import apiClient from "@/services/httpCommon";
 
 export const Generate = () => {
-  const location = useLocation()
-  const { existCV } = location.state || {}
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { existCV } = location.state || {};
 
-  const fullName = useRecoilValue(fullNameState)
-  const bio = useRecoilValue(summaryState)
-  const education = useRecoilValue(educationState)
-  const jobTitle = useRecoilValue(jobTitleState)
+  const fullName = useRecoilValue(fullNameState);
+  const bio = useRecoilValue(summaryState);
+  const education = useRecoilValue(educationState);
+  const jobTitle = useRecoilValue(jobTitleState);
+
+  const [resumeText, setResumeText] = useState("");
 
   const generateCV = async () => {
+    let resumeText = "";
     if (existCV) {
       try {
         if (existCV instanceof File) {
-          const improvedResume = await uploadResume(existCV)
-
-          // TODO - convert text to pdf and download pdf
-          // Amit comment: download logic shouldn't be here, but on the CV view page
-          console.log(improvedResume.data.CVTextContent)
+          const improvedResume = await uploadResume(existCV);
+          resumeText = improvedResume.data.CVTextContent;
+          console.log("Resume Text from File:", resumeText);
         }
       } catch (error) {
-        toast.error('Failed to upload the file. Please try again.')
+        toast.error("Failed to upload the file. Please try again.");
       }
     } else {
-      const res = await apiClient.post('/cv/generate-resume', {
+      const res = await apiClient.post("/cv/generate-resume", {
         name: fullName,
         job: jobTitle,
         education: education,
         description: bio,
-        goals: '',
-      })
-      console.log(res.data.CVTextContent)
+        goals: "",
+      });
+      resumeText = res.data.CVTextContent;
+      console.log("Resume Text from API:", resumeText);
     }
-  }
+    if (resumeText) {
+      setResumeText(resumeText);
+      console.log("Navigating to view page with resumeText:", resumeText);
+      navigate("/build-cv/view", { state: { resumeText } });
+    }
+  };
 
   useEffect(() => {
-    generateCV()
-  }, [])
+    generateCV();
+  }, []);
 
   return (
     <main className="flex-1 flex flex-col items-center justify-center">
@@ -59,7 +67,7 @@ export const Generate = () => {
         style={{
           height: 200,
           width: 200,
-          filter: 'drop-shadow(4px 4px 8px #bababa)',
+          filter: "drop-shadow(4px 4px 8px #bababa)",
           marginBottom: 20,
         }}
       />
@@ -70,5 +78,5 @@ export const Generate = () => {
         did you know? 80% don't put images on their CVs
       </span>
     </main>
-  )
-}
+  );
+};

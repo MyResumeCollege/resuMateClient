@@ -40,7 +40,7 @@ export const Start = () => {
   return (
     <main className="flex-1 flex items-center pt-[200px] flex-col">
       <h1 className="font-bold text-3xl text-center height-fit mb-[6px]">
-        Let's start building your CV
+        Let's Start Building Your Resume
       </h1>
       <h3 className="font-light text-xl mb-[50px]">
         how you would like to start?

@@ -1,17 +1,17 @@
-import Lottie from "react-lottie";
 import AiLoadingAnimation from "@/assets/lotties/ai-loading.json";
+import apiClient from "@/services/httpCommon";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import Lottie from "react-lottie";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { uploadResume } from "../../../../services/uploadResume";
 import {
-  summaryState,
   educationState,
   fullNameState,
   jobTitleState,
+  summaryState,
 } from "../store/state";
-import { useEffect, useState } from "react";
-import { uploadResume } from "../../../../services/uploadResume";
-import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
-import apiClient from "@/services/httpCommon";
 
 export const Generate = () => {
   const location = useLocation();
@@ -23,16 +23,14 @@ export const Generate = () => {
   const education = useRecoilValue(educationState);
   const jobTitle = useRecoilValue(jobTitleState);
 
-  const [resumeText, setResumeText] = useState("");
-
   const generateCV = async () => {
     let resumeText = "";
+
     if (existCV) {
       try {
         if (existCV instanceof File) {
           const improvedResume = await uploadResume(existCV);
           resumeText = improvedResume.data.CVTextContent;
-          console.log("Resume Text from File:", resumeText);
         }
       } catch (error) {
         toast.error("Failed to upload the file. Please try again.");
@@ -46,11 +44,8 @@ export const Generate = () => {
         goals: "",
       });
       resumeText = res.data.CVTextContent;
-      console.log("Resume Text from API:", resumeText);
     }
     if (resumeText) {
-      setResumeText(resumeText);
-      console.log("Navigating to view page with resumeText:", resumeText);
       navigate("/build-cv/view", { state: { resumeText } });
     }
   };

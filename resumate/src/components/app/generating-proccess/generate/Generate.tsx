@@ -1,5 +1,4 @@
 import AiLoadingAnimation from "@/assets/lotties/ai-loading.json";
-import apiClient from "@/services/httpCommon";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import Lottie from "react-lottie";
@@ -10,8 +9,10 @@ import {
   educationState,
   fullNameState,
   jobTitleState,
+  skillsState,
   summaryState,
 } from "../store/state";
+import { generateCVFromScratch } from "@/services/GenerateResume";
 
 export const Generate = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ export const Generate = () => {
   const bio = useRecoilValue(summaryState);
   const education = useRecoilValue(educationState);
   const jobTitle = useRecoilValue(jobTitleState);
+  const skills = useRecoilValue(skillsState);
 
   const generateCV = async () => {
     let resumeText = "";
@@ -36,17 +38,23 @@ export const Generate = () => {
         toast.error("Failed to upload the file. Please try again.");
       }
     } else {
-      const res = await apiClient.post("/cv/generate-resume", {
-        name: fullName,
-        job: jobTitle,
-        education: education,
-        description: bio,
-        goals: "",
-      });
-      resumeText = res.data.CVTextContent;
-    }
-    if (resumeText) {
-      navigate("/build-cv/view", { state: { resumeText } });
+      try {
+        const generateResume = await generateCVFromScratch({
+          fullName,
+          jobTitle,
+          bio,
+          skills,
+        });
+        resumeText = generateResume.data.CVTextContent;
+
+        if (resumeText) {
+          navigate("/build-cv/view", { state: { resumeText } });
+        }
+      } catch (error) {
+        toast.error(
+          "Failed to generate resume from scratch. Please try again."
+        );
+      }
     }
   };
 

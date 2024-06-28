@@ -4,6 +4,11 @@ import apiClient from "./httpCommon";
 type LinkedinDataResponse = {
     name: string;
     summary: string;
+    skills: Skill[]
+}
+
+type Skill = {
+    name: string
 }
 
 export const getLinkedinData = async (linkedinProfileUrl: string): Promise<AxiosResponse<LinkedinDataResponse>> => {

@@ -1,5 +1,5 @@
 import LinkedinLogo from '@/assets/images/linkedin_logo.png';
-import { fullNameState, summaryState } from '@/components/app/generating-proccess/store/state';
+import { fullNameState, skillsState, summaryState } from '@/components/app/generating-proccess/store/state';
 import { Button } from '@/components/shared/button/Button';
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput';
 import { getLinkedinData } from '@/services/linkedinIntegration';
@@ -16,6 +16,7 @@ export const LinkedinIntegration = () => {
 
     const setName = useSetRecoilState(fullNameState);
     const setSummary = useSetRecoilState(summaryState);
+    const setSkills = useSetRecoilState(skillsState)
 
     const closeDialog = () => {
         setIsProfileDialogOpen(false);
@@ -32,6 +33,12 @@ export const LinkedinIntegration = () => {
                 const linkedinData = (await getLinkedinData(profileUrl)).data;
                 setName(linkedinData.name);
                 setSummary(linkedinData.summary);
+            
+                const linkedinSkills = linkedinData.skills.map(skill => ({
+                    name: skill.name,
+                    level: 1
+                }));
+                setSkills(linkedinSkills)
                 toast.success('Imported data from LinkedIn successfully');
 
                 setProfileUrl('');

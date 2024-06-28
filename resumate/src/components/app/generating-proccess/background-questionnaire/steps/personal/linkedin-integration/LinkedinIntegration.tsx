@@ -86,7 +86,7 @@ export const LinkedinIntegration = () => {
         }
         <section
             onClick={() => setIsProfileDialogOpen(true)}
-            className={`bg-white rounded-lg px-5 py-5 w-[400px] mb-5 ${styles.linkedinButton}`}>
+            className={`bg-white rounded-lg px-5 py-5 w-[400px]${styles.linkedinButton}`}>
             <div className='flex gap-3'>
                 <img src={LinkedinLogo} className='h-[40px] w-[40px]' />
                 <div className='flex flex-col'>

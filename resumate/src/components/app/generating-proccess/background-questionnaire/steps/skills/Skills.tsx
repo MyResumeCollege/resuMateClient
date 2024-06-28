@@ -91,7 +91,7 @@ export const Skills = () => {
                             )}
                         </div>
                     </div>
-                    <Button onClick={handleDoneAddSkill} buttonClassName='w-fit mt-auto'>Done</Button>
+                    <Button onClick={handleDoneAddSkill} buttonClassName='!w-fit mt-auto'>Done</Button>
                 </div>
                 {error && <div className="text-sm text-[red] text-center">{error}</div>}
             </div>
@@ -99,7 +99,7 @@ export const Skills = () => {
     }
 
     return (
-        <section className="personal flex-1 flex flex-col pt-[100px] items-stretch">
+        <section className="personal flex-1 flex flex-col pt-[70px] items-stretch">
             <h2 className="font-bold text-3xl text-center mb-5">
                 Let's Talk About<br />
                 Your Skills

@@ -11,9 +11,10 @@ type ButtonProps = {
     loading?: boolean;
     onClick?: () => void;
     style?: CSSProperties;
+    buttonClassName?: string;
 }
 
-export const Button = ({ text = 'Text is missing', disabled = false, loading = false, children, dense = false, variant = 'primary', onClick, style = {} }: ButtonProps) => {
+export const Button = ({ text = 'Text is missing', disabled = false, loading = false, children, dense = false, variant = 'primary', onClick, style = {}, buttonClassName = '' }: ButtonProps) => {
     const classesByVariant: Record<ButtonVariant, string> = {
         primary: 'bg-primary',
         secondary: 'bg-accent'
@@ -25,7 +26,7 @@ export const Button = ({ text = 'Text is missing', disabled = false, loading = f
         disabled={disabled}
         type="button"
         onClick={onClick}
-        className={`transition-all w-full h-fit ${classesByDense} inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white disabled:opacity-50 disabled:pointer-events-none hover:brightness-90 ${classesByVariant[variant]}`}
+        className={`transition-all w-full h-fit ${classesByDense} inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white disabled:opacity-50 disabled:pointer-events-none hover:brightness-90 ${classesByVariant[variant]} ${buttonClassName}`}
         style={style}
     >
         {loading ?

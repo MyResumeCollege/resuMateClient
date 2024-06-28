@@ -1,5 +1,5 @@
-import { AxiosResponse } from "axios";
 import apiClient from "./httpCommon";
+import { AxiosResponse } from "axios";
 
 type CVUploadResponse = {
     CVTextContent: string;

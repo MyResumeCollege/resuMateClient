@@ -1,6 +1,6 @@
 import { InputProps } from "../input-props";
 
-export const TextInput = ({ value, disabled = false, autoFocus = false, label, wrapperClassName, onChange, type = 'text', placholder, icon }: InputProps) => {
+export const TextInput = ({ value, disabled = false, autoFocus = false, label, wrapperClassName, onChange, type = 'text', placholder, icon, inputClassName }: InputProps) => {
     return (<div className={`space-y-3 ${wrapperClassName}`}>
         <div className="relative flex flex-col gap-[5px]">
             {label && <label className="text-sm">{label}</label>}
@@ -10,7 +10,7 @@ export const TextInput = ({ value, disabled = false, autoFocus = false, label, w
                 value={value}
                 disabled={disabled}
                 onChange={(e) => onChange && onChange(e.target.value)}
-                className={`peer py-3 px-4 ${icon ? 'ps-11' : ''} block w-full border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none`}
+                className={`peer py-3 px-4 ${icon ? 'ps-11' : ''} focus:outline outline-2 block w-full border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ${inputClassName}`}
                 placeholder={placholder}
             />
             {icon &&

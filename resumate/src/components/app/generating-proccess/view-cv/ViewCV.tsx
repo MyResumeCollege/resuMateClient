@@ -40,7 +40,7 @@ const ViewCV: React.FC = () => {
         </svg>
         Download Resume
       </Button>
-      <div className="resume-preview">
+      <div className="resume-preview flex-1">
         <pre
           className="resume-text"
           dangerouslySetInnerHTML={{ __html: processedResumeText }}

@@ -1,3 +1,4 @@
+import { Skill } from '@/types/skill';
 import { atom } from 'recoil';
 
 // personal
@@ -24,3 +25,10 @@ export const jobTitleState = atom({
     key: 'jobTitle',
     default: '',
 });
+
+// skills
+
+export const skillsState = atom<Skill[]>({
+    key: "skills",
+    default: []
+})

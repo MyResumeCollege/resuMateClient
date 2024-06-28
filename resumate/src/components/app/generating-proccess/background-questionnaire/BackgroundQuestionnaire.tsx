@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Stepper } from "./stepper/Stepper";
 import { Personal } from "./steps/personal/Personal";
 import { WantedJob } from "./steps/wanted-job/WantedJob";
+import { Skills } from "./steps/skills/Skills";
 
 export const BackgroundQuestionnaire = () => {
     const navigate = useNavigate();
@@ -13,7 +14,8 @@ export const BackgroundQuestionnaire = () => {
 
     const steps = [
         <WantedJob />,
-        <Personal />
+        <Personal />,
+        <Skills/>
     ];
 
     const generateCV = () => {
@@ -35,7 +37,7 @@ export const BackgroundQuestionnaire = () => {
 
     return <main className="flex-1 flex flex-col items-center pt-[50px]">
         <Stepper stepsCount={steps.length} currentStep={currentStep} />
-        <section className="current-step flex-1 flex w-[600px]">
+        <section className="current-step flex-1 flex w-[600px] overflow-hidden">
             {steps[currentStep]}
         </section>
         <section className="controls flex gap-[20px] pb-[50px] pt-[50px]">

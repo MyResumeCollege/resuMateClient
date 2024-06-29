@@ -1,16 +1,14 @@
 import { jsPDF } from "jspdf";
 
-const generatePdf = (resumeText: string, fileName: string = "resume.pdf") => {
+const generatePdf = (resumeText: string) => {
   const doc = new jsPDF();
 
-  // Convert hex color to RGB
   const hexColor = "EFE3F3";
   const rgbColor = parseInt(hexColor, 16);
   const r = (rgbColor >> 16) & 255;
   const g = (rgbColor >> 8) & 255;
   const b = rgbColor & 255;
 
-  // Set background color to hex color
   doc.setFillColor(r, g, b);
   doc.rect(
     0,
@@ -20,11 +18,24 @@ const generatePdf = (resumeText: string, fileName: string = "resume.pdf") => {
     "F"
   );
 
-  // Add the resume text to the PDF
-  doc.text(resumeText, 10, 10);
+  const marginLeft = 10;
+  const marginRight = 10;
+  const marginTop = 10;
+  const lineHeight = 10;
 
-  // Save the generated PDF
-  doc.save(fileName);
+  const pageWidth = doc.internal.pageSize.getWidth(); // max text width for margin
+  const maxTextWidth = pageWidth - marginLeft - marginRight;
+
+  const lines = doc.splitTextToSize(resumeText, maxTextWidth); // add data with margin
+  let yPosition = marginTop;
+
+  lines.forEach((line: string | string[]) => {
+    doc.text(line, marginLeft, yPosition);
+    yPosition += lineHeight;
+  });
+
+  const pdfBlob = doc.output("blob");
+  return URL.createObjectURL(pdfBlob);
 };
 
 export default generatePdf;

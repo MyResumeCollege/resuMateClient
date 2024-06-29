@@ -8,6 +8,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSetRecoilState } from 'recoil';
 import styles from './LinkedinIntegration.module.css';
+import { uniqueId } from "lodash";
 
 export const LinkedinIntegration = () => {
     const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
@@ -35,6 +36,7 @@ export const LinkedinIntegration = () => {
                 setSummary(linkedinData.summary);
             
                 const linkedinSkills = linkedinData.skills.map(skill => ({
+                    id: uniqueId('skillid'),
                     name: skill.name,
                     level: 1
                 }));

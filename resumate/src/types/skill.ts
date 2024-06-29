@@ -23,6 +23,7 @@ export const SKILL_LEVEL_COLOR_LIGHTEN: Record<number, string> = {
 }
 
 export type Skill = {
+    id: string;
     name: string;
     level: number;
 }

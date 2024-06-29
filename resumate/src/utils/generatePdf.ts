@@ -23,13 +23,26 @@ const generatePdf = (resumeText: string) => {
   const marginTop = 10;
   const lineHeight = 10;
 
-  const pageWidth = doc.internal.pageSize.getWidth(); // max text width for margin
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
   const maxTextWidth = pageWidth - marginLeft - marginRight;
 
-  const lines = doc.splitTextToSize(resumeText, maxTextWidth); // add data with margin
+  const lines = doc.splitTextToSize(resumeText, maxTextWidth);
   let yPosition = marginTop;
 
   lines.forEach((line: string | string[]) => {
+    if (yPosition + lineHeight > pageHeight - marginTop) {
+      doc.addPage();
+      doc.setFillColor(r, g, b);
+      doc.rect(
+        0,
+        0,
+        doc.internal.pageSize.getWidth(),
+        doc.internal.pageSize.getHeight(),
+        "F"
+      );
+      yPosition = marginTop;
+    }
     doc.text(line, marginLeft, yPosition);
     yPosition += lineHeight;
   });

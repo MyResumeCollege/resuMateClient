@@ -33,6 +33,8 @@ export const Generate = () => {
         if (existCV instanceof File) {
           const improvedResume = await uploadResume(existCV);
           resumeText = improvedResume.data.CVTextContent;
+
+          if (resumeText) navigate("/build-cv/view", { state: { resumeText } });
         }
       } catch (error) {
         toast.error("Failed to upload the file. Please try again.");
@@ -47,9 +49,8 @@ export const Generate = () => {
         });
         resumeText = generateResume.data.CVTextContent;
 
-        if (resumeText) {
-          navigate("/build-cv/view", { state: { resumeText } });
-        }
+        if (resumeText) navigate("/build-cv/view", { state: { resumeText } });
+        
       } catch (error) {
         toast.error(
           "Failed to generate resume from scratch. Please try again."

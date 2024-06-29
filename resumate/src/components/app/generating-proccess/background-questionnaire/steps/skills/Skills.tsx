@@ -71,7 +71,7 @@ export const Skills = () => {
             setError(undefined);
 
         } else {
-            setError('Skill name should be one letter minimum, and not exists')
+            setError('Skill name should be one letter minimum, and unique')
         }
     }
 

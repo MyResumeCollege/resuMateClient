@@ -18,6 +18,10 @@ const generatePdf = (resumeText: string) => {
     "F"
   );
 
+  doc.setProperties({
+    title: 'Resume',
+  });
+
   const marginLeft = 10;
   const marginRight = 10;
   const marginTop = 10;

@@ -10,21 +10,19 @@ export const Personal = () => {
   // const [education, setEducation] = useRecoilState(educationState);
 
   return (
-    <section className="personal flex-1 flex flex-col pt-[100px] items-center">
+    <section className="personal flex-1 flex flex-col pt-[70px] items-center">
       <h2 className="font-bold text-3xl text-center mb-5">
         Tell Us More <br />
         About You
       </h2>
-      <LinkedinIntegration />
-      <div className="mb-5">
+      <main className="flex-1 px-10 flex flex-col gap-[15px] overflow-y-scroll">
+        <LinkedinIntegration />
         <TextInput
           wrapperClassName="w-[400px]"
           label="Full Name"
           value={fullName}
           onChange={setFullName}
         />
-      </div>
-      <div className="mb-5">
         <TextArea
           wrapperClassName="w-[400px]"
           label="Describe yourself in a few words"
@@ -32,8 +30,7 @@ export const Personal = () => {
           rows={5}
           onChange={setBio}
         />
-      </div>
-      {/* <div className="mb-5">
+        {/* <div className="mb-5">
         <TextArea
           wrapperClassName="w-[400px]"
           label="What is your education?"
@@ -42,6 +39,7 @@ export const Personal = () => {
           onChange={setEducation}
         />
       </div> */}
+      </main>
     </section>
   );
 };

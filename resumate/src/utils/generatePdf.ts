@@ -19,37 +19,32 @@ const generatePdf = (resumeText: string) => {
   );
 
   doc.setProperties({
-    title: 'Resume',
+    title: "Resume",
   });
 
   const marginLeft = 10;
   const marginRight = 10;
   const marginTop = 10;
-  const lineHeight = 10;
+  const lineHeight = 6;
+  const fontSize = 15;
 
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const maxTextWidth = pageWidth - marginLeft - marginRight;
 
+  doc.setFontSize(fontSize);
+
   const lines = doc.splitTextToSize(resumeText, maxTextWidth);
   let yPosition = marginTop;
 
-  lines.forEach((line: string | string[]) => {
+  for (let i = 0; i < lines.length; i++) {
     if (yPosition + lineHeight > pageHeight - marginTop) {
-      doc.addPage();
-      doc.setFillColor(r, g, b);
-      doc.rect(
-        0,
-        0,
-        doc.internal.pageSize.getWidth(),
-        doc.internal.pageSize.getHeight(),
-        "F"
-      );
-      yPosition = marginTop;
+      doc.text("... (content truncated)", marginLeft, yPosition);
+      break;
     }
-    doc.text(line, marginLeft, yPosition);
+    doc.text(lines[i], marginLeft, yPosition);
     yPosition += lineHeight;
-  });
+  }
 
   const pdfBlob = doc.output("blob");
   return URL.createObjectURL(pdfBlob);

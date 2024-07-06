@@ -6,6 +6,7 @@ import { Stepper } from "./stepper/Stepper";
 import { Personal } from "./steps/personal/Personal";
 import { WantedJob } from "./steps/wanted-job/WantedJob";
 import { Skills } from "./steps/skills/Skills";
+import { Experience } from "./steps/experience/Experience";
 
 export const BackgroundQuestionnaire = () => {
     const navigate = useNavigate();
@@ -15,7 +16,8 @@ export const BackgroundQuestionnaire = () => {
     const steps = [
         <WantedJob />,
         <Personal />,
-        <Skills/>
+        <Experience/>,
+        <Skills/>,
     ];
 
     const generateCV = () => {

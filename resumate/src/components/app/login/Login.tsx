@@ -60,8 +60,18 @@ export const Login = () => {
             </Link>
           </div>
           <Button>Log In</Button>
+          <div className="text-center py-1">
+            <span className="text-sm">Don't have an account? <Link to='signup' className="text-[red] font-medium">Sign Up</Link></span>
+          </div>
+          <div className="text-center py-6 flex items-center ">
+            <span className="h-[1px] bg-[black] flex-1 opacity-20"></span>
+            <span className="text-xs px-3 opacity-80">Or login with</span>
+            <span className="h-[1px] bg-[black] flex-1 opacity-20"></span>
+          </div>
           <GoogleLogin
             width={400}
+            logo_alignment="center"
+            text='signin'
             onSuccess={onGoogleLoginSuccess}
             onError={onGoogleLoginFailure}
           />

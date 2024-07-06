@@ -4,12 +4,17 @@ import { Generate } from "@/components/app/generating-proccess/generate/Generate
 import { Start } from "@/components/app/generating-proccess/start/Start";
 import ViewCV from "@/components/app/generating-proccess/view-cv/ViewCV";
 import { Login } from "@/components/app/login/Login";
+import { Register } from "@/components/app/register/Register";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />, // Add Register Route
   },
   {
     path: "/dashboard",

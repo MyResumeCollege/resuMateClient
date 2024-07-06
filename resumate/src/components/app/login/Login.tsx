@@ -1,17 +1,22 @@
 import { Button } from "@/components/shared/button/Button";
 import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Lock from "@/assets/images/lock.webp";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../../../store/atoms/userAtom";
-import { saveTokens, googleSignIn } from "../../../services/authService";
+import {
+  saveTokens,
+  googleSignIn,
+  loginUser,
+} from "../../../services/authService";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const setUser = useSetRecoilState(userState);
+  const navigate = useNavigate();
 
   const onGoogleLoginSuccess = async (
     credentialResponse: CredentialResponse
@@ -26,6 +31,7 @@ export const Login = () => {
       });
       setUser(loginGoogleRes.user);
       console.log(`user ${loginGoogleRes.user.name} login via google`);
+      navigate("/dashboard");
     } catch (err) {
       console.log(err);
     }
@@ -33,6 +39,23 @@ export const Login = () => {
 
   const onGoogleLoginFailure = () => {
     console.log("failed google log in");
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await loginUser(email, password);
+      const { data: loginRes } = response;
+
+      saveTokens({
+        accessToken: loginRes.accessToken,
+        refreshToken: loginRes.refreshToken,
+      });
+      setUser(loginRes.user);
+      console.log(`User ${loginRes.user.name} logged in successfully`);
+      navigate("/dashboard"); // Redirect to dashboard or another page
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -59,9 +82,14 @@ export const Login = () => {
               Forgot Password?
             </Link>
           </div>
-          <Button>Log In</Button>
+          <Button onClick={handleLogin}>Log In</Button>
           <div className="text-center py-1">
-            <span className="text-sm">Don't have an account? <Link to='signup' className="text-[red] font-medium">Sign Up</Link></span>
+            <span className="text-sm">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-[red] font-medium">
+                Sign Up
+              </Link>
+            </span>
           </div>
           <div className="text-center py-6 flex items-center ">
             <span className="h-[1px] bg-[black] flex-1 opacity-20"></span>
@@ -71,7 +99,7 @@ export const Login = () => {
           <GoogleLogin
             width={400}
             logo_alignment="center"
-            text='signin'
+            text="signin"
             onSuccess={onGoogleLoginSuccess}
             onError={onGoogleLoginFailure}
           />

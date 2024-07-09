@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { uploadResume } from "../../../../services/uploadResume";
 import {
-  educationState,
+  experienceState,
   fullNameState,
   jobTitleState,
   skillsState,
@@ -21,9 +21,9 @@ export const Generate = () => {
 
   const fullName = useRecoilValue(fullNameState);
   const bio = useRecoilValue(summaryState);
-  const education = useRecoilValue(educationState);
   const jobTitle = useRecoilValue(jobTitleState);
   const skills = useRecoilValue(skillsState);
+  const experiences = useRecoilValue(experienceState)
 
   const generateCV = async () => {
     let resumeText = "";
@@ -46,6 +46,7 @@ export const Generate = () => {
           jobTitle,
           bio,
           skills,
+          experiences
         });
         resumeText = generateResume.data.CVTextContent;
 

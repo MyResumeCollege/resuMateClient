@@ -30,8 +30,7 @@ export const Login = () => {
         refreshToken: loginGoogleRes.refreshToken,
       });
       setUser(loginGoogleRes.user);
-      console.log(`user ${loginGoogleRes.user.name} login via google`);
-      navigate("/dashboard");
+      navigate("/build-cv");
     } catch (err) {
       console.log(err);
     }
@@ -51,8 +50,7 @@ export const Login = () => {
         refreshToken: loginRes.refreshToken,
       });
       setUser(loginRes.user);
-      console.log(`User ${loginRes.user.name} logged in successfully`);
-      navigate("/dashboard"); // Redirect to dashboard or another page
+      navigate("/build-cv");
     } catch (err) {
       console.log(err);
     }

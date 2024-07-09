@@ -1,4 +1,5 @@
 import { Skill } from "@/types/skill";
+import { ExperiencePeriod } from "@/types/experience-period"
 import apiClient from "./httpCommon";
 import { AxiosResponse } from "axios";
 
@@ -7,6 +8,7 @@ type CVData = {
   jobTitle: string;
   bio: string;
   skills: Skill[];
+  experiences: ExperiencePeriod[]
 };
 
 type CVDataResponse = {
@@ -18,11 +20,13 @@ export const generateCVFromScratch = async ({
   jobTitle,
   bio,
   skills,
+  experiences
 }: CVData): Promise<AxiosResponse<CVDataResponse>> => {
   return apiClient.post("/cv/generate-resume", {
     name: fullName,
     job: jobTitle,
     description: bio,
     skills: skills,
+    experiences: experiences
   });
 };

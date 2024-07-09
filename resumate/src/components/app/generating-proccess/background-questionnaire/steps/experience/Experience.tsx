@@ -110,7 +110,10 @@ export const Experience = () => {
                         />
                     </div>
                     <div className="flex items-center gap-[10px]">
-                        <input type="checkbox" value={`${editedExperiencePeriod.isCurrent}`} />
+                        <input type="checkbox" 
+                        value={`${editedExperiencePeriod.isCurrent}`}
+                        onChange={(e) => updateEditedPeriod(({ isCurrent: e.target.checked }))} 
+                        />
                         <span className="text-sm">I currently work here</span>
                     </div>
                     <div className="flex gap-[10px]">

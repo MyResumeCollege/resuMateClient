@@ -2,15 +2,22 @@ import React, { useEffect, useState } from "react";
 import generatePdf from "@/utils/generatePdf";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/shared/button/Button";
+import { useRecoilValue } from "recoil";
+import { fullNameState } from "../store/state";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
   const { resumeText } = location.state || {};
   const [pdfUrl, setPdfUrl] = useState<string>("");
 
+  const fullName = useRecoilValue(fullNameState);
+  const fileName = fullName
+    ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
+    : "Resume.pdf";
+
   useEffect(() => {
     if (resumeText) {
-      const url = generatePdf(resumeText);
+      const url = generatePdf(resumeText, fileName);
       setPdfUrl(url);
     }
   }, [resumeText]);
@@ -18,7 +25,7 @@ const ViewCV: React.FC = () => {
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = pdfUrl;
-    link.download = "resume.pdf";
+    link.download = fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

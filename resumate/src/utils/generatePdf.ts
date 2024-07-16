@@ -1,6 +1,6 @@
 import { jsPDF } from "jspdf";
 
-const generatePdf = (resumeText: string) => {
+const generatePdf = (resumeText: string, fileName: string) => {
   const doc = new jsPDF();
 
   const hexColor = "EFE3F3";
@@ -19,7 +19,7 @@ const generatePdf = (resumeText: string) => {
   );
 
   doc.setProperties({
-    title: "Resume",
+    title: fileName,
   });
 
   const marginLeft = 10;

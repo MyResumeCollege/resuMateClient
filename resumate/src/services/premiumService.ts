@@ -1,0 +1,15 @@
+import { AxiosResponse } from "axios";
+import apiClient from "./httpCommon";
+import { User } from "../types/user"
+
+type UserPremium = {
+    id: string,
+    isPremium: string
+}
+
+export const setUserPremiumStatus = async (isPremium: boolean, userId?: User['_id']): Promise<AxiosResponse<UserPremium>> => {
+    if (!userId) {
+        throw new Error("User ID is required");
+    }
+    return await apiClient.post(`user/${userId}/set-premium`, { isPremium });
+}

@@ -1,6 +1,6 @@
 import { Button } from "@/components/shared/button/Button";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
-import "../premiumPlan.css";
+import "./pricingCard.css";
 
 interface Feature {
   text: string;
@@ -12,6 +12,7 @@ interface PricingCardProps {
   price: string;
   features: Feature[];
   isPremium: boolean;
+  onSelect: () => void;
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({
@@ -19,6 +20,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   price,
   features,
   isPremium,
+  onSelect
 }) => {
   return (
     <section
@@ -43,7 +45,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
         ))}
       </ul>
       <div className="w-full flex justify-center mt-auto mb-4">
-        <Button>Buy Now</Button>
+        <Button onClick={onSelect}>Buy Now</Button>
       </div>
     </section>
   );

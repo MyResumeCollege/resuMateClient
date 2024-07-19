@@ -4,6 +4,7 @@ import { Generate } from "@/components/app/generating-proccess/generate/Generate
 import { Start } from "@/components/app/generating-proccess/start/Start";
 import ViewCV from "@/components/app/generating-proccess/view-cv/ViewCV";
 import { Login } from "@/components/app/login/Login";
+import { PremiumPlan } from "@/components/app/premium/PremiumPlan";
 import { Register } from "@/components/app/register/Register";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -14,7 +15,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <Register />, // Add Register Route
+    element: <Register />,
   },
   {
     path: "/dashboard",
@@ -29,4 +30,8 @@ export const router = createBrowserRouter([
       { path: "view", element: <ViewCV /> },
     ],
   },
+  {
+    path: "/PremiumPlan",
+    element: <PremiumPlan/> // Add protected Route
+  }
 ]);

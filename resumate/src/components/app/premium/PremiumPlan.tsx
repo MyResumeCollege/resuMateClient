@@ -1,6 +1,13 @@
 import PricingCard from "./pricingCard/pricingCard";
+import { setUserPremiumStatus } from "../../../services/premiumService";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const PremiumPlan = () => {
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState<string | null>(null);
+
   const basicFeatures = [
     { text: "3 Resumes", isAvailable: true },
     { text: "Support in multiple languages", isAvailable: false },
@@ -14,6 +21,30 @@ export const PremiumPlan = () => {
     { text: "Edit Existing Resumes", isAvailable: true },
   ];
 
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
+
+  const handlePlanSelect = async (isPremium: boolean) => {
+    if (userId) {
+      try {
+        await setUserPremiumStatus(isPremium, userId);
+        toast.success(
+          `Successfully updated to ${isPremium ? "Premium" : "Basic"} plan.`
+        );
+        navigate("/build-cv");
+      } catch (error) {
+        console.error("Error updating user premium status:", error);
+        toast.error("Failed to update plan. Please try again.");
+      }
+    } else {
+      toast.error("User ID is not available. Please log in.");
+    }
+  };
+
   return (
     <main className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-100">
       <h1 className="text-6xl font-bold mb-12 text-center">Pricing Plan</h1>
@@ -26,12 +57,14 @@ export const PremiumPlan = () => {
           price="FREE"
           features={basicFeatures}
           isPremium={false}
+          onSelect={() => handlePlanSelect(false)}
         />
         <PricingCard
           title="Premium"
           price="$0.5 PER MONTH"
           features={premiumFeatures}
           isPremium={true}
+          onSelect={() => handlePlanSelect(true)}
         />
       </section>
     </main>

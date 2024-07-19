@@ -1,4 +1,3 @@
-import "./premiumPlan.css";
 import PricingCard from "./pricingCard/pricingCard";
 
 export const PremiumPlan = () => {

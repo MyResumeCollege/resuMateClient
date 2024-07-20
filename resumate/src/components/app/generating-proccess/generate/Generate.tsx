@@ -7,8 +7,6 @@ import { useRecoilValue } from "recoil";
 import { uploadResume } from "../../../../services/uploadResume";
 import {
   experienceState,
-  fullNameState,
-  jobTitleState,
   skillsState,
   summaryState,
 } from "../store/state";
@@ -19,9 +17,7 @@ export const Generate = () => {
   const navigate = useNavigate();
   const { existCV } = location.state || {};
 
-  const fullName = useRecoilValue(fullNameState);
   const bio = useRecoilValue(summaryState);
-  const jobTitle = useRecoilValue(jobTitleState);
   const skills = useRecoilValue(skillsState);
   const experiences = useRecoilValue(experienceState)
 
@@ -42,8 +38,6 @@ export const Generate = () => {
     } else {
       try {
         const generateResume = await generateCVFromScratch({
-          fullName,
-          jobTitle,
           bio,
           skills,
           experiences

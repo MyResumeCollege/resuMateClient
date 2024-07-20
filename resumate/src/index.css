@@ -16,7 +16,7 @@
 
 #root {
   padding: 2rem;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   background: var(--bg-color);
 }

@@ -7,18 +7,12 @@ import { Personal } from "./steps/personal/Personal";
 import { WantedJob } from "./steps/wanted-job/WantedJob";
 import { Skills } from "./steps/skills/Skills";
 import { Experience } from "./steps/experience/Experience";
-import { showCVPreview } from "../../../../services/cvPreview";
-import { useRecoilValue } from "recoil";
-import { fullNameState, jobTitleState } from "../store/state";
 
 export const BackgroundQuestionnaire = () => {
   const navigate = useNavigate();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-
-  const fullName = useRecoilValue(fullNameState);
-  const jobTitle = useRecoilValue(jobTitleState);
 
   const steps = [<WantedJob />, <Personal />, <Experience />, <Skills />];
 
@@ -39,17 +33,6 @@ export const BackgroundQuestionnaire = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
-  const previewPdf = async () => {
-    try {
-      await showCVPreview(fullName, jobTitle);
-      setPdfUrl(
-        `http://localhost:5173/preview?fullName=${fullName}&jobTitle=${jobTitle}`
-      );
-    } catch (error) {
-      console.error("Error fetching PDF preview:", error);
-    }
-  };
-
   return (
     <main className="flex-1 flex flex-col items-center pt-[50px]">
       <Stepper stepsCount={steps.length} currentStep={currentStep} />
@@ -61,7 +44,6 @@ export const BackgroundQuestionnaire = () => {
           <Button text="Back" variant="secondary" onClick={back} />
         )}
         <Button text="Continue" onClick={next} />
-        <Button text="preview" onClick={previewPdf} />
       </section>
       {pdfUrl && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

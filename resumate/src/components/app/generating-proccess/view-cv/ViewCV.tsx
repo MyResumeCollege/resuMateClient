@@ -3,21 +3,23 @@ import generatePdf from "@/utils/generatePdf";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/shared/button/Button";
 import { useRecoilValue } from "recoil";
-import { fullNameState } from "../store/state";
+import { fullNameState, jobTitleState } from "../store/state";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
-  const { resumeText } = location.state || {};
+  const { resumeText } = location.state || {};  
   const [pdfUrl, setPdfUrl] = useState<string>("");
 
   const fullName = useRecoilValue(fullNameState);
+  const jobTitle = useRecoilValue(jobTitleState);
   const fileName = fullName
     ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
     : "Resume.pdf";
 
   useEffect(() => {
     if (resumeText) {
-      const url = generatePdf(resumeText, fileName);
+      const modifiedResumeText = `${fullName} | ${jobTitle}\n\n${resumeText.join("\n")}`;
+      const url = generatePdf(modifiedResumeText, fileName);
       setPdfUrl(url);
     }
   }, [resumeText]);

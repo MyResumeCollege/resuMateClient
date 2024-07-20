@@ -3,6 +3,7 @@ import { BackgroundQuestionnaire } from "@/components/app/generating-proccess/ba
 import { Generate } from "@/components/app/generating-proccess/generate/Generate";
 import { Start } from "@/components/app/generating-proccess/start/Start";
 import ViewCV from "@/components/app/generating-proccess/view-cv/ViewCV";
+import Preview from "@/components/app/generating-proccess/view-cv/Preview";
 import { Login } from "@/components/app/login/Login";
 import { PremiumPlan } from "@/components/app/premium/PremiumPlan";
 import { Register } from "@/components/app/register/Register";
@@ -31,7 +32,11 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/PremiumPlan",
+    path: "/premiumPlan",
     element: <PremiumPlan/> // Add protected Route
+  },
+  {
+    path: "/preview",
+    element: <Preview/> // Add protected Route
   }
 ]);

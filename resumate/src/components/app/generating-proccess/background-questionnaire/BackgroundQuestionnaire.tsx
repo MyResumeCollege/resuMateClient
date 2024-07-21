@@ -7,6 +7,7 @@ import { Personal } from "./steps/personal/Personal";
 import { WantedJob } from "./steps/wanted-job/WantedJob";
 import { Skills } from "./steps/skills/Skills";
 import { Experience } from "./steps/experience/Experience";
+import { SelectTemplate } from "./steps/select-template/SelectTemplate";
 
 export const BackgroundQuestionnaire = () => {
   const navigate = useNavigate();
@@ -14,7 +15,13 @@ export const BackgroundQuestionnaire = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  const steps = [<WantedJob />, <Personal />, <Experience />, <Skills />];
+  const steps = [
+    <WantedJob />,
+    <Personal />,
+    <Experience />,
+    <Skills />,
+    <SelectTemplate />,
+  ];
 
   const generateCV = () => {
     navigate("/build-cv/generate");

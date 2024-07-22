@@ -68,11 +68,11 @@ export const SelectTemplate = () => {
           {visibleTemplates.map((template) => (
             <div
               key={template.id}
-              className={`template w-[180px] h-[250px] border ${
+              className={`template w-[180px] h-[250px] cursor-pointer ${
                 selectedTemplate === template.id
-                  ? "border-blue-500"
-                  : "border-gray-300"
-              } p-1 flex-shrink-0`}
+                  ? "outline outline-primary outline-2"
+                  : ""
+              } flex-shrink-0`}
               onClick={() => selectTemplate(template.id)}
             >
               <img

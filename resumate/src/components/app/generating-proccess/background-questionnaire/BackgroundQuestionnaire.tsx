@@ -8,6 +8,8 @@ import { WantedJob } from "./steps/wanted-job/WantedJob";
 import { Skills } from "./steps/skills/Skills";
 import { Experience } from "./steps/experience/Experience";
 import { SelectTemplate } from "./steps/select-template/SelectTemplate";
+import { Education } from "./steps/education/Education";
+import { Languages } from "./steps/languages/Languages";
 
 export const BackgroundQuestionnaire = () => {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ export const BackgroundQuestionnaire = () => {
     <WantedJob />,
     <Personal />,
     <Experience />,
+    <Education/>,
+    <Languages/>,
     <Skills />,
     <SelectTemplate />,
   ];

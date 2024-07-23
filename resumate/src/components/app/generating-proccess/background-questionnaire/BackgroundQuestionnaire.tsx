@@ -11,20 +11,25 @@ import { SelectTemplate } from "./steps/select-template/SelectTemplate";
 import { Education } from "./steps/education/Education";
 import { Languages } from "./steps/languages/Languages";
 
+type Step = {
+  component: JSX.Element;
+  name: string;
+}
+
 export const BackgroundQuestionnaire = () => {
   const navigate = useNavigate();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  const steps = [
-    <WantedJob />,
-    <Personal />,
-    <Experience />,
-    <Education/>,
-    <Languages/>,
-    <Skills />,
-    <SelectTemplate />,
+  const steps: Step[] = [
+    { component: <WantedJob />, name: 'Job Title' },
+    { component: <Personal />, name: 'Personal' },
+    { component: <Experience />, name: 'Experience' },
+    { component: <Education />, name: 'Education' },
+    { component: <Languages />, name: 'Languages' },
+    { component: <Skills />, name: 'Skills' },
+    { component: <SelectTemplate />, name: 'Template' },
   ];
 
   const generateCV = () => {
@@ -46,9 +51,9 @@ export const BackgroundQuestionnaire = () => {
 
   return (
     <main className="flex-1 flex flex-col items-center pt-[50px]">
-      <Stepper stepsCount={steps.length} currentStep={currentStep} />
+      <Stepper steps={steps} currentStepIndex={currentStep} onStepSelect={setCurrentStep} />
       <section className="current-step flex-1 flex w-[600px] overflow-hidden">
-        {steps[currentStep]}
+        {steps[currentStep].component}
       </section>
       <section className="controls flex gap-[20px] pb-[50px] pt-[50px]">
         {currentStep !== 0 && (

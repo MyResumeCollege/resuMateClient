@@ -12,7 +12,8 @@ export default {
       colors: {
         primary: 'var(--color-primary)',
         bg: 'var(--bg-color)',
-        accent: 'var(--accent-color)'
+        accent: 'var(--accent-color)',
+        dark: 'var(--color-primary-dark)'
       },
       fontFamily: {
         poppins: ["Poppins"]

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Button } from "@/components/shared/button/Button";
 import { useRecoilValue } from "recoil";
 import { fullNameState, jobTitleState } from "../store/state";
-import { showCVPreview } from "../../../../services/cvPreview";
+import { generatePreviewUrl } from "../../../../services/cvPreview";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
-  const { resumeText } = location.state || {};
+  const { resumeText } = location.state || {};  
   const [pdfUrl, setPdfUrl] = useState<string>("");
 
   const fullName = useRecoilValue(fullNameState);
@@ -17,19 +16,20 @@ const ViewCV: React.FC = () => {
     : "Resume.pdf";
 
   useEffect(() => {
-    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2]);
+    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2], resumeText[3], resumeText[4]);    
   }, [resumeText]);
 
   const previewPdf = async (
     bio: string,
+    skills: string,
     experiences: string,
-    skills: string
+    educations: string,
+    languages: string
   ) => {
     try {
-      await showCVPreview(fullName, jobTitle, bio, experiences, skills);
-      setPdfUrl(
-        `http://localhost:5173/preview?fullName=${fullName}&jobTitle=${jobTitle}&bio=${bio}&skills=${skills}&experiences=${experiences}`
-      );
+      const response = await generatePreviewUrl(fullName, jobTitle, bio, skills, experiences, educations, languages);
+      const {url} = response.data
+      setPdfUrl(url);
     } catch (error) {
       console.error("Error fetching PDF preview:", error);
     }
@@ -70,7 +70,7 @@ const ViewCV: React.FC = () => {
       </Button> */}
       {pdfUrl ? (
         <embed src={pdfUrl} type="application/pdf" width="100%" height="100%" />
-      ): <p>Loading Preview..</p>}
+      ): <p>Loading Preview..</p>} 
     </div>
   );
 };

@@ -5,7 +5,7 @@ import Lottie from 'react-lottie'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { uploadResume } from '../../../../services/uploadResume'
-import { experienceState, skillsState, summaryState } from '../store/state'
+import { educationState, experienceState, languagesState, skillsState, summaryState } from '../store/state'
 import { generateCVFromScratch } from '@/services/GenerateResume'
 
 export const Generate = () => {
@@ -16,9 +16,11 @@ export const Generate = () => {
   const bio = useRecoilValue(summaryState)
   const skills = useRecoilValue(skillsState)
   const experiences = useRecoilValue(experienceState)
-
+  const educations = useRecoilValue(educationState)
+  const languages = useRecoilValue(languagesState)
+  
   const generateCV = async () => {
-    let resumeText = ''
+    let resumeText;
 
     if (existCV) {
       try {
@@ -37,6 +39,8 @@ export const Generate = () => {
           bio,
           skills,
           experiences,
+          educations,
+          languages
         })
         resumeText = generateResume.data.CVTextContent
 

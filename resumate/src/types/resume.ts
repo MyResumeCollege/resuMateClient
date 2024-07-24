@@ -5,3 +5,17 @@ export type GenerateResumeInput = {
     experience: string;
     description: string;
 }
+
+export type ResumeSections = {
+    fullName: string,
+    jobTitle: string,
+    bio: string,
+    skills: string,
+    experiences: string,
+    educations: string,
+    languages: string 
+  }
+
+export type CVDataResponse = {
+    CVTextContent: string;
+};

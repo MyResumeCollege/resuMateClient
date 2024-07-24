@@ -16,8 +16,6 @@ export const summaryState = atom({
     default: '',
 });
 
-
-
 // job 
 
 export const jobTitleState = atom({

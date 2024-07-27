@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Button } from "@/components/shared/button/Button";
 import { useNavigate } from "react-router-dom";
@@ -62,6 +62,18 @@ export const BackgroundQuestionnaire = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const validationErrors = useValidation(currentStep);
+  const [skipValidation, setSkipValidation] = useState(false);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "Shift") { // TODO remove hack for development
+        setSkipValidation(prev => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
 
   const steps: Step[] = [
     { component: <WantedJob />, name: "Job Title" },
@@ -82,6 +94,7 @@ export const BackgroundQuestionnaire = () => {
     if (currentStep + 1 === steps.length) {
       generateCV();
     } else {
+      if (skipValidation) {
       if (validationErrors.length > 0) {
         const errorMessages = validationErrors.join(' ');
         toast.error(errorMessages, {
@@ -89,7 +102,7 @@ export const BackgroundQuestionnaire = () => {
         });
         return;
       }
-      setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+    } else setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
     }
   };
 

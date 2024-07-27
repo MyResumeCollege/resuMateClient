@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { previewCV } from "../../../../services/cvPreview";
+import { FaRedo } from 'react-icons/fa';
 
 type PreviewProps = {
   id?: string;
@@ -120,15 +121,17 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
 
         <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Summary
+            <FaRedo className="ml-2 text-gray-500" />
           </h2>
           <p className="text-sm">{bio}</p>
         </div>
 
         <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Experience
+            <FaRedo className="ml-2 text-gray-500" />
           </h2>
           <div className="mb-2">
             <ul className="list-disc pl-5 text-sm mt-1">
@@ -137,8 +140,9 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           </div>
         </div>
         <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Skills
+            <FaRedo className="ml-2 text-gray-500" />
           </h2>
           <div className="flex flex-wrap text-sm">
             {skills}
@@ -146,16 +150,18 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         </div>
 
         <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Education
+            <FaRedo className="ml-2 text-gray-500" />
           </h2>
           <div className="mb-2">
             {educations}
           </div>
         </div>
         <div>
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Languages
+            <FaRedo className="ml-2 text-gray-500" />
           </h2>
           <div className="text-sm whitespace-pre-line">
             {languages}

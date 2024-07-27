@@ -35,7 +35,7 @@ export const PremiumPlan = () => {
         toast.success(
           `Successfully updated to ${isPremium ? "Premium" : "Basic"} plan.`
         );
-        navigate("/build-cv");
+        navigate("/dashboard");
       } catch (error) {
         console.error("Error updating user premium status:", error);
         toast.error("Failed to update plan. Please try again.");

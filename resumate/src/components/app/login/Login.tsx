@@ -30,7 +30,7 @@ export const Login = () => {
         refreshToken: loginGoogleRes.refreshToken,
       })
       setUser(loginGoogleRes.user)
-      navigate('/build-cv')
+      navigate("/PremiumPlan");
     } catch (err) {
       console.log(err)
     }

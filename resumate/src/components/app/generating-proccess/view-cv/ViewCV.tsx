@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { fullNameState, jobTitleState } from "../store/state";
 import { generatePreviewUrl } from "../../../../services/cvPreview";
+import { Button } from "@/components/shared/button/Button";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
@@ -48,7 +49,7 @@ const ViewCV: React.FC = () => {
   return (
     <div className="flex flex-col flex-1 items-center pt-[50px]">
       <h1 className="font-bold text-3xl mb-[20px]">Your Resume is Ready!</h1>
-      {/* <Button
+      <Button
         onClick={handleDownload}
         style={{ width: "fit-content", marginBottom: 20 }}
       >
@@ -67,7 +68,7 @@ const ViewCV: React.FC = () => {
           />
         </svg>
         Download Resume
-      </Button> */}
+      </Button> 
       {pdfUrl ? (
         <embed src={pdfUrl} type="application/pdf" width="100%" height="100%" />
       ): <p>Loading Preview..</p>} 

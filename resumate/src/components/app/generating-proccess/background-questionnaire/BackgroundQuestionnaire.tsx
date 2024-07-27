@@ -10,10 +10,25 @@ import { Experience } from "./steps/experience/Experience";
 import { SelectTemplate } from "./steps/select-template/SelectTemplate";
 import { Education } from "./steps/education/Education";
 import { Languages } from "./steps/languages/Languages";
-import { useRecoilValue } from 'recoil'
-import { fullNameState, jobTitleState, educationState, experienceState, languagesState, skillsState, summaryState } from '../store/state'
-import toast from 'react-hot-toast';
-import {validateEducationPeriods, validateExperiencePeriods, validateJobTitle, validateLanguages, validateNameAndBio, validateSkills} from '../../../../validations/validations'
+import { useRecoilValue } from "recoil";
+import {
+  fullNameState,
+  jobTitleState,
+  educationState,
+  experienceState,
+  languagesState,
+  skillsState,
+  summaryState,
+} from "../store/state";
+import toast from "react-hot-toast";
+import {
+  validateEducationPeriods,
+  validateExperiencePeriods,
+  validateJobTitle,
+  validateLanguages,
+  validateNameAndBio,
+  validateSkills,
+} from "../../../../validations/validations";
 type Step = {
   component: JSX.Element;
   name: string;
@@ -66,8 +81,9 @@ export const BackgroundQuestionnaire = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === "Shift") { // TODO remove hack for development
-        setSkipValidation(prev => !prev);
+      if (event.key === "Shift") {
+        // hack for development
+        setSkipValidation((prev) => !prev);
       }
     };
 
@@ -94,15 +110,15 @@ export const BackgroundQuestionnaire = () => {
     if (currentStep + 1 === steps.length) {
       generateCV();
     } else {
-      if (skipValidation) {
-      if (validationErrors.length > 0) {
-        const errorMessages = validationErrors.join(' ');
-        toast.error(errorMessages, {
-          duration: 7000
-        });
-        return;
-      }
-    } else setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+      if (!skipValidation) {
+        if (validationErrors.length > 0) {
+          const errorMessages = validationErrors.join(" ");
+          toast.error(errorMessages, {
+            duration: 7000,
+          });
+          return;
+        }
+      } else setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
     }
   };
 

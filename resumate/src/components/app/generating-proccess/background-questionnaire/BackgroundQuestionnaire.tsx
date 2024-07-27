@@ -10,17 +10,58 @@ import { Experience } from "./steps/experience/Experience";
 import { SelectTemplate } from "./steps/select-template/SelectTemplate";
 import { Education } from "./steps/education/Education";
 import { Languages } from "./steps/languages/Languages";
-
+import { useRecoilValue } from 'recoil'
+import { fullNameState, jobTitleState, educationState, experienceState, languagesState, skillsState, summaryState } from '../store/state'
+import toast from 'react-hot-toast';
+import {validateEducationPeriods, validateExperiencePeriods, validateJobTitle, validateLanguages, validateNameAndBio, validateSkills} from '../../../../validations/validations'
 type Step = {
   component: JSX.Element;
   name: string;
 }
+
+const useValidation = (currentStep: number): string[] => {
+  const fullName = useRecoilValue(fullNameState);
+  const jobTitle = useRecoilValue(jobTitleState);
+  const bio = useRecoilValue(summaryState);
+  const languages = useRecoilValue(languagesState);
+  const skills = useRecoilValue(skillsState);
+  const educationPeriods = useRecoilValue(educationState);
+  const experiencePeriods = useRecoilValue(experienceState);
+
+  let errors: string[] = [];
+
+  switch (currentStep) {
+    case 0:
+      errors = validateJobTitle(jobTitle);
+      break;
+    case 1:
+      errors = validateNameAndBio(fullName, bio);
+      break;
+    case 2:
+      errors = validateExperiencePeriods(experiencePeriods);
+      break;
+    case 3:
+      errors = validateEducationPeriods(educationPeriods);
+      break;
+    case 4:
+      errors = validateLanguages(languages);
+      break;
+    case 5:
+      errors = validateSkills(skills);
+      break;
+    default:
+      break;
+  }
+
+  return errors;
+};
 
 export const BackgroundQuestionnaire = () => {
   const navigate = useNavigate();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const validationErrors = useValidation(currentStep);
 
   const steps: Step[] = [
     { component: <WantedJob />, name: 'Job Title' },
@@ -41,6 +82,13 @@ export const BackgroundQuestionnaire = () => {
     if (currentStep + 1 === steps.length) {
       generateCV();
     } else {
+      if (validationErrors.length > 0) {
+        const errorMessages = validationErrors.join(' ');
+        toast.error(errorMessages, {
+          duration: 7000
+        });
+        return;
+      }
       setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
     }
   };

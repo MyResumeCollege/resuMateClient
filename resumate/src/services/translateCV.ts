@@ -1,6 +1,5 @@
 import apiClient from './httpCommon';
 import { AxiosResponse } from 'axios';
-import {CVDataResponse} from "../types/resume"
 
 type Resume = {
   bio: string;
@@ -14,7 +13,7 @@ export const translateCV = async ({
   skills,
   experiences,
   resumeLanguage,
-}: Resume): Promise<AxiosResponse<CVDataResponse>> => {
+}: Resume): Promise<AxiosResponse<string[]>> => {
   return apiClient.post('cv/translate-resume', {
     description: bio,
     skills: skills,

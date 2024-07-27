@@ -59,7 +59,7 @@ const Preview: React.FC = () => {
         resumeLanguage,
       });
 
-      const resumeText = translateResume.data.CVTextContent
+      const resumeText = translateResume.data
       // TODO split to sections
     } catch (error) {
       console.error("Error translating resume:", error);

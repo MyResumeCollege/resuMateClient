@@ -117,7 +117,7 @@ export const BackgroundQuestionnaire = () => {
             duration: 7000,
           });
           return;
-        }
+        } else setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
       } else setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
     }
   };

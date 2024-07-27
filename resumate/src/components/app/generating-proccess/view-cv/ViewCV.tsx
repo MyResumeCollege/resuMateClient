@@ -36,7 +36,7 @@ const ViewCV: React.FC = () => {
     }
   };
 
-  // TODO - fix it
+  // TODO - fix it - endpoint in server due to puppetter
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = pdfUrl;
@@ -49,7 +49,7 @@ const ViewCV: React.FC = () => {
   return (
     <div className="flex flex-col flex-1 items-center pt-[50px]">
       <h1 className="font-bold text-3xl mb-[20px]">Your Resume is Ready!</h1>
-      <Button
+      {/* <Button
         onClick={handleDownload}
         style={{ width: "fit-content", marginBottom: 20 }}
       >
@@ -68,7 +68,7 @@ const ViewCV: React.FC = () => {
           />
         </svg>
         Download Resume
-      </Button> 
+      </Button>  */}
       {pdfUrl ? (
         <embed src={pdfUrl} type="application/pdf" width="100%" height="100%" />
       ): <p>Loading Preview..</p>} 

@@ -26,8 +26,10 @@ export const Generate = () => {
       try {
         if (existCV instanceof File) {
           const improvedResume = await uploadResume(existCV)
-          resumeText = improvedResume.data.CVTextContent
+          resumeText = improvedResume.data
 
+          console.log("resumeText ", resumeText);
+          
           if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
         }
       } catch (error) {
@@ -42,7 +44,7 @@ export const Generate = () => {
           educations,
           languages
         })
-        resumeText = generateResume.data.CVTextContent
+        resumeText = generateResume.data
 
         if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
       } catch (error) {

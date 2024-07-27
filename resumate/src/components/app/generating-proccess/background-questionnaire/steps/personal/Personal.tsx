@@ -7,7 +7,6 @@ import { LinkedinIntegration } from "./linkedin-integration/LinkedinIntegration"
 export const Personal = () => {
   const [fullName, setFullName] = useRecoilState(fullNameState);
   const [bio, setBio] = useRecoilState(summaryState);
-  // const [education, setEducation] = useRecoilState(educationState);
 
   return (
     <section className="personal flex-1 flex flex-col pt-[70px] items-center">
@@ -30,15 +29,6 @@ export const Personal = () => {
           rows={5}
           onChange={setBio}
         />
-        {/* <div className="mb-5">
-        <TextArea
-          wrapperClassName="w-[400px]"
-          label="What is your education?"
-          value={education}
-          rows={5}
-          onChange={setEducation}
-        />
-      </div> */}
       </main>
     </section>
   );

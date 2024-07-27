@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { fullNameState, jobTitleState } from "../store/state";
 import { generatePreviewUrl } from "../../../../services/cvPreview";
+import { Button } from "@/components/shared/button/Button";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
@@ -35,7 +36,7 @@ const ViewCV: React.FC = () => {
     }
   };
 
-  // TODO - fix it
+  // TODO - fix it - endpoint in server due to puppetter
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = pdfUrl;
@@ -67,7 +68,7 @@ const ViewCV: React.FC = () => {
           />
         </svg>
         Download Resume
-      </Button> */}
+      </Button>  */}
       {pdfUrl ? (
         <embed src={pdfUrl} type="application/pdf" width="100%" height="100%" />
       ): <p>Loading Preview..</p>} 

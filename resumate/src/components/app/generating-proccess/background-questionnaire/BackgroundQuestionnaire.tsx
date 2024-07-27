@@ -14,7 +14,7 @@ import { Languages } from "./steps/languages/Languages";
 type Step = {
   component: JSX.Element;
   name: string;
-}
+};
 
 export const BackgroundQuestionnaire = () => {
   const navigate = useNavigate();
@@ -23,13 +23,13 @@ export const BackgroundQuestionnaire = () => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const steps: Step[] = [
-    { component: <WantedJob />, name: 'Job Title' },
-    { component: <Personal />, name: 'Personal' },
-    { component: <Experience />, name: 'Experience' },
-    { component: <Education />, name: 'Education' },
-    { component: <Languages />, name: 'Languages' },
-    { component: <Skills />, name: 'Skills' },
-    { component: <SelectTemplate />, name: 'Template' },
+    { component: <WantedJob />, name: "Job Title" },
+    { component: <Personal />, name: "Personal" },
+    { component: <Experience />, name: "Experience" },
+    { component: <Education />, name: "Education" },
+    { component: <Languages />, name: "Languages" },
+    { component: <Skills />, name: "Skills" },
+    { component: <SelectTemplate />, name: "Template" },
   ];
 
   const generateCV = () => {
@@ -51,8 +51,16 @@ export const BackgroundQuestionnaire = () => {
 
   return (
     <main className="flex-1 flex flex-col items-center pt-[50px]">
-      <Stepper steps={steps} currentStepIndex={currentStep} onStepSelect={setCurrentStep} />
-      <section className="current-step flex-1 flex w-[600px] overflow-hidden">
+      <Stepper
+        steps={steps}
+        currentStepIndex={currentStep}
+        onStepSelect={setCurrentStep}
+      />
+      <section
+        className={`current-step flex-1 flex overflow-hidden ${
+          currentStep === steps.length - 1 ? "w-full" : "w-[600px]"
+        }`}
+      >
         {steps[currentStep].component}
       </section>
       <section className="controls flex gap-[20px] pb-[50px] pt-[50px]">

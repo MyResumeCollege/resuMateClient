@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from "react";
 import { translateCV } from "@/services/translateCV";
-import { previewCV } from "../../../../services/cvPreview";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { previewCV } from "../../../../services/cvPreview";
 
-const Preview: React.FC = () => {
+type PreviewProps = {
+  id?: string;
+  readonly?: boolean;
+}
+
+const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const { id } = useParams<{ id: string }>();
   const [fullName, setFullName] = useState<string>("");
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
@@ -17,10 +22,12 @@ const Preview: React.FC = () => {
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
 
   useEffect(() => {
+    const cvId = proppedId || id;
+
     const fetchData = async () => {
-      if (id) {
+      if (cvId) {
         try {
-          const response = await previewCV(id);
+          const response = await previewCV(cvId);
           const data = response.data;
           setFullName(data.fullName);
           setJobTitle(data.jobTitle);
@@ -37,10 +44,10 @@ const Preview: React.FC = () => {
       }
     };
 
-    if (id != "") {
+    if (cvId != "") {
       fetchData();
     }
-  }, [id]);
+  }, [id, proppedId]);
 
   const [resumeLanguage, setLanguage] = useState("");
   const [translatedResume, setTranslatedResume] = useState<string | null>(null);
@@ -66,96 +73,94 @@ const Preview: React.FC = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-10">
-      <div className="w-full max-w-6xl bg-white border border-gray-300 p-8 flex space-x-8">
-        <div className="w-1/3 bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="px-6 py-4">
-            <h2 className="text-xl font-semibold text-gray-800">
-              Translate Your Resume
-            </h2>
-            <div className="mt-4">
-              <label
-                htmlFor="language-select"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Select Language:
-              </label>
-              <select
-                id="language-select"
-                value={resumeLanguage}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="block w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="" disabled>
-                  Choose...
-                </option>
+    <div className="w-full max-w-6xl flex space-x-8 flex-1">
+      {!readonly && <div className="w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
+        <div className="px-6 py-4">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Translate Your Resume
+          </h2>
+          <div className="mt-4">
+            <label
+              htmlFor="language-select"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Select Language:
+            </label>
+            <select
+              id="language-select"
+              value={resumeLanguage}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="block w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="" disabled>
+                Choose...
+              </option>
 
-                <option value="spanish">Spanish</option>
-                <option value="french">French</option>
-                <option value="german">German</option>
-                <option value="italian">Italian</option>
-                <option value="portuguese">Portuguese</option>
-                <option value="dutch">Dutch</option>
-              </select>
-            </div>
-            <div className="mt-6">
-              <button
-                onClick={handleTranslate}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                Translate
-              </button>
-            </div>
+              <option value="spanish">Spanish</option>
+              <option value="french">French</option>
+              <option value="german">German</option>
+              <option value="italian">Italian</option>
+              <option value="portuguese">Portuguese</option>
+              <option value="dutch">Dutch</option>
+            </select>
+          </div>
+          <div className="mt-6">
+            <button
+              onClick={handleTranslate}
+              className="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Translate
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+      <div className="flex-1 bg-white border border-gray-300 p-8">
+        <div className="text-3xl font-bold mb-1">{fullName}</div>
+        <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
+
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Summary
+          </h2>
+          <p className="text-sm">{bio}</p>
+        </div>
+
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Experience
+          </h2>
+          <div className="mb-2">
+            <ul className="list-disc pl-5 text-sm mt-1">
+              {experiences}
+            </ul>
+          </div>
+        </div>
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Skills
+          </h2>
+          <div className="flex flex-wrap text-sm">
+            {skills}
           </div>
         </div>
 
-        <div className="w-2/3 bg-white border border-gray-300 p-8">
-              <div className="text-3xl font-bold mb-1">{fullName}</div>
-              <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
-
-              <div className="mb-4">
-                <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-                  Summary
-                </h2>
-                <p className="text-sm">{bio}</p>
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-                  Experience
-                </h2>
-                <div className="mb-2">
-                  <ul className="list-disc pl-5 text-sm mt-1">
-                    {experiences}
-                  </ul>
-                </div>
-              </div>
-              <div className="mb-4">
-                <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-                  Skills
-                </h2>
-                <div className="flex flex-wrap text-sm">
-                  {skills}
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-                  Education
-                </h2>
-                <div className="mb-2">
-                  {educations}
-                </div>
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-                  Languages
-                </h2>
-                <div className="text-sm whitespace-pre-line">
-                  {languages}
-                  <br />
-                </div>
-              </div>
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Education
+          </h2>
+          <div className="mb-2">
+            {educations}
+          </div>
+        </div>
+        <div>
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Languages
+          </h2>
+          <div className="text-sm whitespace-pre-line">
+            {languages}
+            <br />
+          </div>
         </div>
       </div>
     </div>

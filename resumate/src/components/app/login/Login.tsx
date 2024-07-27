@@ -50,7 +50,7 @@ export const Login = () => {
         refreshToken: loginRes.refreshToken,
       })
       setUser(loginRes.user)
-      navigate('/build-cv')
+      navigate('/dashboard')
     } catch (err) {
       console.log(err)
     }

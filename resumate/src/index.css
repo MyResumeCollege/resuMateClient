@@ -16,7 +16,6 @@
 }
 
 #root {
-  padding: 2rem;
   min-height: 100vh;
   display: flex;
   background: var(--bg-color);
@@ -25,6 +24,7 @@
 .resumate {
   display: flex;
   flex: 1;
+  padding: 20px;
 }
 
 .inputstyle {

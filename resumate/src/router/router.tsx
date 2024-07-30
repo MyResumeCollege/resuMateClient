@@ -51,7 +51,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "/premiumPlan",
+        path: "/pricing",
         element: <PremiumPlan /> // Add protected Route
       },
       {

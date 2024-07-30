@@ -46,22 +46,25 @@ export const PremiumPlan = () => {
   };
 
   return (
-    <main className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-100">
-      <h1 className="text-6xl font-bold mb-12 text-center">Pricing Plan</h1>
+    <main className="flex-1 flex flex-col items-center justify-center p-8">
+      <h1 className="text-4xl font-bold mb-2 text-center">Choose Your Plan</h1>
       <h2 className="text-center text-lg mb-12 max-w-2xl">
         As a premium user, you will be able to do so much more!
       </h2>
-      <section className="flex flex-wrap justify-center gap-8">
+      <section className="flex flex-wrap justify-center items-end gap-8">
         <PricingCard
           title="Basic"
           price="FREE"
+          pricePeriod="forever"
           features={basicFeatures}
           isPremium={false}
           onSelect={() => handlePlanSelect(false)}
         />
         <PricingCard
           title="Premium"
-          price="$0.5 PER MONTH"
+          price="$0.5"
+          pricePeriod="per month"
+          badge="Recommended"
           features={premiumFeatures}
           isPremium={true}
           onSelect={() => handlePlanSelect(true)}

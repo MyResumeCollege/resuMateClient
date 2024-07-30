@@ -22,7 +22,7 @@ export const Register = () => {
     localStorage.setItem("userId", userId);
 
       setUser(registerRes.user);
-      navigate("/PremiumPlan");
+      navigate("/pricing");
     } catch (err) {
       console.log(err);
     }

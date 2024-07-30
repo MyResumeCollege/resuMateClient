@@ -24,16 +24,19 @@ const NavbarWrapper = () => {
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  { path: "/preview/:id/clear", element: <Preview /> },
+  // Have NavBar on top
+  {
+    path: "/",
     element: <NavbarWrapper />,
     children: [
-      {
-        path: "/",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
+
       {
         path: "/dashboard",
         element: <Dashboard />,
@@ -57,5 +60,4 @@ export const router = createBrowserRouter([
       }
     ]
   },
-  { path: "/preview/:id/clear", element: <Preview /> }
 ]);

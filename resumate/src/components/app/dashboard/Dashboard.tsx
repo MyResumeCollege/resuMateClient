@@ -50,22 +50,20 @@ export const Dashboard = () => {
         navigate(`/preview/${selectedResumeId}`);
     }
 
-    const renderCreateNewResume = () => {
-        return <div className="bg-accent p-5 border-[1px] rounded-md w-[300px]">
-            <h2 className="font-bold text-md">Create New Resume</h2>
-            <h5 className="opacity-60">and get you dream job</h5>
+    const emptyStateRenderer = () => {
+        return <div className="flex-1 flex flex-col items-center pt-[200px]">
+            <span className="font-semibold">Select a resume to preview it</span>
         </div>
     }
 
     return <main className="flex-1 flex">
         {/* Resume Select */}
-        <div className="bg-white p-10 rounded-lg border border-gray-300 w-fit">
-            <div className="flex mb-4 justify-between items-end">
-                <h2 className="text-xl font-bold">Your Resumes</h2>
-                <Button onClick={goToCreateResume} dense buttonClassName="!w-fit">Create</Button>
+        <div className="bg-white px-6 py-5 rounded-lg border border-gray-300 w-fit">
+            <div className="flex mb-4 justify-between items-center">
+                <h2 className="text-lg font-semibold">Your Resumes</h2>
+                <Button variant='light' onClick={goToCreateResume} dense buttonClassName="!w-fit !text-primary">Create</Button>
             </div>
             <div className="flex flex-col gap-2">
-                {/* {renderCreateNewResume()} */}
                 {resumes.map((resume, index) => (
                     <ResumeOverview key={index} current={index + 1 === selectedResumeId} resume={resume} onSelect={() => onResumeSelect(index + 1)} />
                 ))}
@@ -73,7 +71,7 @@ export const Dashboard = () => {
         </div>
         {/* Resume Preview */}
         <div className="flex-1 flex">
-            {selectedResumeId &&
+            {selectedResumeId ?
                 <div className="flex-1 px-10 flex flex-col">
                     <div className="flex justify-end mb-3 gap-2">
                         <Button dense variant='secondary' buttonClassName="!w-fit">
@@ -97,6 +95,7 @@ export const Dashboard = () => {
                     </div>
                     <Preview id={'89d7495a-f86a-44c4-91e3-5f522b3e037f"'} readonly />
                 </div>
+                : emptyStateRenderer()
             }
         </div>
     </main>

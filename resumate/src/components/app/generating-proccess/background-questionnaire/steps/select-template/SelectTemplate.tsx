@@ -94,7 +94,7 @@ export const SelectTemplate = () => {
                 <div
                   className={`flex justify-center items-center h-[330px] p-1 ${
                     selectedTemplate === item.id
-                      ? "border-blue-500"
+                      ? "border-primary border-4"
                       : "border-gray-200"
                   } bg-white border rounded-sm shadow-md mx-1 cursor-pointer transition-all duration-300`}
                   onClick={() => handleTemplateClick(item.id)}

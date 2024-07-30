@@ -16,9 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <GoogleOAuthProvider clientId={googleClientId}>
     <RecoilRoot>
       <Toaster />
-      <main className="resumate">
-        <RouterProvider router={router} />
-      </main>
+      <RouterProvider router={router} />
     </RecoilRoot>
   </GoogleOAuthProvider>
 

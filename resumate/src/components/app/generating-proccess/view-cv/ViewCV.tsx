@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { fullNameState, jobTitleState } from "../store/state";
 import { generatePreviewUrl } from "../../../../services/cvPreview";
-import { Button } from "@/components/shared/button/Button";
+import { fullNameState, jobTitleState } from "../store/state";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
-  const { resumeText } = location.state || {};  
+  const { resumeText } = location.state || {};
   const [pdfUrl, setPdfUrl] = useState<string>("");
 
   const fullName = useRecoilValue(fullNameState);
@@ -17,7 +16,7 @@ const ViewCV: React.FC = () => {
     : "Resume.pdf";
 
   useEffect(() => {
-    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2], resumeText[3], resumeText[4]);    
+    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2], resumeText[3], resumeText[4]);
   }, [resumeText]);
 
   const previewPdf = async (
@@ -29,7 +28,7 @@ const ViewCV: React.FC = () => {
   ) => {
     try {
       const response = await generatePreviewUrl(fullName, jobTitle, bio, skills, experiences, educations, languages);
-      const {url} = response.data
+      const { url } = response.data
       setPdfUrl(url);
     } catch (error) {
       console.error("Error fetching PDF preview:", error);
@@ -47,7 +46,7 @@ const ViewCV: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 items-center pt-[50px]">
+    <div className="flex flex-col flex-1 items-center">
       <h1 className="font-bold text-3xl mb-[20px]">Your Resume is Ready!</h1>
       {/* <Button
         onClick={handleDownload}
@@ -71,7 +70,7 @@ const ViewCV: React.FC = () => {
       </Button>  */}
       {pdfUrl ? (
         <embed src={pdfUrl} type="application/pdf" width="100%" height="100%" />
-      ): <p>Loading Preview..</p>} 
+      ) : <p>Loading Preview..</p>}
     </div>
   );
 };

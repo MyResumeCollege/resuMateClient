@@ -1,38 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { fetchTemplates, Template } from "@/services/templateService";
 import "./SelectTemplate.css";
-
-import template1Image from "@/assets/images/resume-template/template1.jpg";
-import template2Image from "@/assets/images/resume-template/template2.jpg";
-import template3Image from "@/assets/images/resume-template/template3.jpg";
-import template4Image from "@/assets/images/resume-template/template4.jpg";
-import template5Image from "@/assets/images/resume-template/template5.jpg";
-import template6Image from "@/assets/images/resume-template/template6.jpg";
-import template7Image from "@/assets/images/resume-template/template7.jpg";
-import template8Image from "@/assets/images/resume-template/template8.jpg";
-import template9Image from "@/assets/images/resume-template/template9.jpg";
+import crownImage from "@/assets/images/crown.png";
+import { checkUserPremiumStatus } from "@/services/premiumService";
 
 export const SelectTemplate = () => {
   const navigate = useNavigate();
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const userId = localStorage.getItem("userId");
 
-  const templates = [
-    { id: "template1", imageUrl: template1Image },
-    { id: "template2", imageUrl: template2Image },
-    { id: "template3", imageUrl: template3Image },
-    { id: "template4", imageUrl: template4Image },
-    { id: "template5", imageUrl: template5Image },
-    { id: "template6", imageUrl: template6Image },
-    { id: "template7", imageUrl: template7Image },
-    { id: "template8", imageUrl: template8Image },
-    { id: "template9", imageUrl: template9Image },
-  ];
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
+
+  useEffect(() => {
+    const getUserStatus = async () => {
+      try {
+        if (userId) {
+          const response = await checkUserPremiumStatus(userId);
+          setIsPremiumUser(response.data.isPremium);
+        }
+      } catch (err) {
+        console.error("Error fetching user status:", err);
+        setError("Failed to fetch user status.");
+      }
+    };
+    const getTemplates = async () => {
+      try {
+        const templatesData = await fetchTemplates();
+        setTemplates(templatesData);
+      } catch (err) {
+        console.error("Error fetching templates:", err);
+        setError("Failed to fetch templates.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUserStatus();
+    getTemplates();
+  }, [userId]);
 
   const handleTemplateClick = (id: string) => {
-    setSelectedTemplate(id);
+    if (isPremiumUser || !templates.find((t) => t._id === id)?.isPremium) {
+      setSelectedTemplate(id);
+    }
   };
 
   const generateCV = () => {
@@ -70,6 +87,14 @@ export const SelectTemplate = () => {
     ],
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <section className="flex-1 flex flex-col items-center pt-12">
       <h2 className="font-bold text-3xl text-center mb-5">
@@ -88,21 +113,32 @@ export const SelectTemplate = () => {
           <Slider {...settings}>
             {templates.map((item) => (
               <div
-                key={item.id}
-                className="flex justify-center items-center h-[330px]"
+                key={item._id}
+                className="flex justify-center items-center h-[330px] relative"
               >
+                {item.isPremium && (
+                  <img
+                    src={crownImage}
+                    className="absolute left-2 w-12 h-12"
+                    alt="Premium"
+                  />
+                )}
                 <div
                   className={`flex justify-center items-center h-[330px] p-1 ${
-                    selectedTemplate === item.id
+                    selectedTemplate === item._id
                       ? "border-primary border-4"
                       : "border-gray-200"
-                  } bg-white border rounded-sm shadow-md mx-1 cursor-pointer transition-all duration-300`}
-                  onClick={() => handleTemplateClick(item.id)}
+                  } bg-white border rounded-sm shadow-md mx-1 cursor-pointer transition-all duration-300 ${
+                    item.isPremium && !isPremiumUser
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  onClick={() => handleTemplateClick(item._id)}
                 >
                   <img
                     src={item.imageUrl}
                     className="w-11/12 h-11/12 rounded-md"
-                    alt={`Template ${item.id}`}
+                    alt={`Template ${item._id}`}
                   />
                 </div>
               </div>

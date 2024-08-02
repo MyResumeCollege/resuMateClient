@@ -5,8 +5,10 @@ import {
   generatePreviewUrl,
   handleDownloadCV,
 } from "../../../../services/cvPreview";
-import { fullNameState, jobTitleState } from "../store/state";
+import { fullNameState, jobTitleState, languagesState, skillsState } from "../store/state";
 import { Button } from "@/components/shared/button/Button";
+import { SKILL_LEVEL_NAME } from "@/types/skill";
+import { LANGUAGE_LEVEL_NAME } from "@/types/language-knowledge";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
@@ -15,6 +17,8 @@ const ViewCV: React.FC = () => {
 
   const fullName = useRecoilValue(fullNameState);
   const jobTitle = useRecoilValue(jobTitleState);
+  const userSkills = useRecoilValue(skillsState)
+  const userLanguages = useRecoilValue(languagesState)
   const fileName = fullName
     ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
     : "Resume.pdf";
@@ -24,28 +28,24 @@ const ViewCV: React.FC = () => {
       previewPdf(
         resumeText[0],
         resumeText[1],
-        resumeText[2],
-        resumeText[3],
-        resumeText[4]
+        resumeText[2]
       );
   }, [resumeText]);
 
   const previewPdf = async (
     bio: string,
-    skills: string,
     experiences: string,
     educations: string,
-    languages: string
   ) => {
     try {
       const response = await generatePreviewUrl(
         fullName,
         jobTitle,
         bio,
-        skills,
+        userSkills.map(skill => `${skill.name} - ${SKILL_LEVEL_NAME[skill.level]}`).join("\n"),
         experiences,
         educations,
-        languages
+        userLanguages.map(languagesState => `${languagesState.lang} - ${LANGUAGE_LEVEL_NAME[languagesState.level]}`).join("\n")
       );
       const { url } = response.data;
       setPdfUrl(url);

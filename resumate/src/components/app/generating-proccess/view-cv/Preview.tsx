@@ -154,7 +154,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
             Education
             <FaRedo className="ml-2 text-gray-500" />
           </h2>
-          <div className="mb-2">
+          <div className="flex flex-wrap text-sm">
             {educations}
           </div>
         </div>

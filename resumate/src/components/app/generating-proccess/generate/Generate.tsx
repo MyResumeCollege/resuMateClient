@@ -27,8 +27,6 @@ export const Generate = () => {
         if (existCV instanceof File) {
           const improvedResume = await uploadResume(existCV)
           resumeText = improvedResume.data
-
-          console.log("resumeText ", resumeText);
           
           if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
         }

@@ -4,7 +4,7 @@ import './navbar.css';
 export const NavBar = () => {
     return <nav className="h-[65px] bg-white p-5 border border-gray-300 flex justify-between items-center">
         <div className='flex items-center gap-2'>
-            <div className='bg-primary h-[30px] w-[30px] rounded-lg'></div>
+            {/* <div className='bg-primary h-[30px] w-[30px] rounded-lg'></div> */}
             <Link to='/dashboard'>
                 <span className="font-bold text-2xl logo relative">
                     ResuMate.

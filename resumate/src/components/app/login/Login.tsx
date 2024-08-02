@@ -2,7 +2,7 @@ import { Button } from '@/components/shared/button/Button'
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Lock from '@/assets/images/lock.webp'
+import Resume from '@/assets/icons/resume.svg';
 import { useSetRecoilState } from 'recoil'
 import { userState } from '../../../store/atoms/userAtom'
 import {
@@ -59,8 +59,8 @@ export const Login = () => {
   return (
     <main className="flex-1 flex flex-col items-center justify-center">
       <section className="flex gap-10 bg-white p-10 rounded-lg w-fit shadow-lg">
-        <div className="bg-bg rounded-md flex-1 px-8 flex items-center">
-          <img src={Lock} className="w-[250px]" />
+        <div className="bg-primary rounded-md flex-1 px-8 flex items-center">
+          <img src={Resume} className="w-[250px]" />
         </div>
         <section className="flex flex-col gap-2 w-[400px]">
           <h1 className="text-4xl font-bold mb-[20px]">Login</h1>
@@ -84,7 +84,7 @@ export const Login = () => {
           <div className="text-center py-1">
             <span className="text-sm">
               Don't have an account?{' '}
-              <Link to="/register" className="text-[red] font-medium">
+              <Link to="/register" className="text-primary font-medium">
                 Sign Up
               </Link>
             </span>

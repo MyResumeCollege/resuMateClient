@@ -20,5 +20,5 @@ export const setUserPremiumStatus = async (
 export const checkUserPremiumStatus = async (
   userId: string
 ): Promise<AxiosResponse<{ isPremium: boolean }>> => {
-  return await apiClient.get(`/users/${userId}/is-premium`);
+  return await apiClient.get(`/user/${userId}/is-premium`);
 };

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { generatePreviewUrl } from "../../../../services/cvPreview";
+import {
+  generatePreviewUrl,
+  handleDownloadCV,
+} from "../../../../services/cvPreview";
 import { fullNameState, jobTitleState } from "../store/state";
+import { Button } from "@/components/shared/button/Button";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
@@ -16,7 +20,14 @@ const ViewCV: React.FC = () => {
     : "Resume.pdf";
 
   useEffect(() => {
-    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2], resumeText[3], resumeText[4]);
+    if (resumeText)
+      previewPdf(
+        resumeText[0],
+        resumeText[1],
+        resumeText[2],
+        resumeText[3],
+        resumeText[4]
+      );
   }, [resumeText]);
 
   const previewPdf = async (
@@ -27,29 +38,47 @@ const ViewCV: React.FC = () => {
     languages: string
   ) => {
     try {
-      const response = await generatePreviewUrl(fullName, jobTitle, bio, skills, experiences, educations, languages);
-      const { url } = response.data
+      const response = await generatePreviewUrl(
+        fullName,
+        jobTitle,
+        bio,
+        skills,
+        experiences,
+        educations,
+        languages
+      );
+      const { url } = response.data;
       setPdfUrl(url);
     } catch (error) {
       console.error("Error fetching PDF preview:", error);
     }
   };
 
-  // TODO - fix it - endpoint in server due to puppetter
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = pdfUrl;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const downloadPDF =  async () => {
+    try {
+      const response = await handleDownloadCV(
+        pdfUrl
+      );
+      if (response instanceof Blob) {
+        const downloadUrl = window.URL.createObjectURL(response);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      } else console.error('Response is not a Blob');
+    } catch (error) {
+      console.error('Error downloading the PDF:', error);
+    }
+  }
 
   return (
     <div className="flex flex-col flex-1 items-center">
       <h1 className="font-bold text-3xl mb-[20px]">Your Resume is Ready!</h1>
-      {/* <Button
-        onClick={handleDownload}
+      <Button
+        onClick={downloadPDF}
         style={{ width: "fit-content", marginBottom: 20 }}
       >
         <svg
@@ -67,10 +96,18 @@ const ViewCV: React.FC = () => {
           />
         </svg>
         Download Resume
-      </Button>  */}
+      </Button>
       {pdfUrl ? (
-        <embed src={pdfUrl} type="application/pdf" width="100%" height="100%" />
-      ) : <p>Loading Preview..</p>}
+        <embed
+          id="previewCV"
+          src={pdfUrl}
+          type="application/pdf"
+          width="100%"
+          height="100%"
+        />
+      ) : (
+        <p>Loading Preview..</p>
+      )}
     </div>
   );
 };

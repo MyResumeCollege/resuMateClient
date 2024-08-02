@@ -1,27 +1,43 @@
 import { AxiosResponse } from "axios";
 import apiClient from "./httpCommon";
-import {ResumeSections} from "../types/resume"
+import { ResumeSections } from "../types/resume";
 
 export const generatePreviewUrl = async (
-    fullName: string, 
-    jobTitle: string, 
-    bio: string, 
-    skills: string, 
-    experiences: string, 
-    educations: string, 
-    languages: string
+  fullName: string,
+  jobTitle: string,
+  bio: string,
+  skills: string,
+  experiences: string,
+  educations: string,
+  languages: string
 ): Promise<AxiosResponse<{ url: string }>> => {
-    return await apiClient.post('/preview/generate-preview-url', {
-        fullName,
-        jobTitle,
-        bio,
-        skills,
-        experiences,
-        educations,
-        languages
-    });
+  return await apiClient.post("/preview/generate-preview-url", {
+    fullName,
+    jobTitle,
+    bio,
+    skills,
+    experiences,
+    educations,
+    languages,
+  });
 };
 
-export const previewCV = async (id: string): Promise<AxiosResponse<ResumeSections>> => {
-    return apiClient.get(`/preview/${id}`);
-  };
+export const previewCV = async (
+  id: string
+): Promise<AxiosResponse<ResumeSections>> => {
+  return await apiClient.get(`/preview/${id}`);
+};
+
+export const handleDownloadCV = async (url: string): Promise<Blob> => {
+  const response = await apiClient.post(
+    "/preview/download-cv",
+    {
+      url,
+    },
+    {
+      responseType: "blob",
+    }
+  );
+
+  return response.data;
+};

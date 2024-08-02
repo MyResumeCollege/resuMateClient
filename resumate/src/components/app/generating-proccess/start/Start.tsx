@@ -27,7 +27,7 @@ export const Start = () => {
     if (!existCV) {
       return;
     }
-    
+
     navigate("generate", { state: { existCV } });
   };
 
@@ -53,12 +53,17 @@ export const Start = () => {
             by a few questions
           </span>
         </div>
-        <div onClick={handleUpdatePdfChange}>
-          <img src={AddFileIcon} alt="Your SVG" />
-          <h2 className="font-medium text-lg">Import existing CV</h2>
-          <span className="font-light text-sm opacity-80">
-            upload CV in PDF format
-          </span>
+        <div onClick={handleUpdatePdfChange} className={styles.disabled}>
+          <div style={{ opacity: 0.3 }} className="flex flex-col items-center">
+            <img src={AddFileIcon} alt="Your SVG" className="!w-[110px] !h-[110px]"/>
+            <h2 className="font-medium text-lg">Import existing CV</h2>
+            <span className="font-light text-sm opacity-80">
+              upload CV in PDF format
+            </span>
+          </div>
+          <div className="absolute font-bold bg-primary text-white py-2 px-3 rounded-t-md w-full top-0 text-center">
+            Coming Soon!
+          </div>
         </div>
         <input
           type="file"

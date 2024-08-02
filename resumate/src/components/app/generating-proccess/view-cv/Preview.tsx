@@ -12,7 +12,7 @@ type PreviewProps = {
 
 const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const { id } = useParams<{ id: string }>();
-  const [fullName, setFullName] = useState<string>("");
+  const [fullName, setFullName] = useState<string>("Full Name");
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
   const [bio, setBio] = useState<string>(
     "A brief bio about yourself goes here."
@@ -134,7 +134,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
             <FaRedo className="ml-2 text-gray-500" />
           </h2>
           <div className="mb-2">
-            <ul className="list-disc pl-5 text-sm mt-1">
+            <ul className="list-disc text-sm mt-1">
               {experiences}
             </ul>
           </div>
@@ -144,7 +144,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
             Skills
             <FaRedo className="ml-2 text-gray-500" />
           </h2>
-          <div className="flex flex-wrap text-sm">
+          <div className="text-sm whitespace-pre-line">
             {skills}
           </div>
         </div>

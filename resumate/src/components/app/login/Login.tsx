@@ -2,7 +2,7 @@ import { Button } from '@/components/shared/button/Button'
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Resume from '@/assets/icons/resume.svg';
+import Resume from '@/assets/icons/resume.svg'
 import { useSetRecoilState } from 'recoil'
 import { userState } from '../../../store/atoms/userAtom'
 import {
@@ -30,7 +30,7 @@ export const Login = () => {
         refreshToken: loginGoogleRes.refreshToken,
       })
       setUser(loginGoogleRes.user)
-      navigate("/pricing");
+      navigate('/pricing')
     } catch (err) {
       console.log(err)
     }

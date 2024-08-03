@@ -15,3 +15,8 @@ export type ResumeSections = {
   educations: string;
   languages: string;
 };
+
+export type ResumeOverview = Pick<ResumeSections, 'fullName' | 'jobTitle'> & {
+  id: string;
+  creationDate: Date;
+};

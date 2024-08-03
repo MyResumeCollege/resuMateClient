@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import apiClient from "./httpCommon";
-import { ResumeSections } from "../types/resume";
+import { ResumeOverview, ResumeSections } from "../types/resume";
 
 export const generatePreviewUrl = async (
   fullName: string,
@@ -41,3 +41,7 @@ export const handleDownloadCV = async (url: string): Promise<Blob> => {
 
   return response.data;
 };
+
+export const getUserResumePreviews = async (userId: string): Promise<AxiosResponse<ResumeOverview[]>> => {
+  return await apiClient.get(`/user/${userId}/resume-previews`);
+}

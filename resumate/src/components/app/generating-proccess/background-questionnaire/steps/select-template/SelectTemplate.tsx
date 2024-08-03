@@ -1,62 +1,49 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import Slider from 'react-slick'
-import { fetchTemplates, Template } from '@/services/templateService'
-import './SelectTemplate.css'
-import crownImage from '@/assets/images/crown.png'
-import { checkUserPremiumStatus } from '@/services/premiumService'
-import { useRecoilValue } from 'recoil'
-import { userIdSelector } from '@/store/atoms/userAtom'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import { fetchTemplates, Template } from "@/services/templateService";
+import "./SelectTemplate.css";
+import crownImage from "@/assets/images/crown.png";
+import { useRecoilValue } from "recoil";
+import { userIdSelector, isUserPremiumSelector } from "@/store/atoms/userAtom";
 
 export const SelectTemplate = () => {
-  const navigate = useNavigate()
-  const userId = useRecoilValue(userIdSelector)
+  const navigate = useNavigate();
+  const userId = useRecoilValue(userIdSelector);
+  const isPremiumUser = useRecoilValue(isUserPremiumSelector);
 
-  const [templates, setTemplates] = useState<Template[]>([])
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false)
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getUserStatus = async () => {
-      try {
-        if (userId) {
-          const response = await checkUserPremiumStatus(userId)
-          setIsPremiumUser(response.data.isPremium)
-        }
-      } catch (err) {
-        console.error('Error fetching user status:', err)
-        setError('Failed to fetch user status.')
-      }
-    }
     const getTemplates = async () => {
       try {
-        const templatesData = await fetchTemplates()
-        setTemplates(templatesData)
+        const templatesData = await fetchTemplates();
+        setTemplates(templatesData);
       } catch (err) {
-        console.error('Error fetching templates:', err)
-        setError('Failed to fetch templates.')
+        console.error("Error fetching templates:", err);
+        setError("Failed to fetch templates.");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    getUserStatus()
-    getTemplates()
-  }, [userId])
+    getTemplates();
+  }, [userId]);
 
   const handleTemplateClick = (id: string) => {
-    if (isPremiumUser || !templates.find(t => t._id === id)?.isPremium) {
-      setSelectedTemplate(id)
+    if (isPremiumUser || !templates.find((t) => t._id === id)?.isPremium) {
+      setSelectedTemplate(id);
     }
-  }
+  };
 
   const generateCV = () => {
-    navigate('/build-cv/generate')
-  }
+    navigate("/build-cv/generate");
+  };
 
   const settings = {
     dots: false,
@@ -66,7 +53,7 @@ export const SelectTemplate = () => {
     slidesToScroll: 1,
     autoplay: false,
     centerMode: true,
-    centerPadding: '0',
+    centerPadding: "0",
     responsive: [
       {
         breakpoint: 1024,
@@ -87,14 +74,14 @@ export const SelectTemplate = () => {
         },
       },
     ],
-  }
+  };
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>
+    return <div>{error}</div>;
   }
 
   return (
@@ -113,7 +100,7 @@ export const SelectTemplate = () => {
       <div className="w-full flex justify-center">
         <div className="w-full max-w-screen-xl">
           <Slider {...settings}>
-            {templates.map(item => (
+            {templates.map((item) => (
               <div
                 key={item._id}
                 className="flex justify-center items-center h-[330px] relative"
@@ -128,12 +115,12 @@ export const SelectTemplate = () => {
                 <div
                   className={`flex justify-center items-center h-[330px] p-1 ${
                     selectedTemplate === item._id
-                      ? 'border-primary border-4'
-                      : 'border-gray-200'
+                      ? "border-primary border-4"
+                      : "border-gray-200"
                   } bg-white border rounded-sm shadow-md mx-1 cursor-pointer transition-all duration-300 ${
                     item.isPremium && !isPremiumUser
-                      ? 'opacity-50 cursor-not-allowed'
-                      : ''
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   }`}
                   onClick={() => handleTemplateClick(item._id)}
                 >
@@ -149,5 +136,5 @@ export const SelectTemplate = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};

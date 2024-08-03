@@ -73,7 +73,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   };
   return (
     <div className="w-full max-w-6xl flex space-x-8 flex-1">
-      {!readonly && <div id = "translate" className="w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
+      {!readonly && <div className="translate w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
         <div className="px-6 py-4">
           <h2 className="text-xl font-semibold text-gray-800">
             Translate Your Resume

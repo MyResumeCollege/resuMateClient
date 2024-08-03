@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../../../store/atoms/userAtom";
 import { registerUser } from "../../../services/authService";
+import { toast } from "react-hot-toast";
+import { AxiosError } from "axios";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
@@ -17,14 +19,23 @@ export const Register = () => {
     try {
       const response = await registerUser({ email, password, name });
       const { data: registerRes } = response;
-      
-    const userId = registerRes.user._id;
-    localStorage.setItem("userId", userId);
+
+      const userId = registerRes.user._id;
+      localStorage.setItem("userId", userId);
 
       setUser(registerRes.user);
       navigate("/pricing");
     } catch (err) {
-      console.log(err);
+      if (
+        err instanceof AxiosError &&
+        err.response &&
+        err.response.status === 400 &&
+        err.response.data === "user already exist"
+      ) {
+        toast.error("User already exists");
+      } else {
+        console.log(err);
+      }
     }
   };
 

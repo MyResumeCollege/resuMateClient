@@ -13,6 +13,10 @@ type Resume = {
   languages: LanguageKnowledge[];
 };
 
+type GenerateSectionData = {
+  data: string
+}
+
 export const generateCVFromScratch = async ({
   bio,
   skills,
@@ -28,4 +32,8 @@ export const generateCVFromScratch = async ({
     educations: educations,
     languages: languages
   });
+};
+
+export const generateSection = async ({ data }: GenerateSectionData): Promise<AxiosResponse<string>> => {
+  return apiClient.post("/cv/generate-section", { data });
 };

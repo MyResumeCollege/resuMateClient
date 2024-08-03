@@ -4,6 +4,9 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { previewCV } from "../../../../services/cvPreview";
 import { FaRedo } from 'react-icons/fa';
+import { generateSection } from "@/services/GenerateResume";
+
+import "./Preview.css"
 
 type PreviewProps = {
   id?: string;
@@ -71,6 +74,28 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       console.error("Error translating resume:", error);
     }
   };
+
+  const handleRegenerate = async (section: string, existSectionData: string) => {
+    try {
+      const response = await generateSection({ data: existSectionData });
+      const updatedSectionText = response.data;
+        
+      switch (section) {
+        case 'bio':
+          setBio(updatedSectionText)
+          break;
+        case 'education':
+          setEducations(updatedSectionText)
+          break;
+        case 'experience':
+          setExperiences(updatedSectionText)
+          break;
+      }
+    
+    } catch (error) {
+      console.error('Error regenerating section:', error);
+    }
+  };
   return (
     <div className="w-full max-w-6xl flex space-x-8 flex-1">
       {!readonly && <div className="translate w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
@@ -121,7 +146,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Summary
-            <FaRedo className="generate-section ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" onClick={() => handleRegenerate("bio", bio)}/>
           </h2>
           <p className="text-sm">{bio}</p>
         </div>
@@ -129,7 +154,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Experience
-            <FaRedo className="generate-section ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" onClick={() => handleRegenerate("experience", experiences)}/>
           </h2>
           <div className="mb-2">
             <ul className="list-disc text-sm mt-1">
@@ -140,7 +165,6 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Skills
-            <FaRedo className="generate-section ml-2 text-gray-500" />
           </h2>
           <div className="text-sm whitespace-pre-line">
             {skills}
@@ -150,7 +174,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Education
-            <FaRedo className="generate-section ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" onClick={() => handleRegenerate("education", educations)}/>
           </h2>
           <div className="flex flex-wrap text-sm">
             {educations}
@@ -159,7 +183,6 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div>
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Languages
-            <FaRedo className="generate-section ml-2 text-gray-500" />
           </h2>
           <div className="text-sm whitespace-pre-line">
             {languages}

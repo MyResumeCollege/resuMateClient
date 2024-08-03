@@ -1,16 +1,16 @@
-import { ResumeSections } from "@/types/resume"
+import { ResumeOverview } from "@/types/resume";
 import classNames from "classnames";
 
-type ResumeOverviewProps = {
-    resume: ResumeSections;
+type ResumeOverviewItemProps = {
+    resume: ResumeOverview;
     current: boolean;
     onSelect: () => void;
 }
 
-export const ResumeOverview = ({ resume, current, onSelect }: ResumeOverviewProps) => {
+export const ResumeOverviewItem = ({ resume, current, onSelect }: ResumeOverviewItemProps) => {
 
     return <div
-        className={classNames(`bg-white p-5 border-[1px] rounded-md shadow-md w-[300px] cursor-pointer`,
+        className={classNames(`bg-white p-5 border-[1px] rounded-md shadow-md cursor-pointer`,
             { '!bg-primary text-white': current },
         )}
         onClick={onSelect}

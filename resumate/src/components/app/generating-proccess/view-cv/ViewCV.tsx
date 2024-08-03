@@ -1,43 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 import {
   generatePreviewUrl,
   handleDownloadCV,
-} from "../../../../services/cvPreview";
+} from '../../../../services/cvPreview'
 import {
-  educationState,
   fullNameState,
   jobTitleState,
   languagesState,
   skillsState,
-  summaryState,
-} from "../store/state";
-import { Button } from "@/components/shared/button/Button";
-import { SKILL_LEVEL_NAME } from "@/types/skill";
-import { LANGUAGE_LEVEL_NAME } from "@/types/language-knowledge";
-import { userIdSelector } from "@/store/atoms/userAtom";
-import { cvSave } from "../../../../services/cvSave";
+} from '../store/state'
+import { Button } from '@/components/shared/button/Button'
+import { SKILL_LEVEL_NAME } from '@/types/skill'
+import { LANGUAGE_LEVEL_NAME } from '@/types/language-knowledge'
+import { userIdSelector } from '@/store/atoms/userAtom'
+import { cvSave } from '../../../../services/cvSave'
 
 const ViewCV: React.FC = () => {
-  const location = useLocation();
-  const { resumeText } = location.state || {};
-  const [pdfUrl, setPdfUrl] = useState<string>("");
-  const userId = useRecoilValue(userIdSelector);
-  const fullName = useRecoilValue(fullNameState);
-  const jobTitle = useRecoilValue(jobTitleState);
-  const userSkills = useRecoilValue(skillsState);
-  const userLanguages = useRecoilValue(languagesState);
-  const userEducation = useRecoilValue(educationState);
-  const userBio = useRecoilValue(summaryState);
+  const location = useLocation()
+  const { resumeText } = location.state || {}
+  const [pdfUrl, setPdfUrl] = useState<string>('')
+  const userId = useRecoilValue(userIdSelector)
+  const fullName = useRecoilValue(fullNameState)
+  const jobTitle = useRecoilValue(jobTitleState)
+  const userSkills = useRecoilValue(skillsState)
+  console.log(userSkills)
+  const userLanguages = useRecoilValue(languagesState)
 
   const fileName = fullName
-    ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
-    : "Resume.pdf";
+    ? `${fullName.replace(/ /g, '_')}-Resume.pdf`
+    : 'Resume.pdf'
 
   useEffect(() => {
-    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2]);
-  }, [resumeText]);
+    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2])
+  }, [resumeText])
 
   const previewPdf = async (
     bio: string,
@@ -50,65 +47,65 @@ const ViewCV: React.FC = () => {
         jobTitle,
         bio,
         userSkills
-          .map((skill) => `${skill.name} - ${SKILL_LEVEL_NAME[skill.level]}`)
-          .join("\n"),
+          .map(skill => `${skill.name} - ${SKILL_LEVEL_NAME[skill.level]}`)
+          .join('\n'),
         experiences,
         educations,
         userLanguages
           .map(
-            (languagesState) =>
+            languagesState =>
               `${languagesState.lang} - ${
                 LANGUAGE_LEVEL_NAME[languagesState.level]
               }`
           )
-          .join("\n")
-      );
-      const { url } = response.data;
-      setPdfUrl(url);
+          .join('\n')
+      )
+      const { url } = response.data
+      setPdfUrl(url)
     } catch (error) {
-      console.error("Error fetching PDF preview:", error);
+      console.error('Error fetching PDF preview:', error)
     }
-  };
+  }
 
   const downloadPDF = async () => {
     try {
-      const response = await handleDownloadCV(pdfUrl);
+      const response = await handleDownloadCV(pdfUrl)
       if (response instanceof Blob) {
-        const downloadUrl = window.URL.createObjectURL(response);
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.setAttribute("download", fileName);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(downloadUrl);
-      } else console.error("Response is not a Blob");
+        const downloadUrl = window.URL.createObjectURL(response)
+        const link = document.createElement('a')
+        link.href = downloadUrl
+        link.setAttribute('download', fileName)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(downloadUrl)
+      } else console.error('Response is not a Blob')
     } catch (error) {
-      console.error("Error downloading the PDF:", error);
+      console.error('Error downloading the PDF:', error)
     }
-  };
+  }
 
   const saveDraft = async () => {
     const cvData = {
       ownerId: userId,
       fullName,
       jobTitle,
-      userBio,
-      userSkills,
-      userEducation,
-      userLanguages,
-    };
-    console.log("my data:", cvData);
-    // const response = await cvSave(cvData);
-    //console.log("Draft saved successfully:", response);
-  };
+      bio: resumeText[0],
+      skills: userSkills,
+      experiences: resumeText[1],
+      educations: resumeText[2],
+      languages: userLanguages,
+    }
+    const response = await cvSave(cvData)
+    console.log(response)
+  }
 
   return (
     <div className="flex flex-col flex-1 items-center">
       <h1 className="font-bold text-3xl mb-[20px]">Your Resume is Ready!</h1>
       <Button
         onClick={downloadPDF}
-        style={{ width: "fit-content", marginBottom: 20 }}
+        style={{ width: 'fit-content', marginBottom: 20 }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +125,7 @@ const ViewCV: React.FC = () => {
       </Button>
       <Button
         onClick={saveDraft}
-        style={{ width: "fit-content", marginBottom: 20 }}
+        style={{ width: 'fit-content', marginBottom: 20 }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +155,7 @@ const ViewCV: React.FC = () => {
         <p>Loading Preview..</p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ViewCV;
+export default ViewCV

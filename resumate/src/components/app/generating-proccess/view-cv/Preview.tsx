@@ -14,9 +14,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const { id } = useParams<{ id: string }>();
   const [fullName, setFullName] = useState<string>("Full Name");
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
-  const [bio, setBio] = useState<string>(
-    "A brief bio about yourself goes here."
-  );
+  const [bio, setBio] = useState<string>( "A brief bio about yourself goes here.");
   const [skills, setSkills] = useState<string>("Skills");
   const [experiences, setExperiences] = useState<string>("Experience");
   const [educations, setEducations] = useState<string>("Educations");
@@ -75,7 +73,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   };
   return (
     <div className="w-full max-w-6xl flex space-x-8 flex-1">
-      {!readonly && <div className="w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
+      {!readonly && <div id = "translate" className="w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
         <div className="px-6 py-4">
           <h2 className="text-xl font-semibold text-gray-800">
             Translate Your Resume
@@ -123,7 +121,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Summary
-            <FaRedo className="ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" />
           </h2>
           <p className="text-sm">{bio}</p>
         </div>
@@ -131,7 +129,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Experience
-            <FaRedo className="ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" />
           </h2>
           <div className="mb-2">
             <ul className="list-disc text-sm mt-1">
@@ -142,7 +140,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Skills
-            <FaRedo className="ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" />
           </h2>
           <div className="text-sm whitespace-pre-line">
             {skills}
@@ -152,7 +150,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="mb-4">
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Education
-            <FaRedo className="ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" />
           </h2>
           <div className="flex flex-wrap text-sm">
             {educations}
@@ -161,7 +159,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div>
         <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
             Languages
-            <FaRedo className="ml-2 text-gray-500" />
+            <FaRedo className="generate-section ml-2 text-gray-500" />
           </h2>
           <div className="text-sm whitespace-pre-line">
             {languages}

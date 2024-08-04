@@ -26,7 +26,7 @@ export const generateCVFromScratch = async ({
 }: Resume): Promise<AxiosResponse<string[]>> => {
   
   return apiClient.post("/cv/generate-resume", {
-    description: bio,
+    bio: bio,
     skills: skills,
     experiences: experiences,
     educations: educations,

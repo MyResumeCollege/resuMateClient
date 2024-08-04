@@ -25,7 +25,6 @@ const ViewCV: React.FC = () => {
   const fullName = useRecoilValue(fullNameState)
   const jobTitle = useRecoilValue(jobTitleState)
   const userSkills = useRecoilValue(skillsState)
-  console.log(userSkills)
   const userLanguages = useRecoilValue(languagesState)
 
   const fileName = fullName
@@ -34,6 +33,7 @@ const ViewCV: React.FC = () => {
 
   useEffect(() => {
     if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2])
+      
   }, [resumeText])
 
   const previewPdf = async (

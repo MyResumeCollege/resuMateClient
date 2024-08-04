@@ -34,7 +34,7 @@ export const Generate = () => {
         toast.error('Failed to upload the file. Please try again.')
       }
     } else {
-      try {
+      try {        
         const generateResume = await generateCVFromScratch({
           bio,
           skills,
@@ -43,7 +43,7 @@ export const Generate = () => {
           languages
         })
         resumeText = generateResume.data
-
+        
         if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
       } catch (error) {
         toast.error('Failed to generate resume from scratch. Please try again.')

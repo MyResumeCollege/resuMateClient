@@ -33,10 +33,10 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           const data = response.data;
           setFullName(data.fullName);
           setJobTitle(data.jobTitle);
-          setBio(data.bio);
+          setBio(data.bio.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
           setSkills(data.skills);
-          setExperiences(data.experiences);
-          setEducations(data.educations);
+          setExperiences(data.experiences.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
+          setEducations(data.educations.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
           setLanguages(data.languages);
         } catch (error) {
           toast.error("Sorry, we encountered some issues");

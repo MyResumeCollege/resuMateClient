@@ -1,9 +1,9 @@
 import { Button } from '@/components/shared/button/Button'
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Resume from '@/assets/icons/resume.svg'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { userState } from '../../../store/atoms/userAtom'
 import {
   saveTokens,
@@ -15,8 +15,14 @@ import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const setUser = useSetRecoilState(userState)
+  const [user, setUser] = useRecoilState(userState)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user._id != "") {
+      navigate('/build-cv')
+    }
+  }, [user])
 
   const onGoogleLoginSuccess = async (
     credentialResponse: CredentialResponse

@@ -1,5 +1,5 @@
 import { Button } from "@/components/shared/button/Button";
-import { getUserResumePreviews } from "@/services/cvPreview";
+import { getUserResume, getUserResumePreviews } from "@/services/cvPreview";
 import { userIdSelector } from "@/store/atoms/userAtom";
 import { ResumeOverview } from "@/types/resume";
 import { useEffect, useState } from "react";
@@ -15,11 +15,20 @@ export const Dashboard = () => {
     const userId = useRecoilValue(userIdSelector);
 
     const [isLoadingResumes, setLoadingResumes] = useState(true);
-    const [selectedResumeId, setSelectedResumeId] = useState<number>();
+    const [selectedResumeIndex, setSelectedResumeIndex] = useState<number>();
+    const [selectedResumeId, setSelectedResumeId] = useState<string>()
     const [resumes, setResumes] = useState<ResumeOverview[]>([]);
 
-    const onResumeSelect = (resumeIndex: number) => {
-        setSelectedResumeId(resumeIndex);
+    const onResumeSelect = async (resumeIndex: number, resumeId: string) => {
+        try {
+            setSelectedResumeIndex(resumeIndex)
+            const response = await getUserResume(userId, resumeId)
+            if (response.data) {
+                setSelectedResumeId(response.data);
+            }
+        } catch (err) {
+            toast.error("An error occured while fetching resume Data")
+        }
     }
 
     const goToCreateResume = () => {
@@ -65,13 +74,13 @@ export const Dashboard = () => {
                     </div>
                     <div className="flex flex-col gap-2 w-[300px]">
                         {resumes.map((resume, index) => (
-                            <ResumeOverviewItem key={index} current={index + 1 === selectedResumeId} resume={resume} onSelect={() => onResumeSelect(index + 1)} />
+                            <ResumeOverviewItem key={index} current={index + 1 === selectedResumeIndex} resume={resume} onSelect={() => onResumeSelect(index + 1, resume.id)} />
                         ))}
                     </div>
                 </div>
                 {/* Resume Preview */}
                 <div className="flex-1 flex">
-                    {selectedResumeId ?
+                    {selectedResumeIndex ?
                         <div className="flex-1 px-10 flex flex-col">
                             <div className="flex justify-end mb-3 gap-2">
                                 <Button dense variant='secondary' buttonClassName="!w-fit">
@@ -93,7 +102,7 @@ export const Dashboard = () => {
                                 </Button>
                                 <Button dense variant='primary' buttonClassName="!w-fit" onClick={goToEditResume}>Edit</Button>
                             </div>
-                            <Preview id={'89d7495a-f86a-44c4-91e3-5f522b3e037f"'} readonly />
+                            <Preview id={selectedResumeId} readonly />
                         </div>
                         : emptyStateRenderer()
                     }

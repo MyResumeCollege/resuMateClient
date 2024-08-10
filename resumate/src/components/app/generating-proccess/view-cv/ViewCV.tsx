@@ -15,11 +15,11 @@ import { Button } from '@/components/shared/button/Button'
 import { SKILL_LEVEL_NAME } from '@/types/skill'
 import { LANGUAGE_LEVEL_NAME } from '@/types/language-knowledge'
 import { userIdSelector } from '@/store/atoms/userAtom'
-import { cvSave } from '../../../../services/cvSave'
+import { saveCV } from '../../../../services/cvSave'
 
 const ViewCV: React.FC = () => {
   const location = useLocation()
-  const { resumeText } = location.state || {}
+  const { resumeText } = location.state || {} 
   const [pdfUrl, setPdfUrl] = useState<string>('')
   const userId = useRecoilValue(userIdSelector)
   const fullName = useRecoilValue(fullNameState)
@@ -90,14 +90,13 @@ const ViewCV: React.FC = () => {
       ownerId: userId,
       fullName,
       jobTitle,
-      bio: resumeText[0],
+      bio: resumeText[0] as string,
       skills: userSkills,
-      experiences: resumeText[1],
-      educations: resumeText[2],
+      experiences: resumeText[1] as string,
+      educations: resumeText[2] as string,
       languages: userLanguages,
     }
-    const response = await cvSave(cvData)
-    console.log(response)
+    saveCV(cvData)
   }
 
   return (

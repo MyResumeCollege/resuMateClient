@@ -23,36 +23,53 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [educations, setEducations] = useState<string>("Educations");
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
 
+  const [resumeLanguage, setLanguage] = useState("");
+  const [translatedResume, setTranslatedResume] = useState<string | null>(null);
+
   useEffect(() => {
-    const cvId = proppedId || id;
+    const resumeId = proppedId || id;
 
     const fetchData = async () => {
-      if (cvId) {
+      if (resumeId) {
         try {
-          const response = await previewCV(cvId);
+          const response = await previewCV(resumeId);
           const data = response.data;
+          
           setFullName(data.fullName);
           setJobTitle(data.jobTitle);
           setBio(data.bio.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
           setSkills(data.skills);
+          extractData(data.experiences, data.educations)
           setExperiences(data.experiences.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
           setEducations(data.educations.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
           setLanguages(data.languages);
         } catch (error) {
+          console.log(error)
           toast.error("Sorry, we encountered some issues");
         }
-      } else {
-        toast.error("Sorry, we encountered some issues");
       }
     };
 
-    if (cvId != "") {
+    if (resumeId != "") {
       fetchData();
     }
   }, [id, proppedId]);
 
-  const [resumeLanguage, setLanguage] = useState("");
-  const [translatedResume, setTranslatedResume] = useState<string | null>(null);
+  const extractValue = (str: string) => {
+    if (str.includes(':')) {
+      return str.substring(str.indexOf(':') + 1).replace(/"/g, '').trim();
+    }
+    return '';
+  };
+
+  const extractData = (experiences: string, educations: string) => {
+    const experiencesExtracted = extractValue(experiences);
+    const educationsExtracted = extractValue(educations);
+  
+    setExperiences(experiencesExtracted || 'No experiences available');
+    setEducations(educationsExtracted || 'No educations available');
+  };
+  
 
   const handleTranslate = async () => {
     if (!resumeLanguage) {
@@ -96,6 +113,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       console.error('Error regenerating section:', error);
     }
   };
+
   return (
     <div className="w-full max-w-6xl flex space-x-8 flex-1">
       {!readonly && <div className="translate w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">

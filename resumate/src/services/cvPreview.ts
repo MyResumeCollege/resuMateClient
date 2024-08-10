@@ -45,3 +45,7 @@ export const handleDownloadCV = async (url: string): Promise<Blob> => {
 export const getUserResumePreviews = async (userId: string): Promise<AxiosResponse<ResumeOverview[]>> => {
   return await apiClient.get(`/user/${userId}/resume-previews`);
 }
+
+export const getUserResume = async (userId: string, resumeId: string): Promise<AxiosResponse<string>> => {
+  return await apiClient.get(`/user/${userId}/${resumeId}`)
+}

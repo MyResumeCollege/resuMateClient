@@ -1,66 +1,66 @@
-import { Button } from '@/components/shared/button/Button'
-import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Resume from '@/assets/icons/resume.svg'
-import { useRecoilState } from 'recoil'
-import { userState } from '../../../store/atoms/userAtom'
+import { Button } from "@/components/shared/button/Button";
+import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Resume from "@/assets/icons/resume.svg";
+import { useRecoilState } from "recoil";
+import { userState } from "../../../store/atoms/userAtom";
 import {
   saveTokens,
   googleSignIn,
   loginUser,
-} from '../../../services/authService'
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
+} from "../../../services/authService";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 export const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useRecoilState(userState)
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useRecoilState(userState);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user._id != "") {
-      navigate('/build-cv')
+    if (user) {
+      navigate("/build-cv");
     }
-  }, [user])
+  }, [user]);
 
   const onGoogleLoginSuccess = async (
     credentialResponse: CredentialResponse
   ) => {
     try {
-      const response = await googleSignIn(credentialResponse)
-      const { data: loginGoogleRes } = response
+      const response = await googleSignIn(credentialResponse);
+      const { data: loginGoogleRes } = response;
 
       saveTokens({
         accessToken: loginGoogleRes.accessToken,
         refreshToken: loginGoogleRes.refreshToken,
-      })
-      setUser(loginGoogleRes.user)
-      navigate('/pricing')
+      });
+      setUser(loginGoogleRes.user);
+      navigate("/pricing");
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const onGoogleLoginFailure = () => {
-    console.log('failed google log in')
-  }
+    console.log("failed google log in");
+  };
 
   const handleLogin = async () => {
     try {
-      const response = await loginUser(email, password)
-      const { data: loginRes } = response
+      const response = await loginUser(email, password);
+      const { data: loginRes } = response;
 
       saveTokens({
         accessToken: loginRes.accessToken,
         refreshToken: loginRes.refreshToken,
-      })
-      setUser(loginRes.user)
-      navigate('/dashboard')
+      });
+      setUser(loginRes.user);
+      navigate("/dashboard");
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   return (
     <main className="flex-1 flex flex-col items-center justify-center">
@@ -82,14 +82,14 @@ export const Login = () => {
               <input type="checkbox" />
               <span>Remember me</span>
             </div>
-            <Link to={'/forgot-password'} className="ml-auto text-[red]">
+            <Link to={"/forgot-password"} className="ml-auto text-[red]">
               Forgot Password?
             </Link>
           </div>
           <Button onClick={handleLogin}>Log In</Button>
           <div className="text-center py-1">
             <span className="text-sm">
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <Link to="/register" className="text-primary font-medium">
                 Sign Up
               </Link>
@@ -110,5 +110,5 @@ export const Login = () => {
         </section>
       </section>
     </main>
-  )
-}
+  );
+};

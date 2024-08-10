@@ -39,6 +39,16 @@ export const resetTokens = () => {
   localStorage.removeItem(REFRESH_TOKEN_KEY);
 };
 
+export const refreshTokenHeaders = () => {
+  const tokens = getTokens();
+  if (tokens.refreshToken) {
+    return {
+      Authorization: `Bearer ${tokens.refreshToken}`,
+    };
+  }
+  return {};
+};
+
 type GoogleSignInResponse = {
   user: User;
   accessToken: string;
@@ -82,4 +92,12 @@ export const registerUser = async (userData: {
   name: string;
 }): Promise<AxiosResponse<RegisterUserResponse>> => {
   return await apiClient.post("/auth/register", userData);
+};
+
+export const logout = async () => {
+  return await apiClient.post(
+    "/auth/logout",
+    {},
+    { headers: refreshTokenHeaders() }
+  );
 };

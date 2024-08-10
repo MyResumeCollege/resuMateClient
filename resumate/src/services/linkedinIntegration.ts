@@ -4,7 +4,7 @@ import apiClient from "./httpCommon";
 type LinkedinDataResponse = {
     name: string;
     summary: string;
-    skills: Skill[]
+    skills: Skill[];
 }
 
 type Skill = {

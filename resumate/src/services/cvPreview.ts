@@ -49,3 +49,21 @@ export const getUserResumePreviews = async (userId: string): Promise<AxiosRespon
 export const getUserResume = async (userId: string, resumeId: string): Promise<AxiosResponse<string>> => {
   return await apiClient.get(`/user/${userId}/${resumeId}`)
 }
+
+export const downloadPDF = async (resumeUrl: string, fileName: string) => {
+  try {
+    const response = await handleDownloadCV(resumeUrl)
+    if (response instanceof Blob) {
+      const downloadUrl = window.URL.createObjectURL(response)
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.setAttribute('download', fileName)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(downloadUrl)
+    } else console.error('Response is not a Blob')
+  } catch (error) {
+    console.error('Error downloading the PDF:', error)
+  }
+}

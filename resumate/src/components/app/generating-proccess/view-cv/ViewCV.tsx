@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import {
   generatePreviewUrl,
-  handleDownloadCV,
 } from '../../../../services/cvPreview'
 import {
   fullNameState,
@@ -16,6 +15,7 @@ import { SKILL_LEVEL_NAME } from '@/types/skill'
 import { LANGUAGE_LEVEL_NAME } from '@/types/language-knowledge'
 import { userIdSelector } from '@/store/atoms/userAtom'
 import { saveCV } from '../../../../services/cvSave'
+import { downloadPDF } from "../../../../services/cvPreview"
 
 const ViewCV: React.FC = () => {
   const location = useLocation()
@@ -33,7 +33,6 @@ const ViewCV: React.FC = () => {
 
   useEffect(() => {
     if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2])
-      
   }, [resumeText])
 
   const previewPdf = async (
@@ -67,25 +66,7 @@ const ViewCV: React.FC = () => {
     }
   }
 
-  const downloadPDF = async () => {
-    try {
-      const response = await handleDownloadCV(pdfUrl)
-      if (response instanceof Blob) {
-        const downloadUrl = window.URL.createObjectURL(response)
-        const link = document.createElement('a')
-        link.href = downloadUrl
-        link.setAttribute('download', fileName)
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(downloadUrl)
-      } else console.error('Response is not a Blob')
-    } catch (error) {
-      console.error('Error downloading the PDF:', error)
-    }
-  }
-
-  const saveDraft = async () => {
+  const saveResume = async () => {
     const cvData = {
       ownerId: userId,
       fullName,
@@ -103,7 +84,7 @@ const ViewCV: React.FC = () => {
     <div className="flex flex-col flex-1 items-center">
       <h1 className="font-bold text-3xl mb-[20px]">Your Resume is Ready!</h1>
       <Button
-        onClick={downloadPDF}
+        onClick={() => downloadPDF(pdfUrl, fileName)}
         style={{ width: 'fit-content', marginBottom: 20 }}
       >
         <svg
@@ -123,7 +104,7 @@ const ViewCV: React.FC = () => {
         Download Resume
       </Button>
       <Button
-        onClick={saveDraft}
+        onClick={saveResume}
         style={{ width: 'fit-content', marginBottom: 20 }}
       >
         <svg
@@ -151,7 +132,7 @@ const ViewCV: React.FC = () => {
           height="100%"
         />
       ) : (
-        <p>Loading Preview..</p>
+        <p>Loading Preview..</p> // TODO
       )}
     </div>
   )

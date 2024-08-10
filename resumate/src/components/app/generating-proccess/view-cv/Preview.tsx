@@ -37,11 +37,10 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           
           setFullName(data.fullName);
           setJobTitle(data.jobTitle);
-          setBio(data.bio.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
+          setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, '$1'));
           setSkills(data.skills);
-          extractData(data.experiences, data.educations)
-          setExperiences(data.experiences.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
-          setEducations(data.educations.substring(data.educations.indexOf(':') + 1).replace(/"/g, '').trim());
+          setExperiences(data.experiences.replace(/^[^\n]*:\s*"?([^"]*)"?$/, '$1'));
+          setEducations(data.educations.replace(/^[^\n]*:\s*"?([^"]*)"?$/, '$1'));
           setLanguages(data.languages);
         } catch (error) {
           console.log(error)
@@ -54,22 +53,6 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       fetchData();
     }
   }, [id, proppedId]);
-
-  const extractValue = (str: string) => {
-    if (str.includes(':')) {
-      return str.substring(str.indexOf(':') + 1).replace(/"/g, '').trim();
-    }
-    return '';
-  };
-
-  const extractData = (experiences: string, educations: string) => {
-    const experiencesExtracted = extractValue(experiences);
-    const educationsExtracted = extractValue(educations);
-  
-    setExperiences(experiencesExtracted || 'No experiences available');
-    setEducations(educationsExtracted || 'No educations available');
-  };
-  
 
   const handleTranslate = async () => {
     if (!resumeLanguage) {

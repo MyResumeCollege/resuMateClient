@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput';
 import { Button } from '@/components/shared/button/Button';
 import apiClient from '@/services/httpCommon';
 import toast from 'react-hot-toast';
+import Resume from '@/assets/icons/resume.svg';
 
 export const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -69,31 +70,44 @@ export const ResetPassword: React.FC = () => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-      <div className='w-full max-w-md bg-white rounded-lg shadow-md p-8'>
-        <h2 className='text-2xl font-bold mb-6 text-center'>Reset Password</h2>
-        <form onSubmit={handleSubmit}>
-          <TextInput
-            label='New Password'
-            value={password}
-            onChange={setPassword}
-            type='password'
-          />
-          <TextInput
-            label='Confirm New Password'
-            value={confirmPassword}
-            onChange={setConfirmPassword}
-            type='password'
-          />
-          <Button
-            onClick={handleButtonClick}
-            disabled={isLoading}
-            buttonClassName='w-full mt-4'
-          >
-            {isLoading ? 'Resetting...' : 'Reset Password'}
-          </Button>
-        </form>
-      </div>
-    </div>
+    <main className='flex-1 flex flex-col items-center justify-center'>
+      <section className='flex gap-10 bg-white p-10 rounded-lg w-fit shadow-lg'>
+        <div className='bg-primary rounded-md flex-1 px-8 flex items-center'>
+          <img src={Resume} className='w-[250px]' alt='Resume' />
+        </div>
+        <section className='flex flex-col gap-2 w-[400px]'>
+          <h1 className='text-4xl font-bold mb-[20px]'>Reset Password</h1>
+          <form onSubmit={handleSubmit}>
+            <TextInput
+              label='New Password'
+              value={password}
+              onChange={setPassword}
+              type='password'
+            />
+            <TextInput
+              label='Confirm New Password'
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              type='password'
+            />
+            <Button
+              onClick={handleButtonClick}
+              disabled={isLoading}
+              buttonClassName='w-full mt-4'
+            >
+              {isLoading ? 'Resetting...' : 'Reset Password'}
+            </Button>
+          </form>
+          <div className='text-center py-1'>
+            <span className='text-sm'>
+              Remember your password?{' '}
+              <Link to='/' className='text-primary font-medium'>
+                Log In
+              </Link>
+            </span>
+          </div>
+        </section>
+      </section>
+    </main>
   );
 };

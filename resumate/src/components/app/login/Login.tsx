@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Resume from '@/assets/icons/resume.svg';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../../store/atoms/userAtom';
+import toast from 'react-hot-toast';
 import {
   saveTokens,
   googleSignIn,
@@ -29,11 +30,12 @@ export const Login = () => {
     try {
       const response = await googleSignIn(credentialResponse);
       const { data: loginGoogleRes } = response;
-
       saveTokens({
         accessToken: loginGoogleRes.accessToken,
         refreshToken: loginGoogleRes.refreshToken,
       });
+
+      localStorage.setItem("userId", loginGoogleRes.user._id);
       setUser(loginGoogleRes.user);
       navigate('/pricing');
     } catch (err) {
@@ -58,6 +60,7 @@ export const Login = () => {
       navigate('/dashboard');
     } catch (err) {
       console.log(err);
+      toast.error("Invalid Email/Password")
     }
   };
 

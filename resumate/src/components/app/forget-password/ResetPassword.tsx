@@ -57,7 +57,6 @@ export const ResetPassword: React.FC = () => {
   };
 
   const handleButtonClick = () => {
-    // Create a synthetic event
     const syntheticEvent = new Event('submit', {
       bubbles: true,
       cancelable: true,
@@ -77,7 +76,6 @@ export const ResetPassword: React.FC = () => {
         </div>
         <section className='flex flex-col gap-2 w-[400px]'>
           <h1 className='text-4xl font-bold mb-[20px]'>Reset Password</h1>
-          <form onSubmit={handleSubmit}>
             <TextInput
               label='New Password'
               value={password}
@@ -97,7 +95,6 @@ export const ResetPassword: React.FC = () => {
             >
               {isLoading ? 'Resetting...' : 'Reset Password'}
             </Button>
-          </form>
           <div className='text-center py-1'>
             <span className='text-sm'>
               Remember your password?{' '}

@@ -7,6 +7,7 @@ import { FaRedo } from "react-icons/fa";
 import { generateSection } from "@/services/GenerateResume";
 
 import "./Preview.css";
+import Section from "@/components/shared/section/Section";
 
 type PreviewProps = {
   id?: string;
@@ -153,64 +154,41 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           </div>
         </div>
       )}
-      <div className="flex-1 bg-white border border-gray-300 p-8">
-        <div className="text-3xl font-bold mb-1">{fullName}</div>
-        <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
+       <div className="flex-1 bg-white border border-gray-300 p-8">
+      <div className="text-3xl font-bold mb-1">{fullName}</div>
+      <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
-            Summary
-            <FaRedo
-              className="generate-section ml-2 text-gray-500"
-              onClick={() => {
-                console.log("bio ", bio);
+      <Section
+        title="Summary"
+        onRegenerate={() => handleRegenerate("bio", bio)}
+      >
+        <p className="text-sm">{bio}</p>
+      </Section>
 
-                handleRegenerate("bio", bio);
-              }}
-            />
-          </h2>
-          <p className="text-sm">{bio}</p>
+      <Section
+        title="Experience"
+        onRegenerate={() => handleRegenerate("experience", experiences)}
+      >
+        <div className="mb-2">
+          <ul className="list-disc text-sm mt-1">{experiences}</ul>
         </div>
+      </Section>
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
-            Experience
-            <FaRedo
-              className="generate-section ml-2 text-gray-500"
-              onClick={() => handleRegenerate("experience", experiences)}
-            />
-          </h2>
-          <div className="mb-2">
-            <ul className="list-disc text-sm mt-1">{experiences}</ul>
-          </div>
-        </div>
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
-            Skills
-          </h2>
-          <div className="text-sm whitespace-pre-line">{skills}</div>
-        </div>
+      <Section title="Skills">
+        <div className="text-sm whitespace-pre-line">{skills}</div>
+      </Section>
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
-            Education
-            <FaRedo
-              className="generate-section ml-2 text-gray-500"
-              onClick={() => handleRegenerate("education", educations)}
-            />
-          </h2>
-          <div className="flex flex-wrap text-sm">{educations}</div>
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2 flex items-center">
-            Languages
-          </h2>
-          <div className="text-sm whitespace-pre-line">
-            {languages}
-            <br />
-          </div>
-        </div>
-      </div>
+      <Section
+        title="Education"
+        onRegenerate={() => handleRegenerate("education", educations)}
+      >
+        <div className="flex flex-wrap text-sm">{educations}</div>
+      </Section>
+
+      <Section title="Languages">
+        <div className="text-sm whitespace-pre-line">{languages}</div>
+      </Section>
+    </div>
     </div>
   );
 };

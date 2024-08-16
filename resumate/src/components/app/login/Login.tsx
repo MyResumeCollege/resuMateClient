@@ -81,7 +81,7 @@ export const Login = () => {
               <input type='checkbox' />
               <span>Remember me</span>
             </div>
-            <Link to={'/forgot-password'} className='ml-auto text-[green]'>
+            <Link to={'/forgot-password'} className='ml-auto text-primary'>
               Forgot Password?
             </Link>
           </div>

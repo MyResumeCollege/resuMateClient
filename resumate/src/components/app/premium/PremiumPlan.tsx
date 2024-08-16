@@ -22,7 +22,7 @@ export const PremiumPlan = () => {
   ];
 
   useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
+    const storedUserId = localStorage.getItem("userId");    
     if (storedUserId) {
       setUserId(storedUserId);
     }

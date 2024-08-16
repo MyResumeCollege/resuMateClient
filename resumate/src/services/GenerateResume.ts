@@ -34,6 +34,6 @@ export const generateCVFromScratch = async ({
   });
 };
 
-export const generateSection = async ({ data }: GenerateSectionData): Promise<AxiosResponse<string>> => {
+export const generateSection = async ({ data }: GenerateSectionData): Promise<AxiosResponse<string>> => {  
   return apiClient.post("/cv/generate-section", { data });
 };

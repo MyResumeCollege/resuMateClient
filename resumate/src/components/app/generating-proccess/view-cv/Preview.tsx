@@ -115,7 +115,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     }
   };
 
-  const saveResume = async () => {    
+  const saveResume = async () => {
     const cvData = {
       resumePreviewId: id,
       fullName,
@@ -126,7 +126,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       educations: educations,
       languages: languages,
     };
-    
+
     await upsertResume(user._id, cvData);
   };
 
@@ -179,36 +179,46 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         <div className="text-3xl font-bold mb-1">{fullName}</div>
         <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
 
-        <Section
-          title="Summary"
-          onRegenerate={() => handleRegenerate("bio", bio)}
-        >
-          <p className="text-sm">{bio}</p>
-        </Section>
+        {bio && (
+          <Section
+            title="Summary"
+            onRegenerate={() => handleRegenerate("bio", bio)}
+          >
+            <p className="text-sm">{bio}</p>
+          </Section>
+        )}
 
-        <Section
-          title="Experience"
-          onRegenerate={() => handleRegenerate("experience", experiences)}
-        >
-          <div className="mb-2">
-            <ul className="list-disc text-sm mt-1">{experiences}</ul>
-          </div>
-        </Section>
+        {experiences && (
+          <Section
+            title="Experience"
+            onRegenerate={() => handleRegenerate("experience", experiences)}
+          >
+            <div className="mb-2">
+              <ul className="list-disc text-sm mt-1">{experiences}</ul>
+            </div>
+          </Section>
+        )}
 
-        <Section title="Skills">
-          <div className="text-sm whitespace-pre-line">{skills}</div>
-        </Section>
+        {skills && (
+          <Section title="Skills">
+            <div className="text-sm whitespace-pre-line">{skills}</div>
+          </Section>
+        )}
 
-        <Section
-          title="Education"
-          onRegenerate={() => handleRegenerate("education", educations)}
-        >
-          <div className="flex flex-wrap text-sm">{educations}</div>
-        </Section>
+        {educations && (
+          <Section
+            title="Education"
+            onRegenerate={() => handleRegenerate("education", educations)}
+          >
+            <div className="flex flex-wrap text-sm">{educations}</div>
+          </Section>
+        )}
 
-        <Section title="Languages">
-          <div className="text-sm whitespace-pre-line">{languages}</div>
-        </Section>
+        {languages && (
+          <Section title="Languages">
+            <div className="text-sm whitespace-pre-line">{languages}</div>
+          </Section>
+        )}
       </div>
     </div>
   );

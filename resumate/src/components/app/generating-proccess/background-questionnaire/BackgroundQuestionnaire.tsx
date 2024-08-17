@@ -29,6 +29,8 @@ import {
   validateNameAndBio,
   validateSkills,
 } from '../../../../validations/validations'
+import { ExperiencePeriod } from '@/types/experience-period'
+import { EducationPeriod } from '@/types/education-period'
 type Step = {
   component: JSX.Element
   name: string
@@ -53,10 +55,10 @@ const useValidation = (currentStep: number): string[] => {
       errors = validateNameAndBio(fullName, bio)
       break
     case 2:
-      errors = validateExperiencePeriods(experiencePeriods)
+      errors = validateExperiencePeriods(experiencePeriods as ExperiencePeriod[])
       break
     case 3:
-      errors = validateEducationPeriods(educationPeriods)
+      errors = validateEducationPeriods(educationPeriods as EducationPeriod[])
       break
     case 4:
       errors = validateLanguages(languages)

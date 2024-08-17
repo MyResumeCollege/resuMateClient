@@ -1,12 +1,13 @@
 import PricingCard from "./pricingCard/pricingCard";
 import { setUserPremiumStatus } from "../../../services/premiumService";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userState } from "@/store/atoms/userAtom";
 
 export const PremiumPlan = () => {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState<string | null>(null);
+  const user = useRecoilValue(userState);
 
   const basicFeatures = [
     { text: "3 Resumes", isAvailable: true },
@@ -21,17 +22,11 @@ export const PremiumPlan = () => {
     { text: "Edit Existing Resumes", isAvailable: true },
   ];
 
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");    
-    if (storedUserId) {
-      setUserId(storedUserId);
-    }
-  }, []);
 
-  const handlePlanSelect = async (isPremium: boolean) => {
+  const handlePlanSelect = async (userId: string, isPremium: boolean) => {
     if (userId) {
       try {
-        await setUserPremiumStatus(isPremium, userId);
+        await setUserPremiumStatus(userId, isPremium);
         toast.success(
           `Successfully updated to ${isPremium ? "Premium" : "Basic"} plan.`
         );
@@ -58,7 +53,7 @@ export const PremiumPlan = () => {
           pricePeriod="forever"
           features={basicFeatures}
           isPremium={false}
-          onSelect={() => handlePlanSelect(false)}
+          onSelect={() => handlePlanSelect(user._id, false)}
         />
         <PricingCard
           title="Premium"
@@ -67,7 +62,7 @@ export const PremiumPlan = () => {
           badge="Recommended"
           features={premiumFeatures}
           isPremium={true}
-          onSelect={() => handlePlanSelect(true)}
+          onSelect={() => handlePlanSelect(user._id, true)}
         />
       </section>
     </main>

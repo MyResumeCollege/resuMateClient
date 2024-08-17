@@ -2,12 +2,15 @@ import { translateCV } from "@/services/translateCV";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { previewCV } from "../../../../services/cvPreview";
-import { FaRedo } from "react-icons/fa";
+import { previewCV } from "../../../../services/cvService";
 import { generateSection } from "@/services/GenerateResume";
+import { upsertResume } from "../../../../services/cvService";
+import { userIdSelector, userState } from "@/store/atoms/userAtom";
 
 import "./Preview.css";
 import Section from "@/components/shared/section/Section";
+import { useRecoilValue } from "recoil";
+import { Button } from "@/components/shared/button/Button";
 
 type PreviewProps = {
   id?: string;
@@ -16,6 +19,7 @@ type PreviewProps = {
 
 const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const { id } = useParams<{ id: string }>();
+  const user = useRecoilValue(userState);
   const [fullName, setFullName] = useState<string>("Full Name");
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
   const [bio, setBio] = useState<string>(
@@ -25,7 +29,6 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [experiences, setExperiences] = useState<string>("Experience");
   const [educations, setEducations] = useState<string>("Educations");
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
-
   const [resumeLanguage, setLanguage] = useState("");
   const [translatedResume, setTranslatedResume] = useState<string | null>(null);
 
@@ -93,7 +96,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       if (updatedSectionText !== "" && updatedSectionText !== ".") {
         switch (section) {
           case "bio":
-            setBio(updatedSectionText)
+            setBio(updatedSectionText);
             break;
           case "education":
             setEducations(updatedSectionText);
@@ -103,11 +106,28 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
             break;
         }
       } else {
-        toast.error("Sorry, we encounter too many requests from your user. please try again in 30 minute")
+        toast.error(
+          "Sorry, we encounter too many requests from your user. Please try again in 30 seconds"
+        );
       }
     } catch (error) {
       console.error("Error regenerating section:", error);
     }
+  };
+
+  const saveResume = async () => {    
+    const cvData = {
+      resumePreviewId: id,
+      fullName,
+      jobTitle,
+      bio: bio,
+      skills: skills,
+      experiences: experiences,
+      educations: educations,
+      languages: languages,
+    };
+    
+    await upsertResume(user._id, cvData);
   };
 
   return (
@@ -144,51 +164,52 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
               </select>
             </div>
             <div className="mt-6">
-              <button
-                onClick={handleTranslate}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              <Button onClick={handleTranslate}>Translate</Button>
+              <Button
+                onClick={saveResume}
+                style={{ width: "fit-content", marginTop: 20 }}
               >
-                Translate
-              </button>
+                Save Resume
+              </Button>
             </div>
           </div>
         </div>
       )}
-       <div className="flex-1 bg-white border border-gray-300 p-8">
-      <div className="text-3xl font-bold mb-1">{fullName}</div>
-      <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
+      <div className="flex-1 bg-white border border-gray-300 p-8">
+        <div className="text-3xl font-bold mb-1">{fullName}</div>
+        <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
 
-      <Section
-        title="Summary"
-        onRegenerate={() => handleRegenerate("bio", bio)}
-      >
-        <p className="text-sm">{bio}</p>
-      </Section>
+        <Section
+          title="Summary"
+          onRegenerate={() => handleRegenerate("bio", bio)}
+        >
+          <p className="text-sm">{bio}</p>
+        </Section>
 
-      <Section
-        title="Experience"
-        onRegenerate={() => handleRegenerate("experience", experiences)}
-      >
-        <div className="mb-2">
-          <ul className="list-disc text-sm mt-1">{experiences}</ul>
-        </div>
-      </Section>
+        <Section
+          title="Experience"
+          onRegenerate={() => handleRegenerate("experience", experiences)}
+        >
+          <div className="mb-2">
+            <ul className="list-disc text-sm mt-1">{experiences}</ul>
+          </div>
+        </Section>
 
-      <Section title="Skills">
-        <div className="text-sm whitespace-pre-line">{skills}</div>
-      </Section>
+        <Section title="Skills">
+          <div className="text-sm whitespace-pre-line">{skills}</div>
+        </Section>
 
-      <Section
-        title="Education"
-        onRegenerate={() => handleRegenerate("education", educations)}
-      >
-        <div className="flex flex-wrap text-sm">{educations}</div>
-      </Section>
+        <Section
+          title="Education"
+          onRegenerate={() => handleRegenerate("education", educations)}
+        >
+          <div className="flex flex-wrap text-sm">{educations}</div>
+        </Section>
 
-      <Section title="Languages">
-        <div className="text-sm whitespace-pre-line">{languages}</div>
-      </Section>
-    </div>
+        <Section title="Languages">
+          <div className="text-sm whitespace-pre-line">{languages}</div>
+        </Section>
+      </div>
     </div>
   );
 };

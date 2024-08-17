@@ -38,8 +38,8 @@ export const Generate = () => {
         const generateResume = await generateCVFromScratch({
           bio,
           skills,
-          experiences,
-          educations,
+          experiences: Array.isArray(experiences) ? experiences : [],
+          educations: Array.isArray(educations)? educations : [],
           languages
         })
         resumeText = generateResume.data

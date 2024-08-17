@@ -35,7 +35,7 @@ export const Login = () => {
         refreshToken: loginGoogleRes.refreshToken,
       });
 
-      localStorage.setItem("userId", loginGoogleRes.user._id);
+      // localStorage.setItem("userId", loginGoogleRes.user._id);
       setUser(loginGoogleRes.user);
       navigate('/pricing');
     } catch (err) {
@@ -59,8 +59,7 @@ export const Login = () => {
       setUser(loginRes.user);
       navigate('/dashboard');
     } catch (err) {
-      console.log(err);
-      toast.error("Invalid Email/Password")
+      toast.error("Invalid Email and/or Password")
     }
   };
 

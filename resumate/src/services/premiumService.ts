@@ -7,13 +7,13 @@ type UserPremium = {
   isPremium: string
 }
 export const setUserPremiumStatus = async (
-  isPremium: boolean,
-  userId?: User['_id']
+  userId: User['_id'],
+  isPremium: boolean
 ): Promise<AxiosResponse<UserPremium>> => {
   if (!userId) {
     throw new Error('User ID is required')
   }
-  return await apiClient.post(`user/${userId}/set-premium`, { isPremium })
+  return await apiClient.post(`/user/${userId}/set-premium`, { isPremium })
 }
 
 export const checkUserPremiumStatus = async (

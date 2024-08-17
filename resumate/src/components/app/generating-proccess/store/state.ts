@@ -39,14 +39,14 @@ export const languagesState = atom<LanguageKnowledge[]>({
 
 // experience
 
-export const experienceState = atom<ExperiencePeriod[]>({
+export const experienceState = atom<ExperiencePeriod[] | string>({
     key: "experience",
     default: []
 })
 
 // education
 
-export const educationState = atom<EducationPeriod[]>({
+export const educationState = atom<EducationPeriod[] | string>({
     key: 'education',
     default: []
 });

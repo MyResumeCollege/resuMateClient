@@ -4,7 +4,7 @@ import {
   getUserResumePreviews,
   downloadPDF,
 } from "@/services/cvService";
-import { userIdSelector } from "@/store/atoms/userAtom";
+import { isUserPremiumSelector, userIdSelector } from "@/store/atoms/userAtom";
 import { ResumeOverview } from "@/types/resume";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -24,6 +24,7 @@ export const Dashboard = () => {
   const [selectedResumeIndex, setSelectedResumeIndex] = useState<number>();
   const [selectedResumeId, setSelectedResumeId] = useState<string>();
   const [resumes, setResumes] = useState<ResumeOverview[]>([]);
+  const isPremiumUser = useRecoilValue(isUserPremiumSelector);
 
   const fullName = useRecoilValue(fullNameState);
   const fileName = fullName
@@ -89,6 +90,11 @@ export const Dashboard = () => {
     }
   };
 
+  const getCountResumes = () => {
+    if (resumes.length >= 3) return true
+    else return false
+  }
+
   useEffect(() => {
     getResumes();
   }, []);
@@ -105,6 +111,7 @@ export const Dashboard = () => {
                 variant="light"
                 onClick={goToCreateResume}
                 dense
+                disabled={isPremiumUser ? false : getCountResumes()}
                 buttonClassName="!w-fit !text-primary"
               >
                 Create

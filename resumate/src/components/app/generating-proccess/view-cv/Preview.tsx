@@ -166,9 +166,9 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     : "Resume.pdf";
 
   return (
-    <div className="w-full max-w-6xl flex space-x-8 flex-1 overflow-hidden" style={{ maxHeight: "100vh" }}>
+    <div className="w-full flex space-x-8 flex-1 overflow-hidden" style={{ maxHeight: "100vh" }}>
       {!readonly && (
-        <div className="translate w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
+        <div className="translate w-[400px] border border-gray-300 bg-white rounded-lg overflow-hidden">
           <div className="px-6 py-4 flex flex-col divide-y gap-5">
             <div className="flex flex-col gap-2">
               <Button

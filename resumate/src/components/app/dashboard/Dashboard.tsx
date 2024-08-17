@@ -1,8 +1,8 @@
+import Flying from "@/assets/icons/flying.svg";
 import { Button } from "@/components/shared/button/Button";
 import {
   getUserResume,
-  getUserResumePreviews,
-  downloadPDF,
+  getUserResumePreviews
 } from "@/services/cvService";
 import { isUserPremiumSelector, userIdSelector } from "@/store/atoms/userAtom";
 import { ResumeOverview } from "@/types/resume";
@@ -10,11 +10,9 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { removeCV } from "../../../services/cvService";
 import Preview from "../generating-proccess/view-cv/Preview";
 import { ResumeOverviewItem } from "./resume-overview-item/ResumeOverview";
-import Flying from "@/assets/icons/flying.svg";
-import { fullNameState } from "../generating-proccess/store/state";
-import { removeCV } from "../../../services/cvService";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -26,15 +24,12 @@ export const Dashboard = () => {
   const [resumes, setResumes] = useState<ResumeOverview[]>([]);
   const isPremiumUser = useRecoilValue(isUserPremiumSelector);
 
-  const fullName = useRecoilValue(fullNameState);
-  const fileName = fullName
-    ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
-    : "Resume.pdf";
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const onResumeSelect = async (resumeIndex: number, resumeId: string) => {
     try {
       setSelectedResumeIndex(resumeIndex);
-      
+
       const response = await getUserResume(userId, resumeId);
       if (response.data) setSelectedResumeId(response.data);
     } catch (err) {
@@ -51,6 +46,8 @@ export const Dashboard = () => {
   };
 
   const deleteResume = async () => {
+    setIsDeleting(true);
+
     try {
       if (selectedResumeId) {
         const deletedResume = await removeCV(userId, selectedResumeId);
@@ -58,7 +55,7 @@ export const Dashboard = () => {
           (resume) => resume.id !== deletedResume.data.resumeId
         );
 
-        setResumes(updatedResumes);        
+        setResumes(updatedResumes);
         setSelectedResumeIndex(undefined);
         setSelectedResumeId(undefined);
 
@@ -66,6 +63,8 @@ export const Dashboard = () => {
       } else toast.error("Failed to delete resume.");
     } catch (err) {
       toast.error("Failed to delete resume.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -135,47 +134,18 @@ export const Dashboard = () => {
                 <div className="flex justify-end mb-3 gap-2">
                   <Button
                     dense
-                    variant="secondary"
-                    buttonClassName="!w-fit"
-                    onClick={() =>
-                      downloadPDF(
-                        `${
-                          import.meta.env.VITE_API_BASE_URL
-                        }/preview/${selectedResumeId}/clear`,
-                        fileName
-                      )
-                    }
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                      />
-                    </svg>
-                    Download
-                  </Button>
-                  <Button
-                    dense
                     variant="primary"
                     buttonClassName="!w-fit"
                     onClick={goToEditResume}
                   >
-                    Edit
+                    Preview & Edit
                   </Button>
                   <Button
+                    loading={isDeleting}
                     dense
-                    variant="primary"
+                    variant="outlined-danger"
                     buttonClassName="!w-fit"
                     onClick={deleteResume}
-                    style={{ backgroundColor: 'red'}}
                   >
                     Delete
                   </Button>

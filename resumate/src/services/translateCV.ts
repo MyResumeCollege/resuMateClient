@@ -14,10 +14,10 @@ export const translateCV = async ({
   experiences,
   resumeLanguage,
 }: Resume): Promise<AxiosResponse<string[]>> => {
-  return apiClient.post('cv/translate-resume', {
-    description: bio,
-    skills: skills,
-    experiences: experiences,
-    resumeLanguage: resumeLanguage,
+  return apiClient.post('/resume/translate-resume', {
+    bio,
+    skills,
+    experiences,
+    resumeLanguage,
   });
 };

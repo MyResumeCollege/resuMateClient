@@ -19,11 +19,11 @@ export const Login = () => {
   const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate('/build-cv');
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user) {
+      navigate('/build-cv');
+    }
+  }, [user]);
   const onGoogleLoginSuccess = async (
     credentialResponse: CredentialResponse
   ) => {
@@ -59,7 +59,7 @@ export const Login = () => {
       setUser(loginRes.user);
       navigate('/dashboard');
     } catch (err) {
-      toast.error("Invalid Email and/or Password")
+      toast.error('Invalid Email and/or Password');
     }
   };
 

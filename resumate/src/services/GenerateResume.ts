@@ -25,7 +25,7 @@ export const generateCVFromScratch = async ({
   languages
 }: Resume): Promise<AxiosResponse<string[]>> => {
   
-  return apiClient.post("/cv/generate-resume", {
+  return apiClient.post("/resume/generate-resume", {
     bio: bio,
     skills: skills,
     experiences: experiences,
@@ -35,5 +35,5 @@ export const generateCVFromScratch = async ({
 };
 
 export const generateSection = async ({ data }: GenerateSectionData): Promise<AxiosResponse<string>> => {  
-  return apiClient.post("/cv/generate-section", { data });
+  return apiClient.post("/resume/generate-section", { data });
 };

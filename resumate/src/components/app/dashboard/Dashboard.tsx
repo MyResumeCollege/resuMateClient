@@ -3,7 +3,7 @@ import {
   getUserResume,
   getUserResumePreviews,
   downloadPDF,
-} from "@/services/cvPreview";
+} from "@/services/cvService";
 import { userIdSelector } from "@/store/atoms/userAtom";
 import { ResumeOverview } from "@/types/resume";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import Preview from "../generating-proccess/view-cv/Preview";
 import { ResumeOverviewItem } from "./resume-overview-item/ResumeOverview";
 import Flying from "@/assets/icons/flying.svg";
 import { fullNameState } from "../generating-proccess/store/state";
+import { removeCV } from "../../../services/cvService";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export const Dashboard = () => {
   const onResumeSelect = async (resumeIndex: number, resumeId: string) => {
     try {
       setSelectedResumeIndex(resumeIndex);
+      
       const response = await getUserResume(userId, resumeId);
       if (response.data) setSelectedResumeId(response.data);
     } catch (err) {
@@ -45,6 +47,25 @@ export const Dashboard = () => {
 
   const goToEditResume = () => {
     navigate(`/preview/${selectedResumeId}`);
+  };
+
+  const deleteResume = async () => {
+    try {
+      if (selectedResumeId) {
+        const deletedResume = await removeCV(userId, selectedResumeId);
+        const updatedResumes = resumes.filter(
+          (resume) => resume.id !== deletedResume.data.resumeId
+        );
+
+        setResumes(updatedResumes);        
+        setSelectedResumeIndex(undefined);
+        setSelectedResumeId(undefined);
+
+        toast.success("Resume deleted successfully.");
+      } else toast.error("Failed to delete resume.");
+    } catch (err) {
+      toast.error("Failed to delete resume.");
+    }
   };
 
   const emptyStateRenderer = () => {
@@ -109,7 +130,14 @@ export const Dashboard = () => {
                     dense
                     variant="secondary"
                     buttonClassName="!w-fit"
-                    onClick={() => downloadPDF(`${import.meta.env.VITE_API_BASE_URL}/preview/${selectedResumeId}/clear`, fileName)}
+                    onClick={() =>
+                      downloadPDF(
+                        `${
+                          import.meta.env.VITE_API_BASE_URL
+                        }/preview/${selectedResumeId}/clear`,
+                        fileName
+                      )
+                    }
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -134,6 +162,15 @@ export const Dashboard = () => {
                     onClick={goToEditResume}
                   >
                     Edit
+                  </Button>
+                  <Button
+                    dense
+                    variant="primary"
+                    buttonClassName="!w-fit"
+                    onClick={deleteResume}
+                    style={{ backgroundColor: 'red'}}
+                  >
+                    Delete
                   </Button>
                 </div>
                 <Preview id={selectedResumeId} readonly />

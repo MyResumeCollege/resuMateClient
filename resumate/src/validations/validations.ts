@@ -96,11 +96,11 @@ const validateSkills = (skills: Skill[]): string[] => {
   } else {
     let hasError = false;
     skills.forEach((skill) => {
-      if (!skill.name || skill.name.length < 3) hasError = true;
+      if (!skill.name || skill.name.length < 1) hasError = true;
     });
 
     if (hasError)
-      errors.push("All skill names must be at least 3 characters long.");
+      errors.push("All skill names must be at least 1 character long.");
   }
 
   return errors;

@@ -20,9 +20,6 @@ export const Register = () => {
       const response = await registerUser({ email, password, name });
       const { data: registerRes } = response;
 
-      const userId = registerRes.user._id;
-      localStorage.setItem("userId", userId);
-
       setUser(registerRes.user);
       navigate("/pricing");
     } catch (err) {

@@ -1,16 +1,15 @@
+import { Button } from "@/components/shared/button/Button";
+import Section from "@/components/shared/section/Section";
+import { generateSection } from "@/services/GenerateResume";
 import { translateCV } from "@/services/translateCV";
+import { isUserPremiumSelector, userState } from "@/store/atoms/userAtom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { previewCV } from "../../../../services/cvService";
-import { generateSection } from "@/services/GenerateResume";
-import { upsertResume } from "../../../../services/cvService";
-import { userIdSelector, userState } from "@/store/atoms/userAtom";
-
-import "./Preview.css";
-import Section from "@/components/shared/section/Section";
 import { useRecoilValue } from "recoil";
-import { Button } from "@/components/shared/button/Button";
+import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
+import "./Preview.css";
+import { PremiumBadge } from "@/components/shared/premium-badge/PremiumBadge";
 
 type PreviewProps = {
   id?: string;
@@ -20,6 +19,8 @@ type PreviewProps = {
 const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const { id } = useParams<{ id: string }>();
   const user = useRecoilValue(userState);
+  const isPremiumUser = useRecoilValue(isUserPremiumSelector);
+
   const [fullName, setFullName] = useState<string>("Full Name");
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
   const [bio, setBio] = useState<string>(
@@ -29,8 +30,11 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [experiences, setExperiences] = useState<string>("Experience");
   const [educations, setEducations] = useState<string>("Educations");
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
-  const [resumeLanguage, setLanguage] = useState("");
+  const [resumeLanguage, setLanguage] = useState("English");
   const [translatedResume, setTranslatedResume] = useState<string | null>(null);
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const resumeId = proppedId || id;
@@ -116,66 +120,128 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   };
 
   const saveResume = async () => {
-    const cvData = {
-      resumePreviewId: id,
-      fullName,
-      jobTitle,
-      bio: bio,
-      skills: skills,
-      experiences: experiences,
-      educations: educations,
-      languages: languages,
-    };
+    setIsSaving(true);
 
-    await upsertResume(user._id, cvData);
+    try {
+      const cvData = {
+        resumePreviewId: id,
+        fullName,
+        jobTitle,
+        bio: bio,
+        skills: skills,
+        experiences: experiences,
+        educations: educations,
+        languages: languages,
+      };
+
+      await upsertResume(user._id, cvData);
+      toast.success('Saved resume draft')
+    } catch (er) {
+      toast.error('Failed saving resume')
+    } finally {
+      setIsSaving(false);
+    }
+
   };
 
+  const downloadResume = async () => {
+    setIsDownloading(true);
+
+    try {
+      await downloadPDF(
+        `${import.meta.env.VITE_API_BASE_URL
+        }/preview/${id}/clear`,
+        resumeDownloadFileName
+      )
+      toast.success('Resume downloaded succesfully')
+    } catch (er) {
+      toast.error('Failed downloading resume')
+    } finally {
+      setIsDownloading(false);
+    }
+  }
+
+  const resumeDownloadFileName = fullName
+    ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
+    : "Resume.pdf";
+
   return (
-    <div className="w-full max-w-6xl flex space-x-8 flex-1">
+    <div className="w-full max-w-6xl flex space-x-8 flex-1 overflow-hidden" style={{ maxHeight: "100vh" }}>
       {!readonly && (
         <div className="translate w-1/3 border border-gray-300 bg-white rounded-lg overflow-hidden">
-          <div className="px-6 py-4">
-            <h2 className="text-xl font-semibold text-gray-800">
-              Translate Your Resume
-            </h2>
-            <div className="mt-4">
-              <label
-                htmlFor="language-select"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Select Language:
-              </label>
-              <select
-                id="language-select"
-                value={resumeLanguage}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="block w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="" disabled>
-                  Choose...
-                </option>
-
-                <option value="spanish">Spanish</option>
-                <option value="french">French</option>
-                <option value="german">German</option>
-                <option value="italian">Italian</option>
-                <option value="portuguese">Portuguese</option>
-                <option value="dutch">Dutch</option>
-              </select>
-            </div>
-            <div className="mt-6">
-              <Button onClick={handleTranslate}>Translate</Button>
+          <div className="px-6 py-4 flex flex-col divide-y gap-5">
+            <div className="flex flex-col gap-2">
               <Button
                 onClick={saveResume}
-                style={{ width: "fit-content", marginTop: 20 }}
+                loading={isSaving}
+                style={{ marginTop: 20 }}
               >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                  stroke="currentColor" className="size-5">
+                  <path strokeLinecap="round" strokeLinejoin="round"
+                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                </svg>
                 Save Resume
               </Button>
+              <Button
+                variant='outlined'
+                loading={isDownloading}
+                onClick={downloadResume}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                  />
+                </svg>
+                Download
+              </Button>
+            </div>
+            <div className="flex flex-col pt-4 ">
+              <h2 className="text-md font-semibold text-gray-800 flex gap-1 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                </svg>
+                Language
+              </h2>
+              <div className="flex flex-col relative">
+                {!isPremiumUser &&
+                  <div className="absolute top-0 left-0 w-[100%] h-[100%] pb-[17px] flex items-center justify-center" style={{ backdropFilter: "blur(2px)" }}>
+                    <PremiumBadge text="Premium Feature"/>
+                  </div>}
+                <div className="mt-4">
+                  <select
+                    id="language-select"
+                    value={resumeLanguage}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className="block w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="english">Ensligh</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="french">French</option>
+                    <option value="german">German</option>
+                    <option value="italian">Italian</option>
+                    <option value="portuguese">Portuguese</option>
+                    <option value="dutch">Dutch</option>
+                  </select>
+                </div>
+                <Button buttonClassName="mt-4" variant='outlined' onClick={handleTranslate}>Translate</Button>
+              </div>
+
             </div>
           </div>
         </div>
       )}
-      <div className="flex-1 bg-white border border-gray-300 p-8">
+
+      <div className="flex-1 bg-white border border-gray-300 p-8 overflow-auto">
         <div className="text-3xl font-bold mb-1">{fullName}</div>
         <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
 

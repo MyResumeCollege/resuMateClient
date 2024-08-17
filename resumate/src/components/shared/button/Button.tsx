@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 
-type ButtonVariant = 'primary' | 'secondary' | 'light';
+type ButtonVariant = 'primary' | 'secondary' | 'light' | 'outlined';
 
 type ButtonProps = {
     text?: string;
@@ -18,7 +18,8 @@ export const Button = ({ text = 'Text is missing', disabled = false, loading = f
     const classesByVariant: Record<ButtonVariant, string> = {
         primary: 'bg-primary',
         secondary: 'bg-accent',
-        light: 'bg-white border text-black'
+        light: 'bg-white border text-black',
+        outlined: 'border-2 !text-primary !border-primary'
     }
 
     const classesByDense = dense ? 'py-2 px-3' : 'py-3 px-4';

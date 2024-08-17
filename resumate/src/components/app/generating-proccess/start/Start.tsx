@@ -43,7 +43,7 @@ export const Start = () => {
         Let's Start Building Your Resume
       </h1>
       <h3 className="font-light text-xl mb-[50px]">
-        how you would like to start?
+        How you would like to start?
       </h3>
       <section className={`${styles.startOptions} flex gap-[30px]`}>
         <div onClick={continueToBackground}>

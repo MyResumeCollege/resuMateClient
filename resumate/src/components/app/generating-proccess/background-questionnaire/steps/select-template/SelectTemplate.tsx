@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import { PremiumBadge } from "@/components/shared/premium-badge/PremiumBadge";
 import { fetchTemplates, Template } from "@/services/templateService";
-import "./SelectTemplate.css";
-import crownImage from "@/assets/images/crown.png";
+import { isUserPremiumSelector, userIdSelector } from "@/store/atoms/userAtom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
 import { useRecoilValue } from "recoil";
-import { userIdSelector, isUserPremiumSelector } from "@/store/atoms/userAtom";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import "./SelectTemplate.css";
 
 export const SelectTemplate = () => {
-  const navigate = useNavigate();
   const userId = useRecoilValue(userIdSelector);
   const isPremiumUser = useRecoilValue(isUserPremiumSelector);
 
@@ -36,13 +35,11 @@ export const SelectTemplate = () => {
   }, [userId]);
 
   const handleTemplateClick = (id: string) => {
-    if (isPremiumUser || !templates.find((t) => t._id === id)?.isPremium) {
+    const template = templates.find((t) => t._id === id);
+
+    if (isPremiumUser || !template?.isPremium) {
       setSelectedTemplate(id);
     }
-  };
-
-  const generateCV = () => {
-    navigate("/build-cv/generate");
   };
 
   const settings = {
@@ -76,12 +73,43 @@ export const SelectTemplate = () => {
     ],
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>{error}</div>;
+  }
+
+  const PremiumTemplateWrapper = (children: JSX.Element) => {
+    return <Link to='/pricing' target="_blank" replace>
+      {children}
+    </Link>
+  }
+
+  const templateRenderer = (template: Template) => {
+    return <div
+      key={template._id}
+      className="flex justify-center items-center h-[330px] relative"
+    >
+      {template.isPremium && (
+        <div className="absolute left-4 top-2 z-10 shadow">
+          <PremiumBadge text="Premium Template" />
+        </div>
+      )}
+      <div
+        className={`flex justify-center items-center h-[330px] p-1 ${selectedTemplate === template._id
+          ? "border-primary border-4"
+          : "border-gray-200"
+          } bg-white border rounded-sm shadow-md mx-1 cursor-pointer transition-all duration-300 ${template.isPremium && !isPremiumUser
+            ? "opacity-50"
+            : ""
+          }`}
+        onClick={() => handleTemplateClick(template._id)}
+      >
+        <img
+          src={template.imageUrl}
+          className="w-11/12 h-11/12 rounded-md"
+          alt={`Template ${template._id}`}
+        />
+      </div>
+    </div>
   }
 
   return (
@@ -89,52 +117,14 @@ export const SelectTemplate = () => {
       <h2 className="font-bold text-3xl text-center mb-5">
         Select Your Template
       </h2>
-      <div className="text-center mb-5">
-        <button
-          className="text-blue-500 underline"
-          onClick={() => generateCV()}
-        >
-          Skip this step
-        </button>
-      </div>
-      <div className="w-full flex justify-center">
+      {!loading && <div className="w-full flex justify-center">
         <div className="w-full max-w-screen-xl">
           <Slider {...settings}>
-            {templates.map((item) => (
-              <div
-                key={item._id}
-                className="flex justify-center items-center h-[330px] relative"
-              >
-                {item.isPremium && (
-                  <img
-                    src={crownImage}
-                    className="absolute left-2 w-12 h-12"
-                    alt="Premium"
-                  />
-                )}
-                <div
-                  className={`flex justify-center items-center h-[330px] p-1 ${
-                    selectedTemplate === item._id
-                      ? "border-primary border-4"
-                      : "border-gray-200"
-                  } bg-white border rounded-sm shadow-md mx-1 cursor-pointer transition-all duration-300 ${
-                    item.isPremium && !isPremiumUser
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                  onClick={() => handleTemplateClick(item._id)}
-                >
-                  <img
-                    src={item.imageUrl}
-                    className="w-11/12 h-11/12 rounded-md"
-                    alt={`Template ${item._id}`}
-                  />
-                </div>
-              </div>
-            ))}
+            {templates.map((item) => (item.isPremium ? PremiumTemplateWrapper(templateRenderer(item)) : templateRenderer(item)))}
           </Slider>
         </div>
-      </div>
+      </div>}
+
     </section>
   );
 };

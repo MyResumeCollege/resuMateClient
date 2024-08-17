@@ -88,7 +88,7 @@ export const SelectTemplate = () => {
       key={template._id}
       className="flex justify-center items-center h-[330px] relative"
     >
-      {template.isPremium && (
+      {template.isPremium && !isPremiumUser && (
         <div className="absolute left-4 top-2 z-10 shadow">
           <PremiumBadge text="Premium Template" />
         </div>
@@ -120,7 +120,7 @@ export const SelectTemplate = () => {
       {!loading && <div className="w-full flex justify-center">
         <div className="w-full max-w-screen-xl">
           <Slider {...settings}>
-            {templates.map((item) => (item.isPremium ? PremiumTemplateWrapper(templateRenderer(item)) : templateRenderer(item)))}
+            {templates.map((item) => (item.isPremium && !isPremiumUser ? PremiumTemplateWrapper(templateRenderer(item)) : templateRenderer(item)))}
           </Slider>
         </div>
       </div>}

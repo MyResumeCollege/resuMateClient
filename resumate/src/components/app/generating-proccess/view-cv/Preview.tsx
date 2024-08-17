@@ -33,6 +33,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [resumeLanguage, setLanguage] = useState("English");
   const [translatedResume, setTranslatedResume] = useState<string | null>(null);
 
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -41,6 +42,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
     const fetchData = async () => {
       if (resumeId) {
+        setIsLoading(true);
+
         try {
           const response = await previewCV(resumeId);
           const data = response.data;
@@ -59,6 +62,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         } catch (error) {
           console.log(error);
           toast.error("Sorry, we encountered some issues");
+        } finally {
+          setIsLoading(false)
         }
       }
     };
@@ -215,7 +220,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
               <div className="flex flex-col relative">
                 {!isPremiumUser &&
                   <div className="absolute top-0 left-0 w-[100%] h-[100%] pb-[17px] flex items-center justify-center" style={{ backdropFilter: "blur(2px)" }}>
-                    <PremiumBadge text="Premium Feature"/>
+                    <PremiumBadge text="Premium Feature" />
                   </div>}
                 <div className="mt-4">
                   <select
@@ -241,7 +246,19 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         </div>
       )}
 
-      <div className="flex-1 bg-white border border-gray-300 p-8 overflow-auto">
+      <div className="flex-1 bg-white border border-gray-300 p-8 overflow-auto relative">
+        {isLoading &&
+          <div className="absolute w-[100%] h-[100%] flex items-center justify-center"
+            style={{ backdropFilter: "blur(3px)" }}
+          >
+            <span
+              className="animate-spin inline-block size-[50px] border-[8px] border-current border-t-transparent text-primary rounded-full"
+              role="status"
+              aria-label="loading"
+            />
+          </div>
+
+        }
         <div className="text-3xl font-bold mb-1">{fullName}</div>
         <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
 

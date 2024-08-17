@@ -9,21 +9,26 @@ import { Button } from "@/components/shared/button/Button";
 import { TextArea } from "@/components/shared/inputs/textarea/TextArea";
 
 export const Experience = () => {
-    const [experiencePeriods, setExperiencePeriods] = useRecoilState(experienceState);
+    const [experiencePeriods, setExperiencePeriods] = useRecoilState<ExperiencePeriod[] | string>(experienceState);
 
     const [editedExperiencePeriod, setEditedExperiencePeriod] = useState<ExperiencePeriod>();
     const [error, setError] = useState<string>();
 
-    const isEditedExperienceNew = !experiencePeriods.find(period => period.id === editedExperiencePeriod?.id);
+    const isExperiencePeriodsArray = Array.isArray(experiencePeriods);
+    const isEditedExperienceNew = isExperiencePeriodsArray && !experiencePeriods.find(period => period.id === editedExperiencePeriod?.id);
 
     const removePeriod = (experience: ExperiencePeriod) => {
-        const newPeriods = experiencePeriods.filter(currentExperience => currentExperience.id !== experience.id);
-        setExperiencePeriods(newPeriods);
+        if (isExperiencePeriodsArray) {
+            const newPeriods = experiencePeriods.filter(currentExperience => currentExperience.id !== experience.id);
+            setExperiencePeriods(newPeriods);
+        }
     }
 
     const addPeriod = (period: ExperiencePeriod) => {
-        const newPeriods = [...experiencePeriods, period];
-        setExperiencePeriods(newPeriods);
+        if (isExperiencePeriodsArray) {
+            const newPeriods = [...experiencePeriods, period];
+            setExperiencePeriods(newPeriods);
+        }
     }
 
     const openAddNewPeriod = () => {
@@ -50,7 +55,7 @@ export const Experience = () => {
     const ref = useClickOutside(closeAddNewPeriod);
 
     const handleDoneEditPeriod = () => {
-        if (editedExperiencePeriod) {
+        if (editedExperiencePeriod && isExperiencePeriodsArray) {
             const clonedPeriods = [...experiencePeriods];
 
             const periodIndex = clonedPeriods.findIndex(expPeriod => expPeriod.id === editedExperiencePeriod.id);
@@ -65,7 +70,6 @@ export const Experience = () => {
 
             setEditedExperiencePeriod(undefined);
             setError(undefined);
-
         }
     }
 
@@ -158,7 +162,7 @@ export const Experience = () => {
                 Your Experience
             </h2>
             <main className="flex-1 px-10 flex flex-col gap-2 overflow-y-scroll">
-                {experiencePeriods.map(periodRenderer)}
+                {isExperiencePeriodsArray && experiencePeriods.map(periodRenderer)}
                 {isEditedExperienceNew && renderEditPeriod()}
                 <Button onClick={openAddNewPeriod} disabled={!!editedExperiencePeriod}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">

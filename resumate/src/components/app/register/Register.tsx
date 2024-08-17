@@ -49,10 +49,12 @@ export const Register = () => {
             type="password"
             label="Password"
           />
-          <Button onClick={handleRegister}>Register</Button>
+          <div className="flex pt-4 text-sm items-center">
+            <Button onClick={handleRegister}>Register</Button>
+          </div>
           <div className="flex pt-2 text-sm items-center">
             <span>Already have an account?</span>
-            <Link to={"/"} className="ml-2 text-[red]">
+            <Link to={"/"} className="ml-2 text-primary font-medium">
               Log In
             </Link>
           </div>

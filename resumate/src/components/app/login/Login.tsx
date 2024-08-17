@@ -35,7 +35,6 @@ export const Login = () => {
         refreshToken: loginGoogleRes.refreshToken,
       });
 
-      // localStorage.setItem("userId", loginGoogleRes.user._id);
       setUser(loginGoogleRes.user);
       navigate('/pricing');
     } catch (err) {

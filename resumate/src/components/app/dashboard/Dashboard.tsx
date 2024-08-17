@@ -159,14 +159,23 @@ export const Dashboard = () => {
         </>
       ) : (
         <div className="flex-1 flex items-center flex-col justify-center gap-5">
-          <img src={Flying} className="h-[250px]" />
-          <span className="text-lg">
-            Your'e one step away from your{" "}
-            <span className="font-bold underlineded">Dream Job</span>
-          </span>
-          <Button buttonClassName="!w-[300px]" onClick={goToCreateResume}>
-            Let's start building your resume
-          </Button>
+          {isLoadingResumes ?
+            <>
+              <span className="animate-spin inline-block size-10 border-[3px] border-current border-t-transparent text-primary rounded-full" role="status" aria-label="loading"/>
+              <span className="font-bold">
+                Loading your resumes...
+              </span>
+            </> :
+            <>
+              <img src={Flying} className="h-[250px]" />
+              <span className="text-lg">
+                Your'e one step away from your{" "}
+                <span className="font-bold underlineded">Dream Job</span>
+              </span>
+              <Button buttonClassName="!w-[300px]" onClick={goToCreateResume}>
+                Let's start building your resume
+              </Button>
+            </>}
         </div>
       )}
     </main>

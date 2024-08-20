@@ -1,26 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/shared/button/Button'
-import { useNavigate } from 'react-router-dom'
-import { Stepper } from './stepper/Stepper'
-import { Personal } from './steps/personal/Personal'
-import { WantedJob } from './steps/wanted-job/WantedJob'
-import { Skills } from './steps/skills/Skills'
-import { Experience } from './steps/experience/Experience'
-import { SelectTemplate } from './steps/select-template/SelectTemplate'
-import { Education } from './steps/education/Education'
-import { Languages } from './steps/languages/Languages'
-import { useRecoilValue } from 'recoil'
-import {
-  fullNameState,
-  jobTitleState,
-  educationState,
-  experienceState,
-  languagesState,
-  skillsState,
-  summaryState,
-} from '../store/state'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 import {
   validateEducationPeriods,
   validateExperiencePeriods,
@@ -31,6 +14,23 @@ import {
 } from '../../../../validations/validations'
 import { ExperiencePeriod } from '@/types/experience-period'
 import { EducationPeriod } from '@/types/education-period'
+import {
+  educationState,
+  experienceState,
+  fullNameState,
+  jobTitleState,
+  languagesState,
+  skillsState,
+  summaryState
+} from '../store/state'
+import { Stepper } from './stepper/Stepper'
+import { Education } from './steps/education/Education'
+import { Experience } from './steps/experience/Experience'
+import { Languages } from './steps/languages/Languages'
+import { Personal } from './steps/personal/Personal'
+import { SelectTemplate } from './steps/select-template/SelectTemplate'
+import { Skills } from './steps/skills/Skills'
+import { WantedJob } from './steps/wanted-job/WantedJob'
 type Step = {
   component: JSX.Element
   name: string
@@ -136,9 +136,8 @@ export const BackgroundQuestionnaire = () => {
         onStepSelect={setCurrentStep}
       />
       <section
-        className={`current-step flex-1 flex overflow-hidden ${
-          currentStep === steps.length - 1 ? 'w-full' : 'w-[600px]'
-        }`}
+        className={`current-step flex-1 flex overflow-hidden ${currentStep === steps.length - 1 ? 'w-full' : 'w-[600px]'
+          }`}
       >
         {steps[currentStep].component}
       </section>

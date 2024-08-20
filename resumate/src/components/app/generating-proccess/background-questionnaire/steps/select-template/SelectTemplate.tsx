@@ -1,44 +1,24 @@
 import { PremiumBadge } from "@/components/shared/premium-badge/PremiumBadge";
-import { fetchTemplates, Template } from "@/services/templateService";
-import { isUserPremiumSelector, userIdSelector } from "@/store/atoms/userAtom";
-import { useEffect, useState } from "react";
+import { Template, templates } from "@/services/templateService";
+import { isUserPremiumSelector } from "@/store/atoms/userAtom";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { templateState } from "../../../store/state";
 import "./SelectTemplate.css";
 
 export const SelectTemplate = () => {
-  const userId = useRecoilValue(userIdSelector);
   const isPremiumUser = useRecoilValue(isUserPremiumSelector);
 
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedTemplate, setTemplate] = useRecoilState(templateState);
 
-  useEffect(() => {
-    const getTemplates = async () => {
-      try {
-        const templatesData = await fetchTemplates();
-        setTemplates(templatesData);
-      } catch (err) {
-        console.error("Error fetching templates:", err);
-        setError("Failed to fetch templates.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleTemplateClick = (id: number) => {
+    const template = templates.find(tmp => tmp._id === id);
 
-    getTemplates();
-  }, [userId]);
-
-  const handleTemplateClick = (id: string) => {
-    const template = templates.find((t) => t._id === id);
-
-    if (isPremiumUser || !template?.isPremium) {
-      setSelectedTemplate(id);
+    if (template && (isPremiumUser || !template?.isPremium)) {
+      setTemplate(template._id);
     }
   };
 
@@ -72,10 +52,6 @@ export const SelectTemplate = () => {
       },
     ],
   };
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   const PremiumTemplateWrapper = (children: JSX.Element) => {
     return <Link to='/pricing' target="_blank" replace>
@@ -117,14 +93,13 @@ export const SelectTemplate = () => {
       <h2 className="font-bold text-3xl text-center mb-5">
         Select Your Template
       </h2>
-      {!loading && <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center">
         <div className="w-full max-w-screen-xl">
           <Slider {...settings}>
             {templates.map((item) => (item.isPremium && !isPremiumUser ? PremiumTemplateWrapper(templateRenderer(item)) : templateRenderer(item)))}
           </Slider>
         </div>
-      </div>}
-
+      </div>
     </section>
   );
 };

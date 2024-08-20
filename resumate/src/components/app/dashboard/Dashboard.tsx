@@ -9,7 +9,7 @@ import { ResumeOverview } from "@/types/resume";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { removeCV } from "../../../services/cvService";
 import Preview from "../generating-proccess/view-cv/Preview";
 import { ResumeOverviewItem } from "./resume-overview-item/ResumeOverview";

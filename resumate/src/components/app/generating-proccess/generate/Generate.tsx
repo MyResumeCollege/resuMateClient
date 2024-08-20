@@ -1,4 +1,5 @@
 import AiLoadingAnimation from '@/assets/lotties/ai-loading.json'
+import { generateCVFromScratch } from '@/services/GenerateResume'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import Lottie from 'react-lottie'
@@ -6,7 +7,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { uploadResume } from '../../../../services/uploadResume'
 import { educationState, experienceState, languagesState, skillsState, summaryState } from '../store/state'
-import { generateCVFromScratch } from '@/services/GenerateResume'
 
 export const Generate = () => {
   const location = useLocation()
@@ -18,7 +18,7 @@ export const Generate = () => {
   const experiences = useRecoilValue(experienceState)
   const educations = useRecoilValue(educationState)
   const languages = useRecoilValue(languagesState)
-  
+
   const generateCV = async () => {
     let resumeText;
 
@@ -27,23 +27,23 @@ export const Generate = () => {
         if (existCV instanceof File) {
           const improvedResume = await uploadResume(existCV)
           resumeText = improvedResume.data
-          
+
           if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
         }
       } catch (error) {
         toast.error('Failed to upload the file. Please try again.')
       }
     } else {
-      try {        
+      try {
         const generateResume = await generateCVFromScratch({
           bio,
           skills,
           experiences: Array.isArray(experiences) ? experiences : [],
-          educations: Array.isArray(educations)? educations : [],
+          educations: Array.isArray(educations) ? educations : [],
           languages
         })
         resumeText = generateResume.data
-        
+
         if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
       } catch (error) {
         toast.error('Failed to generate resume from scratch. Please try again.')

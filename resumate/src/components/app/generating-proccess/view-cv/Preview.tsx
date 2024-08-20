@@ -1,15 +1,16 @@
 import { Button } from "@/components/shared/button/Button";
-import Section from "@/components/shared/section/Section";
+import { PremiumBadge } from "@/components/shared/premium-badge/PremiumBadge";
 import { generateSection } from "@/services/GenerateResume";
+import { templates } from "@/services/templateService";
 import { translateCV } from "@/services/translateCV";
 import { isUserPremiumSelector, userState } from "@/store/atoms/userAtom";
-import { useEffect, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
+import { educationState, experienceState, fullNameState, jobTitleState, languagesState, summaryState, templateState } from "../store/state";
 import "./Preview.css";
-import { PremiumBadge } from "@/components/shared/premium-badge/PremiumBadge";
 
 type PreviewProps = {
   id?: string;
@@ -21,11 +22,23 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const user = useRecoilValue(userState);
   const isPremiumUser = useRecoilValue(isUserPremiumSelector);
 
+  const resetName = useResetRecoilState(fullNameState);
+  const resetJobTitle = useResetRecoilState(jobTitleState);
+  const resetBio = useResetRecoilState(summaryState);
+  const resetEducation = useResetRecoilState(educationState);
+  const resetExperience = useResetRecoilState(experienceState);
+  const resetLanguages = useResetRecoilState(languagesState);
+  const resetTemplate = useResetRecoilState(templateState);
+
   const [fullName, setFullName] = useState<string>("Full Name");
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
   const [bio, setBio] = useState<string>(
     "A brief bio about yourself goes here."
+
   );
+
+  const [selectedTemplate, setSelectedTemplate] = useRecoilState(templateState);
+
   const [skills, setSkills] = useState<string>("Skills");
   const [experiences, setExperiences] = useState<string>("Experience");
   const [educations, setEducations] = useState<string>("Educations");
@@ -59,6 +72,11 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
             data.educations.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
           );
           setLanguages(data.languages);
+          if (data.template) {
+            setSelectedTemplate(data.template || 1)
+          }
+
+          console.log(data);
         } catch (error) {
           console.log(error);
           toast.error("Sorry, we encountered some issues");
@@ -137,6 +155,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         experiences: experiences,
         educations: educations,
         languages: languages,
+        template: selectedTemplate
       };
 
       await upsertResume(user._id, cvData);
@@ -169,6 +188,20 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const resumeDownloadFileName = fullName
     ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
     : "Resume.pdf";
+
+  useEffect(() => {
+    return () => {
+      resetName();
+      resetBio();
+      resetEducation();
+      resetExperience();
+      resetJobTitle();
+      resetLanguages();
+      resetTemplate();
+    }
+  }, [])
+
+  const currentTemplate = templates.find(tmp => tmp._id === selectedTemplate);
 
   return (
     <div className="w-full flex space-x-8 flex-1 overflow-hidden" style={{ maxHeight: "100vh" }}>
@@ -246,8 +279,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         </div>
       )}
 
-      <div className="flex-1 bg-white border border-gray-300 p-8 overflow-auto relative">
-        {isLoading &&
+      {/* <div className="flex-1 bg-white border border-gray-300 p-8 overflow-auto relative"> */}
+      {/* {isLoading &&
           <div className="absolute w-[100%] h-[100%] flex items-center justify-center"
             style={{ backdropFilter: "blur(3px)" }}
           >
@@ -258,11 +291,13 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
             />
           </div>
 
-        }
-        <div className="text-3xl font-bold mb-1">{fullName}</div>
-        <div className="text-sm text-gray-600 mb-1">{jobTitle}</div>
+        } */}
+      {cloneElement(currentTemplate!.component({ resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate } }))}
+      {/* <BasicTemplate resume={{ bio, educations, experiences, fullName, jobTitle, languages, skills }} /> */}
+      {/* <div className="text-3xl font-bold mb-1">{fullName}</div>
+        <div className="text-sm text-gray-600 mb-1">{jobTitle}</div> */}
 
-        {bio && (
+      {/* {bio && (
           <Section
             title="Summary"
             onRegenerate={() => handleRegenerate("bio", bio)}
@@ -301,9 +336,10 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           <Section title="Languages">
             <div className="text-sm whitespace-pre-line">{languages}</div>
           </Section>
-        )}
-      </div>
+        )} */}
+      {/* </div> */}
     </div>
   );
 };
+
 export default Preview;

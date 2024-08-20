@@ -20,6 +20,6 @@ export const userIdSelector = selector<User['_id']>({
 export const isUserPremiumSelector = selector<User['isPremium']>({
   key: 'isUserPremium',
   get: ({ get }) => {
-    return get(userState).isPremium
+    return get(userState)?.isPremium
   },
 })

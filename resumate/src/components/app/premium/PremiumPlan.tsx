@@ -23,19 +23,22 @@ export const PremiumPlan = () => {
     { text: "Edit Existing Resumes", isAvailable: true },
   ];
 
-
   const handlePlanSelect = async (userId: string, isPremium: boolean) => {
     if (userId) {
       try {
-        await setUserPremiumStatus(userId, isPremium);
-        setUser((prevUser) => ({
-          ...prevUser,
-          isPremium,
-        }));
-        toast.success(
-          `Successfully updated to ${isPremium ? "Premium" : "Basic"} plan.`
-        );
-        navigate("/dashboard");
+        if (isPremium) navigate("/payment");
+        else {
+          await setUserPremiumStatus(userId, isPremium);
+          setUser((prevUser) => ({
+            ...prevUser,
+            isPremium,
+          }));
+
+          toast.success(
+            `Successfully updated to ${isPremium ? "Premium" : "Basic"} plan.`
+          );
+          navigate("/dashboard");
+        }
       } catch (error) {
         console.error("Error updating user premium status:", error);
         toast.error("Failed to update plan. Please try again.");

@@ -14,6 +14,7 @@ export type ResumeSections = {
   experiences: string;
   educations: string;
   languages: string;
+  template: number;
 };
 
 export type ResumeOverview = {

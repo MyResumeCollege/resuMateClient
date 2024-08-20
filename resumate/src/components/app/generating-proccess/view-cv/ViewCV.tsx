@@ -9,6 +9,7 @@ import {
   jobTitleState,
   languagesState,
   skillsState,
+  templateState,
 } from "../store/state";
 
 const ViewCV: React.FC = () => {
@@ -19,6 +20,7 @@ const ViewCV: React.FC = () => {
   const jobTitle = useRecoilValue(jobTitleState);
   const userSkills = useRecoilValue(skillsState);
   const userLanguages = useRecoilValue(languagesState);
+  const template = useRecoilValue(templateState);
 
   useEffect(() => {
     if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2]);
@@ -45,7 +47,8 @@ const ViewCV: React.FC = () => {
               `${languagesState.lang} - ${LANGUAGE_LEVEL_NAME[languagesState.level]
               }`
           )
-          .join("\n")
+          .join("\n"),
+        template
       );
       const { url } = response.data;
       setPdfUrl(url);

@@ -7,6 +7,6 @@ export type InputProps = {
     onChange?: (newValue: string) => void;
     disabled?: boolean;
     type?: React.HTMLInputTypeAttribute;
-    placholder?: string;
+    placeholder?: string;
     icon?: React.ReactNode;
 }

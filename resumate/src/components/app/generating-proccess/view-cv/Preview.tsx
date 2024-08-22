@@ -60,10 +60,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
         try {
           const response = await previewCV(resumeId);
-          const data = response.data;
-
-          console.log("data ", data);
-          
+          const data = response.data;          
 
           setFullName(data.fullName);
           setJobTitle(data.jobTitle);

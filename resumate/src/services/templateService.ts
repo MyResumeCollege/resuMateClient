@@ -23,7 +23,7 @@ export const templates: Template[] = [
   {
     _id: 2,
     imageUrl: Template2,
-    isPremium: false,
+    isPremium: true,
     component: ClassicTemplate
   },
   {

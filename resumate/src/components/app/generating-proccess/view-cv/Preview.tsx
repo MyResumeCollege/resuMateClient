@@ -11,6 +11,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
 import { educationState, experienceState, fullNameState, jobTitleState, languagesState, summaryState, templateState } from "../store/state";
 import "./Preview.css";
+import { ResumeSections } from "@/types/resume";
 
 type PreviewProps = {
   id?: string;
@@ -43,8 +44,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [experiences, setExperiences] = useState<string>("Experience");
   const [educations, setEducations] = useState<string>("Educations");
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
-  const [resumeLanguage, setLanguage] = useState("English");
-  const [translatedResume, setTranslatedResume] = useState<string | null>(null);
+  const [languageTo, setLanguageTo] = useState("en");
+  const [languageFrom, setLanguageFrom] = useState("en");
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -61,6 +62,9 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           const response = await previewCV(resumeId);
           const data = response.data;
 
+          console.log("data ", data);
+          
+
           setFullName(data.fullName);
           setJobTitle(data.jobTitle);
           setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
@@ -72,13 +76,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
             data.educations.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
           );
           setLanguages(data.languages);
+          setLanguageTo(data.resumeLanguage || "en");
+          setLanguageFrom(data.resumeLanguage || "en"); 
           if (data.template) {
             setSelectedTemplate(data.template || 1)
           }
-
-          console.log(data);
         } catch (error) {
-          console.log(error);
           toast.error("Sorry, we encountered some issues");
         } finally {
           setIsLoading(false)
@@ -92,24 +95,27 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   }, [id, proppedId]);
 
   const handleTranslate = async () => {
-    if (!resumeLanguage) {
-      console.error("Please enter a language for translation.");
-      return;
-    }
-
-    try {
-      const translateResume = await translateCV({
-        bio,
-        skills,
-        experiences,
-        resumeLanguage,
-      });
-
-      const resumeText = translateResume.data;
-      // TODO split to sections
-    } catch (error) {
-      console.error("Error translating resume:", error);
-    }
+    const resumeSections: ResumeSections = {
+      fullName,
+      jobTitle,
+      bio,
+      skills,
+      experiences,
+      educations,
+      languages,
+      template: selectedTemplate,
+      resumeLanguage: languageTo
+    };
+    
+    const translatedResume = await translateCV(resumeSections, languageFrom, languageTo);
+    setFullName(translatedResume.fullName)
+    setJobTitle(translatedResume.jobTitle)
+    setBio(translatedResume.bio)
+    setExperiences(translatedResume.experiences)
+    setEducations(translatedResume.educations)
+    setSkills(translatedResume.skills)
+    setLanguages(translatedResume.languages)
+    setLanguageFrom(languageTo);
   };
 
   const handleRegenerate = async (
@@ -155,7 +161,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         experiences: experiences,
         educations: educations,
         languages: languages,
-        template: selectedTemplate
+        template: selectedTemplate,
+        resumeLanguage: languageTo
       };
 
       await upsertResume(user._id, cvData);
@@ -258,17 +265,13 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
                 <div className="mt-4">
                   <select
                     id="language-select"
-                    value={resumeLanguage}
-                    onChange={(e) => setLanguage(e.target.value)}
+                    value={languageTo}
+                    onChange={(e) => setLanguageTo(e.target.value)}
                     className="block w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value="english">Ensligh</option>
-                    <option value="spanish">Spanish</option>
-                    <option value="french">French</option>
-                    <option value="german">German</option>
-                    <option value="italian">Italian</option>
-                    <option value="portuguese">Portuguese</option>
-                    <option value="dutch">Dutch</option>
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="it">Italian</option>
                   </select>
                 </div>
                 <Button buttonClassName="mt-4" variant='outlined' onClick={handleTranslate}>Translate</Button>
@@ -292,7 +295,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           </div>
 
         } */}
-      {cloneElement(currentTemplate!.component({ resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate } }))}
+      {cloneElement(currentTemplate!.component({ resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom } }))}
       {/* <BasicTemplate resume={{ bio, educations, experiences, fullName, jobTitle, languages, skills }} /> */}
       {/* <div className="text-3xl font-bold mb-1">{fullName}</div>
         <div className="text-sm text-gray-600 mb-1">{jobTitle}</div> */}

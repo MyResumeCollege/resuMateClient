@@ -12,6 +12,7 @@ type cvData = {
   educations?: string;
   languages?: string;
   template: number;
+  resumeLanguage: string
 }
 
 type SetUrlForPreviewResponse = {
@@ -64,6 +65,7 @@ export const generatePreviewUrl = async (
   educations: string,
   languages: string,
   template: number,
+  resumeLanguage: string
 ): Promise<AxiosResponse<{ url: string }>> => {
   return await apiClient.post("/preview/create-preview", {
     fullName,
@@ -74,6 +76,7 @@ export const generatePreviewUrl = async (
     educations,
     languages,
     template,
+    resumeLanguage
   });
 };
 
@@ -88,7 +91,8 @@ export const updateCvPreview = async(cvData: cvData) => {
     experiences: cvData.experiences,
     educations: cvData.educations,
     languages: cvData.languages,
-    template: cvData.template
+    template: cvData.template,
+    resumeLanguage: cvData.resumeLanguage
   });
 }
 

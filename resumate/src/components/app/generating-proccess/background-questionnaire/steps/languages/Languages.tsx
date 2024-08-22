@@ -82,7 +82,7 @@ export const Languages = () => {
                     <TextInput
                         autoFocus
                         label="Language"
-                        placholder="English"
+                        placeholder="English"
                         inputClassName="bg-[#c8c8c8] outline-none focus:online-none font-bold"
                         value={editedLang.lang}
                         onChange={(newLang) => updateEditedLang(({ lang: newLang }))}

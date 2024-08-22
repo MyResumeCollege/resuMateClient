@@ -76,7 +76,7 @@ export const LinkedinIntegration = () => {
                             <TextInput
                                 autoFocus
                                 label='Profile URL'
-                                placholder='https://www.linkedin.com/in/your-linkedin-profile-000'
+                                placeholder='https://www.linkedin.com/in/your-linkedin-profile-000'
                                 wrapperClassName='mt-5'
                                 value={profileUrl}
                                 onChange={setProfileUrl} />

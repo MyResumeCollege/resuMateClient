@@ -82,7 +82,7 @@ export const Skills = () => {
                     <TextInput
                         autoFocus
                         label="Skill Name"
-                        placholder="Microsoft Excel.."
+                        placeholder="Microsoft Excel.."
                         inputClassName="bg-[#c8c8c8] outline-none focus:online-none font-bold"
                         value={editedSkill.name}
                         onChange={(newName) => updateEditedSkill(({ name: newName }))}

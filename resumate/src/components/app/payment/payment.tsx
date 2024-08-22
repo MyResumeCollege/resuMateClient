@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { Button } from "@/components/shared/button/Button";
 import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
-import "react-datepicker/dist/react-datepicker.css";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import { setUserPremiumStatus } from "../../../services/premiumService";
@@ -8,7 +8,9 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userIdSelector, userState } from "@/store/atoms/userAtom";
-import { useState } from "react";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 
 function Payment() {
   const navigate = useNavigate();
@@ -68,7 +70,7 @@ function Payment() {
               value={cardNumber}
               onChange={setCardNumber}
               label="Card Number"
-              placholder="1234 5678 9012 3456"
+              placeholder="1234 5678 9012 3456"
             />
 
             <div className="flex space-x-4">
@@ -90,7 +92,7 @@ function Payment() {
                 value={cvv}
                 onChange={setCVV}
                 label="CVV"
-                placholder="XXX"
+                placeholder="XXX"
               />
             </div>
           </div>

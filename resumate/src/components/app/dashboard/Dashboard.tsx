@@ -94,7 +94,7 @@ export const Dashboard = () => {
     else return false
   }
 
-  useEffect(() => {
+  useEffect(() => {    
     getResumes();
   }, []);
 

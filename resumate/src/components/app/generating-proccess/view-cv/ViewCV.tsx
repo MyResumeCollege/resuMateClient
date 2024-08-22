@@ -48,7 +48,8 @@ const ViewCV: React.FC = () => {
               }`
           )
           .join("\n"),
-        template
+        template,
+        "en"
       );
       const { url } = response.data;
       setPdfUrl(url);

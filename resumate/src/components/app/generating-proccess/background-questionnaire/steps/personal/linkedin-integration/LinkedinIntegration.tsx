@@ -1,5 +1,5 @@
 import LinkedinLogo from '@/assets/images/linkedin_logo.png';
-import { fullNameState, skillsState, summaryState } from '@/components/app/generating-proccess/store/state';
+import { educationState, experienceState, fullNameState, skillsState, summaryState } from '@/components/app/generating-proccess/store/state';
 import { Button } from '@/components/shared/button/Button';
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput';
 import { getLinkedinData } from '@/services/linkedinIntegration';
@@ -8,7 +8,6 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSetRecoilState } from 'recoil';
 import styles from './LinkedinIntegration.module.css';
-import { uniqueId } from "lodash";
 
 export const LinkedinIntegration = () => {
     const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
@@ -18,6 +17,8 @@ export const LinkedinIntegration = () => {
     const setName = useSetRecoilState(fullNameState);
     const setSummary = useSetRecoilState(summaryState);
     const setSkills = useSetRecoilState(skillsState)
+    const setEducationPeriods = useSetRecoilState(educationState);
+    const setExperiencePeriods = useSetRecoilState(experienceState);
 
     const closeDialog = () => {
         setIsProfileDialogOpen(false);
@@ -32,20 +33,20 @@ export const LinkedinIntegration = () => {
             setIsLoading(true);
             try {
                 const linkedinData = (await getLinkedinData(profileUrl)).data;
+                console.log("linkedinData ", linkedinData);
+                
                 setName(linkedinData.name);
-                setSummary(linkedinData.summary);
-            
-                const linkedinSkills = linkedinData.skills.map(skill => ({
-                    id: uniqueId('skillid'),
-                    name: skill.name,
-                    level: 1
-                }));
-                setSkills(linkedinSkills)
+                setSummary(linkedinData.bio);
+                setEducationPeriods(linkedinData.educationPeriods)
+                setExperiencePeriods(linkedinData.experiencePeriods)
+                setSkills(linkedinData.skills)
                 toast.success('Imported data from LinkedIn successfully');
 
                 setProfileUrl('');
                 setIsProfileDialogOpen(false);
             } catch (e) {
+                console.log("error ?");
+                
                 toast.error('An error occured while importing data from Linkedin');
             } finally {
                 setIsLoading(false);

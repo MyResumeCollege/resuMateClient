@@ -33,7 +33,7 @@ export const NavBar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = (event: MouseEvent) => {    
     if (
       dropdownRef.current &&
       !dropdownRef.current.contains(event.target as Node)

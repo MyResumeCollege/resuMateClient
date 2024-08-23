@@ -1,14 +1,15 @@
 import { AxiosResponse } from "axios";
 import apiClient from "./httpCommon";
+import { EducationPeriod } from "@/types/education-period";
+import { ExperiencePeriod } from "@/types/experience-period";
+import { Skill } from "@/types/skill";
 
 type LinkedinDataResponse = {
     name: string;
-    summary: string;
+    bio: string;
     skills: Skill[];
-}
-
-type Skill = {
-    name: string
+    educationPeriods: EducationPeriod[],
+    experiencePeriods: ExperiencePeriod[]
 }
 
 export const getLinkedinData = async (linkedinProfileUrl: string): Promise<AxiosResponse<LinkedinDataResponse>> => {

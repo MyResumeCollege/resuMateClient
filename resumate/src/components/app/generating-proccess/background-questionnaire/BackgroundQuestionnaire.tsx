@@ -16,10 +16,12 @@ import { ExperiencePeriod } from '@/types/experience-period'
 import { EducationPeriod } from '@/types/education-period'
 import {
   educationState,
+  emailState,
   experienceState,
   fullNameState,
   jobTitleState,
   languagesState,
+  phoneNumberState,
   skillsState,
   summaryState
 } from '../store/state'
@@ -31,6 +33,7 @@ import { Personal } from './steps/personal/Personal'
 import { SelectTemplate } from './steps/select-template/SelectTemplate'
 import { Skills } from './steps/skills/Skills'
 import { WantedJob } from './steps/wanted-job/WantedJob'
+import { ContactInfo } from "./steps/contactInfo/ContactInfo"
 type Step = {
   component: JSX.Element
   name: string
@@ -39,6 +42,8 @@ type Step = {
 const useValidation = (currentStep: number): string[] => {
   const fullName = useRecoilValue(fullNameState)
   const jobTitle = useRecoilValue(jobTitleState)
+  const phoneNumber = useRecoilValue(phoneNumberState)
+  const email = useRecoilValue(emailState)
   const bio = useRecoilValue(summaryState)
   const languages = useRecoilValue(languagesState)
   const skills = useRecoilValue(skillsState)
@@ -53,17 +58,20 @@ const useValidation = (currentStep: number): string[] => {
       break
     case 1:
       errors = validateNameAndBio(fullName, bio)
-      break
+      break;
     case 2:
-      errors = validateExperiencePeriods(experiencePeriods as ExperiencePeriod[])
+      // validate phone number and email      
       break
     case 3:
-      errors = validateEducationPeriods(educationPeriods as EducationPeriod[])
+      errors = validateExperiencePeriods(experiencePeriods as ExperiencePeriod[])
       break
     case 4:
-      errors = validateLanguages(languages)
+      errors = validateEducationPeriods(educationPeriods as EducationPeriod[])
       break
     case 5:
+      errors = validateLanguages(languages)
+      break
+    case 6:
       errors = validateSkills(skills)
       break
     default:
@@ -96,6 +104,7 @@ export const BackgroundQuestionnaire = () => {
   const steps: Step[] = [
     { component: <WantedJob />, name: 'Job Title' },
     { component: <Personal />, name: 'Personal' },
+    { component: <ContactInfo/>, name: 'Contact' },
     { component: <Experience />, name: 'Experience' },
     { component: <Education />, name: 'Education' },
     { component: <Languages />, name: 'Languages' },

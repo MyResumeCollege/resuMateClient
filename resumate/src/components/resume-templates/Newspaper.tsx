@@ -1,6 +1,7 @@
 import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -14,6 +15,8 @@ const List = (listedText: string) => {
 export const NewspaperTemplate = ({ resume, onRegenerateSection, onRephraseSection, readonly = false }: TemplateProps) => {
   const {
     fullName,
+    email,
+    phoneNumber,
     bio,
     jobTitle,
     languages,
@@ -44,6 +47,17 @@ export const NewspaperTemplate = ({ resume, onRegenerateSection, onRephraseSecti
     <div className="flex-1 flex flex-col bg-white border border-gray-300 overflow-auto relative p-6 font-lora">
       <div className="flex flex-col items-center justify-center py-[30px]">
         <h2 className="font-bold text-3xl">{fullName}</h2>
+        <div className="my-3 text-gray-800">
+          {Title("Contact Info")}
+          <div className="flex items-center">
+            <FaPhoneAlt className="mr-2" />
+            <span>Phone Number: {phoneNumber}</span>
+          </div>
+          <div className="flex items-center">
+            <FaEnvelope className="mr-2" />
+            <span>Email: {email}</span>
+          </div>
+        </div>
         <span className="text-md">{jobTitle}</span>
       </div>
       {HorizontalDivider}

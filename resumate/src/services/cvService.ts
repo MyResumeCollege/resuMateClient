@@ -4,13 +4,15 @@ import { ResumeOverview, ResumeSections } from "@/types/resume";
 
 type cvData = {
   resumePreviewId?: string;
-  fullName?: string;
-  jobTitle?: string;
-  bio?: string;
-  skills?: string;
+  fullName: string;
+  email?: string;
+  phoneNumber?: string;
+  jobTitle: string;
+  bio: string;
+  skills: string;
   experiences?: string;
-  educations?: string;
-  languages?: string;
+  educations: string;
+  languages: string;
   template: number;
   resumeLanguage: string
 }
@@ -58,6 +60,8 @@ export const downloadPDF = async (resumeUrl: string, fileName: string) => {
 
 export const generatePreviewUrl = async (
   fullName: string,
+  email: string,
+  phoneNumber: string,
   jobTitle: string,
   bio: string,
   skills: string,
@@ -69,6 +73,8 @@ export const generatePreviewUrl = async (
 ): Promise<AxiosResponse<{ url: string }>> => {
   return await apiClient.post("/preview/create-preview", {
     fullName,
+    email,
+    phoneNumber,
     jobTitle,
     bio,
     skills,

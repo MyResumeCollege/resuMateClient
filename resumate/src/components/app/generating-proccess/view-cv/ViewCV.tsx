@@ -5,9 +5,11 @@ import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { generatePreviewUrl } from "../../../../services/cvService";
 import {
+  emailState,
   fullNameState,
   jobTitleState,
   languagesState,
+  phoneNumberState,
   skillsState,
   templateState,
 } from "../store/state";
@@ -17,6 +19,8 @@ const ViewCV: React.FC = () => {
   const { resumeText } = location.state || {};
   const [pdfUrl, setPdfUrl] = useState<string>("");
   const fullName = useRecoilValue(fullNameState);
+  const email = useRecoilValue(emailState);
+  const phoneNumber = useRecoilValue(phoneNumberState)
   const jobTitle = useRecoilValue(jobTitleState);
   const userSkills = useRecoilValue(skillsState);
   const userLanguages = useRecoilValue(languagesState);
@@ -34,6 +38,8 @@ const ViewCV: React.FC = () => {
     try {
       const response = await generatePreviewUrl(
         fullName,
+        email,
+        phoneNumber,
         jobTitle,
         bio,
         userSkills

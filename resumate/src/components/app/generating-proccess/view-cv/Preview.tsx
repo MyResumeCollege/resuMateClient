@@ -4,6 +4,7 @@ import { generateSection } from "@/services/GenerateResume";
 import { templates } from "@/services/templateService";
 import { translateCV } from "@/services/translateCV";
 import { isUserPremiumSelector, userState } from "@/store/atoms/userAtom";
+import { ResumeSections } from "@/types/resume";
 import { cloneElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -11,7 +12,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
 import { educationState, experienceState, fullNameState, jobTitleState, languagesState, summaryState, templateState } from "../store/state";
 import "./Preview.css";
-import { ResumeSections } from "@/types/resume";
+import { debounce } from "lodash";
 
 type PreviewProps = {
   id?: string;
@@ -51,45 +52,23 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  useEffect(() => {
-    const resumeId = proppedId || id;
+  // Rephrasing
 
-    const fetchData = async () => {
-      if (resumeId) {
-        setIsLoading(true);
-
-        try {
-          const response = await previewCV(resumeId);
-          const data = response.data;          
-
-          setFullName(data.fullName);
-          setJobTitle(data.jobTitle);
-          setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
-          setSkills(data.skills);
-          setExperiences(
-            data.experiences.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
-          );
-          setEducations(
-            data.educations.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
-          );
-          setLanguages(data.languages);
-          setLanguageTo(data.resumeLanguage || "en");
-          setLanguageFrom(data.resumeLanguage || "en"); 
-          if (data.template) {
-            setSelectedTemplate(data.template || 1)
-          }
-        } catch (error) {
-          toast.error("Sorry, we encountered some issues");
-        } finally {
-          setIsLoading(false)
-        }
-      }
-    };
-
-    if (resumeId != "") {
-      fetchData();
+  const handleRephrasing = (section: keyof ResumeSections, newValue: string) => {
+    switch (section) {
+      case "bio":
+        setBio(newValue);
+        break;
+      case 'educations':
+        setEducations(newValue);
+        break;
+      case 'experiences':
+        setExperiences(newValue);
+        break;
     }
-  }, [id, proppedId]);
+  }
+
+  // Translate
 
   const handleTranslate = async () => {
     const resumeSections: ResumeSections = {
@@ -103,7 +82,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       template: selectedTemplate,
       resumeLanguage: languageTo
     };
-    
+
     const translatedResume = await translateCV(resumeSections, languageFrom, languageTo);
     setFullName(translatedResume.fullName)
     setJobTitle(translatedResume.jobTitle)
@@ -115,8 +94,28 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     setLanguageFrom(languageTo);
   };
 
-  const handleRegenerate = async (
-    section: string,
+  // Regenerate
+
+  const handleRegenerate = (section: keyof ResumeSections) => {
+    let currentSectionValue = '';
+
+    switch (section) {
+      case "bio":
+        currentSectionValue = bio;
+        break;
+      case 'educations':
+        currentSectionValue = educations;
+        break;
+      case 'experiences':
+        currentSectionValue = experiences;
+        break;
+    }
+
+    regenerateSection(section, currentSectionValue);
+  }
+
+  const regenerateSection = async (
+    section: keyof ResumeSections,
     existSectionData: string
   ) => {
     try {
@@ -128,10 +127,10 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           case "bio":
             setBio(updatedSectionText);
             break;
-          case "education":
+          case "educations":
             setEducations(updatedSectionText);
             break;
-          case "experience":
+          case "experiences":
             setExperiences(updatedSectionText);
             break;
         }
@@ -144,6 +143,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       console.error("Error regenerating section:", error);
     }
   };
+
+  // Toolbar Actions
 
   const saveResume = async () => {
     setIsSaving(true);
@@ -192,6 +193,47 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const resumeDownloadFileName = fullName
     ? `${fullName.replace(/ /g, "_")}-Resume.pdf`
     : "Resume.pdf";
+
+  useEffect(() => {
+    const resumeId = proppedId || id;
+
+    const fetchData = async () => {
+      if (resumeId) {
+        setIsLoading(true);
+
+        try {
+          const response = await previewCV(resumeId);
+          const data = response.data;
+
+          setFullName(data.fullName);
+          setJobTitle(data.jobTitle);
+          setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
+          setSkills(data.skills);
+          setExperiences(
+            data.experiences.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
+          );
+          setEducations(
+            data.educations.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
+          );
+          setLanguages(data.languages);
+          setLanguageTo(data.resumeLanguage || "en");
+          setLanguageFrom(data.resumeLanguage || "en");
+          if (data.template) {
+            setSelectedTemplate(data.template || 1)
+          }
+        } catch (error) {
+          toast.error("Sorry, we encountered some issues");
+        } finally {
+          setIsLoading(false)
+        }
+      }
+    };
+
+    if (resumeId != "") {
+      fetchData();
+    }
+  }, [id, proppedId]);
+
 
   useEffect(() => {
     return () => {
@@ -292,52 +334,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           </div>
 
         } */}
-      {cloneElement(currentTemplate!.component({ resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom } }))}
-      {/* <BasicTemplate resume={{ bio, educations, experiences, fullName, jobTitle, languages, skills }} /> */}
-      {/* <div className="text-3xl font-bold mb-1">{fullName}</div>
-        <div className="text-sm text-gray-600 mb-1">{jobTitle}</div> */}
-
-      {/* {bio && (
-          <Section
-            title="Summary"
-            onRegenerate={() => handleRegenerate("bio", bio)}
-          >
-            <p className="text-sm">{bio}</p>
-          </Section>
-        )}
-
-        {experiences && (
-          <Section
-            title="Experience"
-            onRegenerate={() => handleRegenerate("experience", experiences)}
-          >
-            <div className="mb-2">
-              <ul className="list-disc text-sm mt-1">{experiences}</ul>
-            </div>
-          </Section>
-        )}
-
-        {skills && (
-          <Section title="Skills">
-            <div className="text-sm whitespace-pre-line">{skills}</div>
-          </Section>
-        )}
-
-        {educations && (
-          <Section
-            title="Education"
-            onRegenerate={() => handleRegenerate("education", educations)}
-          >
-            <div className="flex flex-wrap text-sm">{educations}</div>
-          </Section>
-        )}
-
-        {languages && (
-          <Section title="Languages">
-            <div className="text-sm whitespace-pre-line">{languages}</div>
-          </Section>
-        )} */}
-      {/* </div> */}
+      {cloneElement(currentTemplate!.component({
+        resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom },
+        onRegenerateSection: handleRegenerate,
+        onRephraseSection: debounce(handleRephrasing, 1000),
+        readonly
+      }))}
     </div>
   );
 };

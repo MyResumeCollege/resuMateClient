@@ -1,21 +1,22 @@
-import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  resetTokens,
-  logout as logoutRequest,
-} from "../../../services/authService";
-import { useResetRecoilState } from "recoil";
-import { userState } from "../../../store/atoms/userAtom";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useMutation } from "react-query";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import {
+  logout as logoutRequest,
+  resetTokens,
+} from "../../../services/authService";
+import { userInitialsSelector, userState } from "../../../store/atoms/userAtom";
 
 export const NavBar = () => {
   const navigate = useNavigate();
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const resetUserState = useResetRecoilState(userState);
   const logoutMutation = useMutation(logoutRequest);
-  
+  const resetUserState = useResetRecoilState(userState);
+  const userInitials = useRecoilValue(userInitialsSelector);
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogOut = async () => {
@@ -33,7 +34,7 @@ export const NavBar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {    
+  const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
       !dropdownRef.current.contains(event.target as Node)
@@ -59,12 +60,10 @@ export const NavBar = () => {
         </Link>
       </div>
       <div className="relative flex items-center">
-        <img
-          src="https://as2.ftcdn.net/v2/jpg/03/49/49/79/1000_F_349497933_Ly4im8BDmHLaLzgyKg2f2yZOvJjBtlw5.jpg"
-          alt="Profile"
-          className="rounded-full h-[50px] w-[50px] cursor-pointer"
-          onClick={toggleDropdown}
-        />
+        <div className="rounded-full h-[50px] w-[50px] cursor-pointer bg-primary flex items-center justify-center font-bold text-white"
+          onClick={toggleDropdown}>
+          {userInitials}
+        </div>
         {dropdownOpen && (
           <div
             ref={dropdownRef}

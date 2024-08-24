@@ -10,6 +10,14 @@ export const userState = atom<User>({
   effects_UNSTABLE: [persistAtom],
 })
 
+export const userInitialsSelector = selector<string>({
+  key: 'userInitials',
+  get: ({ get }) => {
+    const username = get(userState).name;
+    return username.split(' ')[0][0] + username.split(' ')[1][0];
+  },
+})
+
 export const userIdSelector = selector<User['_id']>({
   key: 'userId',
   get: ({ get }) => {

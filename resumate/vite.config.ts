@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from "path";
+import { defineConfig } from 'vite';
 
 export default defineConfig({
+  ...(process.env.VITE_ENV !== 'dev' && { base: "https://node04.cs.colman.ac.il/public/client" }),
   plugins: [react()],
   resolve: {
     alias: {
@@ -10,8 +11,6 @@ export default defineConfig({
     },
   },
   css: {
-    modules: {
-      
-    }
+    modules: {}
   }
 })

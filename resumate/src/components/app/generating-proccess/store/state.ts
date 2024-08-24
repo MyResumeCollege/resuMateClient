@@ -15,6 +15,24 @@ export const fullNameState = atom({
     effects_UNSTABLE: [persistAtom],
 });
 
+// email 
+
+export const emailState = atom({
+    key: 'email',
+    default: '',
+    effects_UNSTABLE: [persistAtom],
+});
+
+// phone number 
+
+export const phoneNumberState = atom({
+    key: 'phoneNumber',
+    default: '',
+    effects_UNSTABLE: [persistAtom],
+});
+
+// summary 
+
 export const summaryState = atom({
     key: 'summary',
     default: '',

@@ -1,6 +1,7 @@
 import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -11,9 +12,16 @@ const List = (listedText: string) => {
   ));
 };
 
-export const FolderTealTemaplate = ({ resume, onRegenerateSection, onRephraseSection, readonly = false }: TemplateProps) => {
+export const FolderTealTemaplate = ({
+  resume,
+  onRegenerateSection,
+  onRephraseSection,
+  readonly = false,
+}: TemplateProps) => {
   const {
     fullName,
+    email,
+    phoneNumber,
     bio,
     jobTitle,
     languages,
@@ -27,11 +35,12 @@ export const FolderTealTemaplate = ({ resume, onRegenerateSection, onRephraseSec
       <div className="flex flex-col mb-2">
         <h2 className="text-lg font-semibold uppercase">
           {text}
-          {options?.onRegenerate && !readonly &&
+          {options?.onRegenerate && !readonly && (
             <RegenerateButton
               onClick={options.onRegenerate}
               style={{ marginLeft: 10 }}
-            />}
+            />
+          )}
         </h2>
       </div>
     );
@@ -41,55 +50,68 @@ export const FolderTealTemaplate = ({ resume, onRegenerateSection, onRephraseSec
     <div className="flex-1 flex bg-white border border-gray-300 overflow-auto relative">
       <div className="left p-6 flex-1 flex flex-col">
         <div className="my-3">
-          {Title('Experience', { onRegenerate: () => onRegenerateSection('experiences') })}
+          {Title("Experience", {
+            onRegenerate: () => onRegenerateSection("experiences"),
+          })}
           <EditableText
             className="text-xs"
             readonly={readonly}
-            onChange={newValue => onRephraseSection('experiences', newValue)}>
+            onChange={(newValue) => onRephraseSection("experiences", newValue)}
+          >
             {experiences}
           </EditableText>
         </div>
         <div className="my-3">
-          {Title('Education', { onRegenerate: () => onRegenerateSection('educations') })}
+          {Title("Education", {
+            onRegenerate: () => onRegenerateSection("educations"),
+          })}
           <EditableText
             className="text-xs"
             readonly={readonly}
-            onChange={newValue => onRephraseSection('educations', newValue)}>
+            onChange={(newValue) => onRephraseSection("educations", newValue)}
+          >
             {educations}
           </EditableText>
         </div>
         <div className="my-3">
-          {Title('Skills')}
+          {Title("Skills")}
           {List(skills)}
         </div>
-
       </div>
       <div className="right p-6 bg-[#9b948e] w-[300px] text-white text-xs">
-        <div
-          className="text-3xl font-bold pr-6"
-        >
-          {fullName}
+        <div className="text-3xl font-bold pr-6">{fullName}</div>
+        <div className="my-3 text-gray-800">
+          {Title("Contact Info")}
+          <div className="flex items-center">
+            <FaPhoneAlt className="mr-2" />
+            <span>Phone Number: {phoneNumber}</span>
+          </div>
+          <div className="flex items-center">
+            <FaEnvelope className="mr-2" />
+            <span>Email: {email}</span>
+          </div>
         </div>
-        <div
-          className="text-sm font-semibold mb-[40px] opacity-60"
-        >
+        <div className="text-sm font-semibold mb-[40px] opacity-60">
           {jobTitle}
         </div>
         <div className="my-3">
-          {Title('About Me', { onRegenerate: () => onRegenerateSection('bio') })}
+          {Title("About Me", {
+            onRegenerate: () => onRegenerateSection("bio"),
+          })}
           <EditableText
             className="text-xs"
             readonly={readonly}
-            onChange={newValue => onRephraseSection('bio', newValue)}>
+            onChange={(newValue) => onRephraseSection("bio", newValue)}
+          >
             {bio}
           </EditableText>
         </div>
         <div className="my-3">
-          {Title('Languages')}
+          {Title("Languages")}
           {List(languages)}
         </div>
         <div className="my-3">
-          {Title('Contact')}
+          {Title("Contact")}
           bla bla bla contact details here
         </div>
       </div>

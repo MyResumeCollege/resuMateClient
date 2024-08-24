@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
-import { educationState, experienceState, fullNameState, jobTitleState, languagesState, skillsState, summaryState, templateState } from "../store/state";
+import { educationState, emailState, experienceState, fullNameState, jobTitleState, languagesState, phoneNumberState, skillsState, summaryState, templateState } from "../store/state";
 import "./Preview.css";
 
 type PreviewProps = {
@@ -26,6 +26,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
   const resetName = useResetRecoilState(fullNameState);
   const resetJobTitle = useResetRecoilState(jobTitleState);
+  const resetEmail = useResetRecoilState(emailState);
+  const resetPhoneNumber = useResetRecoilState(phoneNumberState)
   const resetBio = useResetRecoilState(summaryState);
   const resetEducation = useResetRecoilState(educationState);
   const resetExperience = useResetRecoilState(experienceState);
@@ -34,20 +36,20 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const resetSkills = useResetRecoilState(skillsState)
 
   const [fullName, setFullName] = useState<string>("Full Name");
+  const [phoneNumber, setPhoneNumber] = useState<string>("052-0000000")
+  const [email, setEmail] = useState<string>("test@gmail.com")
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
   const [bio, setBio] = useState<string>(
     "A brief bio about yourself goes here."
 
   );
-
-  const [selectedTemplate, setSelectedTemplate] = useRecoilState(templateState);
-
   const [skills, setSkills] = useState<string>("Skills");
   const [experiences, setExperiences] = useState<string>("Experience");
   const [educations, setEducations] = useState<string>("Educations");
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
   const [languageTo, setLanguageTo] = useState("en");
   const [languageFrom, setLanguageFrom] = useState("en");
+  const [selectedTemplate, setSelectedTemplate] = useRecoilState(templateState);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -154,6 +156,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       const cvData = {
         resumePreviewId: id,
         fullName,
+        phoneNumber,
+        email,
         jobTitle,
         bio: bio,
         skills: skills,
@@ -204,9 +208,11 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
         try {
           const response = await previewCV(resumeId);
-          const data = response.data;
+          const data = response.data;          
 
           setFullName(data.fullName);
+          setPhoneNumber(data.phoneNumber ?? "")
+          setEmail(data.email ?? "")
           setJobTitle(data.jobTitle);
           setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
           setSkills(data.skills);
@@ -239,6 +245,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   useEffect(() => {
     return () => {
       resetName();
+      resetEmail();
+      resetPhoneNumber();
       resetBio();
       resetEducation();
       resetExperience();
@@ -324,7 +332,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       )}
       <div className="preview flex" style={{ aspectRatio: "1/1.41", height: '100%' }}>
         {cloneElement(currentTemplate!.component({
-          resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom },
+          resume: { bio, email, phoneNumber, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom },
           onRegenerateSection: handleRegenerate,
           onRephraseSection: debounce(handleRephrasing, 1000),
           readonly

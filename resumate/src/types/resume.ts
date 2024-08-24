@@ -9,6 +9,8 @@ export type GenerateResumeInput = {
 export type ResumeSections = {
   fullName: string;
   jobTitle: string;
+  email?: string;
+  phoneNumber?: string;
   bio: string;
   skills: string;
   experiences: string;

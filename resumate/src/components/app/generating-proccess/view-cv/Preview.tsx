@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
-import { educationState, experienceState, fullNameState, jobTitleState, languagesState, summaryState, templateState } from "../store/state";
+import { educationState, experienceState, fullNameState, jobTitleState, languagesState, skillsState, summaryState, templateState } from "../store/state";
 import "./Preview.css";
 import { debounce } from "lodash";
 
@@ -31,6 +31,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const resetExperience = useResetRecoilState(experienceState);
   const resetLanguages = useResetRecoilState(languagesState);
   const resetTemplate = useResetRecoilState(templateState);
+  const resetSkills = useResetRecoilState(skillsState)
 
   const [fullName, setFullName] = useState<string>("Full Name");
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
@@ -243,6 +244,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       resetExperience();
       resetJobTitle();
       resetLanguages();
+      resetSkills();
       resetTemplate();
     }
   }, [])

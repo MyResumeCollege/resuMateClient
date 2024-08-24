@@ -20,7 +20,7 @@ const List = (listedText: string) => {
   ));
 };
 
-export const CalmTemplate = ({ resume }: TemplateProps) => {
+export const CalmTemplate = ({ resume, onRegenerateSection }: TemplateProps) => {
   const {
     fullName,
     bio,

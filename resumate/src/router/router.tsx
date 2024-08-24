@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
     path: "/reset-password/:token",
     element: <ResetPassword />,
   },
-  { path: "/preview/:id/clear", element: <Preview /> },
+  { path: "/preview/:id/clear", element: <Preview readonly/> },
   // Have NavBar on top
   {
     path: "/",

@@ -1,9 +1,11 @@
 import { TemplateProps } from "@/types/template-props";
+import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 
-const Title = (text: string) => {
+const Title = (text: string, onRegenerate = () => { }) => {
   return (
-    <div className="flex flex-col mb-2">
+    <div className="flex mb-2">
       <h2 className="text-lg font-bold">{text}</h2>
+      {onRegenerate && <RegenerateButton onClick={onRegenerate} />}
     </div>
   );
 };

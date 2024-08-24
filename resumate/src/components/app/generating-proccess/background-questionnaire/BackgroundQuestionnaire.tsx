@@ -10,6 +10,7 @@ import {
   validateJobTitle,
   validateLanguages,
   validateNameAndBio,
+  validatePhoneNumberAndEmail,
   validateSkills,
 } from '../../../../validations/validations'
 import { ExperiencePeriod } from '@/types/experience-period'
@@ -51,7 +52,7 @@ const useValidation = (currentStep: number): string[] => {
   const experiencePeriods = useRecoilValue(experienceState)
 
   let errors: string[] = []
-
+    
   switch (currentStep) {
     case 0:
       errors = validateJobTitle(jobTitle)
@@ -60,8 +61,8 @@ const useValidation = (currentStep: number): string[] => {
       errors = validateNameAndBio(fullName, bio)
       break;
     case 2:
-      // validate phone number and email      
-      break
+      errors = validatePhoneNumberAndEmail(phoneNumber, email)   
+      break;
     case 3:
       errors = validateExperiencePeriods(experiencePeriods as ExperiencePeriod[])
       break

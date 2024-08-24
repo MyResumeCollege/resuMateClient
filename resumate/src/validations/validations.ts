@@ -106,11 +106,24 @@ const validateSkills = (skills: Skill[]): string[] => {
   return errors;
 };
 
+const validatePhoneNumberAndEmail = (phoneNumber: string, email: string) => {
+  const errors: string[] = [];
+  
+  const phoneNumberRegex = /^0\d{1,2}-\d{2}-\d{5}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(email) && !phoneNumberRegex.test(phoneNumber)) {
+    errors.push("Email and phone number are invalid.");
+  }
+
+  return errors;
+}
+
 export {
     validateJobTitle,
     validateNameAndBio,
     validateExperiencePeriods,
     validateEducationPeriods,
     validateLanguages,
-    validateSkills
+    validateSkills,
+    validatePhoneNumberAndEmail
 }

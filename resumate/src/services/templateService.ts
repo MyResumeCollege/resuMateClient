@@ -1,10 +1,15 @@
-import Template1 from '@/assets/images/resume-template/template1.jpg';
-import Template2 from '@/assets/images/resume-template/template2.jpg';
-import Template3 from '@/assets/images/resume-template/template3.jpg';
-import { BlueyTemplate } from '@/components/resume-templates/Bluey';
-import { ClassicTemplate } from '@/components/resume-templates/Classic';
-import { CalmTemplate } from '@/components/resume-templates/Calm';
+import Folder from '@/assets/images/resume-template/folder.png';
+import FolderTeal from '@/assets/images/resume-template/folder-teal.png';
+import Newspaper from '@/assets/images/resume-template/newspaper.png';
+import NewspaperDark from '@/assets/images/resume-template/newspaper-dark.png';
+import Sea from '@/assets/images/resume-template/sea.png';
+
+import { FolderTemaplate } from '@/components/resume-templates/Folder';
+import { FolderTealTemaplate } from '@/components/resume-templates/FolderTeal';
+import { NewspaperTemplate } from '@/components/resume-templates/Newspaper';
+import { SeaTemplate } from '@/components/resume-templates/Sea';
 import { TemplateProps } from '@/types/template-props';
+import { NewspaperDarkTemplate } from '@/components/resume-templates/NewspaperDark';
 
 export interface Template {
   _id: number;
@@ -16,20 +21,32 @@ export interface Template {
 export const templates: Template[] = [
   {
     _id: 1,
-    imageUrl: Template1,
+    imageUrl: Sea,
     isPremium: false,
-    component: BlueyTemplate
+    component: SeaTemplate
   },
   {
     _id: 2,
-    imageUrl: Template2,
-    isPremium: true,
-    component: ClassicTemplate
+    imageUrl: Newspaper,
+    isPremium: false,
+    component: NewspaperTemplate
   },
   {
     _id: 3,
-    imageUrl: Template3,
-    isPremium: false,
-    component: CalmTemplate
+    imageUrl: NewspaperDark,
+    isPremium: true,
+    component: NewspaperDarkTemplate
+  },
+  {
+    _id: 4,
+    imageUrl: Folder,
+    isPremium: true,
+    component: FolderTemaplate
+  },
+  {
+    _id: 5,
+    imageUrl: FolderTeal,
+    isPremium: true,
+    component: FolderTealTemaplate
   }
 ];

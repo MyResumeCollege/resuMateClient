@@ -15,7 +15,7 @@ import Payment from "@/components/app/payment/payment";
 
 const NavbarWrapper = () => {
   return (
-    <div className="flex flex-col flex-1 resumate-app">
+    <div className="flex flex-col flex-1 resumate-app max-h-[100vh]">
       <NavBar />
       <main className="resumate">
         <Outlet />
@@ -41,7 +41,8 @@ export const router = createBrowserRouter([
     path: "/reset-password/:token",
     element: <ResetPassword />,
   },
-  { path: "/preview/:id/clear", element: <Preview readonly/> },
+  { path: "/preview/:id/clear", element: <Preview/> },
+  { path: "/preview/:id/download", element: <Preview readonly/> },
   // Have NavBar on top
   {
     path: "/",

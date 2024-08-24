@@ -67,7 +67,7 @@ export const NavBar = () => {
         {dropdownOpen && (
           <div
             ref={dropdownRef}
-            className="absolute top-[60px] right-0 bg-white border border-gray-300 shadow-lg rounded-lg w-[180px] py-2"
+            className="absolute top-[60px] z-10 right-0 bg-white border border-gray-300 shadow-lg rounded-lg w-[180px] py-2"
           >
             <button
               onClick={handleLogOut}

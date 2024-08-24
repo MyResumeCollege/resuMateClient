@@ -5,6 +5,7 @@ import { templates } from "@/services/templateService";
 import { translateCV } from "@/services/translateCV";
 import { isUserPremiumSelector, userState } from "@/store/atoms/userAtom";
 import { ResumeSections } from "@/types/resume";
+import { debounce } from "lodash";
 import { cloneElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -12,7 +13,6 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
 import { educationState, experienceState, fullNameState, jobTitleState, languagesState, skillsState, summaryState, templateState } from "../store/state";
 import "./Preview.css";
-import { debounce } from "lodash";
 
 type PreviewProps = {
   id?: string;
@@ -180,7 +180,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     try {
       await downloadPDF(
         `${import.meta.env.VITE_API_BASE_URL
-        }/preview/${id}/clear`,
+        }/preview/${id}/download`,
         resumeDownloadFileName
       )
       toast.success('Resume downloaded succesfully')
@@ -322,26 +322,14 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           </div>
         </div>
       )}
-
-      {/* <div className="flex-1 bg-white border border-gray-300 p-8 overflow-auto relative"> */}
-      {/* {isLoading &&
-          <div className="absolute w-[100%] h-[100%] flex items-center justify-center"
-            style={{ backdropFilter: "blur(3px)" }}
-          >
-            <span
-              className="animate-spin inline-block size-[50px] border-[8px] border-current border-t-transparent text-primary rounded-full"
-              role="status"
-              aria-label="loading"
-            />
-          </div>
-
-        } */}
-      {cloneElement(currentTemplate!.component({
-        resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom },
-        onRegenerateSection: handleRegenerate,
-        onRephraseSection: debounce(handleRephrasing, 1000),
-        readonly
-      }))}
+      <div className="preview flex" style={{ aspectRatio: "1/1.41", height: '100%' }}>
+        {cloneElement(currentTemplate!.component({
+          resume: { bio, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom },
+          onRegenerateSection: handleRegenerate,
+          onRephraseSection: debounce(handleRephrasing, 1000),
+          readonly
+        }))}
+      </div>
     </div>
   );
 };

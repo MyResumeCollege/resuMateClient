@@ -1,16 +1,17 @@
 import { TemplateProps } from "@/types/template-props";
+import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
-    <div key={item} className="text-sm">
+    <div key={item}>
       <span className="font-bold">{item.split("-")[0]}</span> -
       <span>{item.split("-")[1]}</span>
     </div>
   ));
 };
 
-export const BlueyTemplate = ({ resume, onRegenerateSection, onRephraseSection, readonly }: TemplateProps) => {
+export const SeaTemplate = ({ resume, onRegenerateSection, onRephraseSection, readonly = false }: TemplateProps) => {
   const {
     fullName,
     bio,
@@ -41,7 +42,7 @@ export const BlueyTemplate = ({ resume, onRegenerateSection, onRephraseSection, 
   };
 
   return (
-    <div className="flex-1 flex bg-white border border-gray-300 overflow-auto relative">
+    <div className="flex-1 flex bg-white border border-gray-300 overflow-auto relative text-xs">
       <div className="bg-primary p-8 pr-0 text-white" style={{ maxWidth: 300 }}>
         <div
           className="text-3xl font-bold pr-6"
@@ -56,14 +57,9 @@ export const BlueyTemplate = ({ resume, onRegenerateSection, onRephraseSection, 
 
         <div className="flex flex-col mb-5 text-gray-800">
           {Title("Education", { onRegenerate: () => onRegenerateSection('educations') })}
-          <div
-            className="text-sm pr-6 whitespace-break-spaces"
-            contentEditable={!readonly}
-            suppressContentEditableWarning
-            onInput={e => onRephraseSection('educations', e.currentTarget.textContent || '')}
-          >
+          <EditableText className="pr-6 whitespace-break-spaces" readonly={readonly} onChange={newValue => onRephraseSection('educations', newValue)}>
             {educations.slice(0, 400)}
-          </div>
+          </EditableText>
         </div>
 
         <div className="flex flex-col mb-5 text-gray-800">
@@ -80,18 +76,24 @@ export const BlueyTemplate = ({ resume, onRegenerateSection, onRephraseSection, 
           </div>
         </div>
       </div>
-      <div className="flex-1 p-6 text-sm">
+      <div className="flex-1 p-6">
         <div className="flex flex-col mb-5">
           {Title("About Me", { color: 'black', onRegenerate: () => onRegenerateSection('bio') })}
-          <div contentEditable={!readonly} suppressContentEditableWarning onInput={e => onRephraseSection('bio', e.currentTarget.textContent || '')}>
+          <EditableText
+            className="pr-6 whitespace-break-spaces"
+            readonly={readonly}
+            onChange={newValue => onRephraseSection('bio', newValue)}>
             {bio.slice(0, 400)}
-          </div>
+          </EditableText>
         </div>
-        <div className="text-sm">
+        <div>
           {Title("Experience", { color: 'black', onRegenerate: () => onRegenerateSection('experiences') })}
-          <div contentEditable={!readonly} suppressContentEditableWarning onInput={e => onRephraseSection('experiences', e.currentTarget.textContent || '')}>
+          <EditableText
+            className="pr-6 whitespace-break-spaces"
+            readonly={readonly}
+            onChange={newValue => onRephraseSection('experiences', newValue)}>
             {experiences.slice(0, 400)}
-          </div>
+          </EditableText>
         </div>
       </div>
     </div >

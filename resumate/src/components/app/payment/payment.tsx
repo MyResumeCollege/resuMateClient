@@ -2,15 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/shared/button/Button";
 import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
-import DatePicker from "react-datepicker";
-
 import { setUserPremiumStatus } from "../../../services/premiumService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userIdSelector, userState } from "@/store/atoms/userAtom";
-
-import "react-datepicker/dist/react-datepicker.css";
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -27,7 +23,7 @@ const Payment = () => {
   const [cvv, setCVV] = useState("");
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState("");
 
   const handleCVVChange = (value: string) => {
     const cvv = value.replace(/\D/g, "");
@@ -35,11 +31,6 @@ const Payment = () => {
       setCVV(cvv);
     }
   };
-
-  const handleDateChange = (date: Date | null) => {
-    setEndDate(date);
-  };
-
   const formatCardNumber = (number: string) => {
     return number
       .replace(/\D/g, "")
@@ -56,11 +47,19 @@ const Payment = () => {
     setName(name);
   };
 
+  const handleDateChange = (value: string) => {
+    const numericValue = value.replace(/\D/g, "");
+    if (numericValue.length <= 6) {
+      let formattedValue = numericValue;
+      if (numericValue.length > 2) {
+        formattedValue = numericValue.slice(0, 2) + "/" + numericValue.slice(2);
+      }
+      setEndDate(formattedValue);
+    }
+  };
+
   const handlePayment = async (userId: string, isPremium: boolean) => {
-    if (
-      cardNumber.length !== 19 ||
-      endDate === null
-    ) {
+    if (cardNumber.length !== 19 || endDate.length !== 7) {
       toast.error("Please fill in all fields correctly.");
       return;
     }
@@ -114,13 +113,13 @@ const Payment = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Expiration Date
                 </label>
-                <DatePicker
-                  selected={endDate}
-                  onChange={handleDateChange}
-                  dateFormat="MM/yyyy"
-                  showMonthYearPicker
-                  className="w-full border border-gray-300 rounded-md p-2 datepicker-input"
-                  placeholderText="MM/YYYY"
+                <input
+                  type="text"
+                  value={endDate}
+                  onChange={(e) => handleDateChange(e.target.value)}
+                  maxLength={7}
+                  className="w-full border border-gray-300 rounded-md p-2"
+                  placeholder="MM/YYYY"
                 />
               </div>
               <TextInput

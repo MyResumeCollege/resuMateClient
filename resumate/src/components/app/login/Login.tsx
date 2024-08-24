@@ -1,22 +1,22 @@
+import Resume from '@/assets/icons/resume.svg';
 import { Button } from '@/components/shared/button/Button';
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Resume from '@/assets/icons/resume.svg';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../../store/atoms/userAtom';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import {
-  saveTokens,
   googleSignIn,
   loginUser,
+  saveTokens,
 } from '../../../services/authService';
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import { userState } from '../../../store/atoms/userAtom';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useRecoilState(userState);
+  const setUser = useSetRecoilState(userState);
   const navigate = useNavigate();
 
   // useEffect(() => {

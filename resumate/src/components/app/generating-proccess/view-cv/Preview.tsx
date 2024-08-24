@@ -51,10 +51,11 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [languageFrom, setLanguageFrom] = useState("en");
   const [selectedTemplate, setSelectedTemplate] = useRecoilState(templateState);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
+  console.log(loading)
   // Rephrasing
 
   const handleRephrasing = (section: keyof ResumeSections, newValue: string) => {

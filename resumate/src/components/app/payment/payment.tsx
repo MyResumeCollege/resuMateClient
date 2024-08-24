@@ -3,6 +3,7 @@ import { Button } from "@/components/shared/button/Button";
 import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
 import DatePicker from "react-datepicker";
+
 import { setUserPremiumStatus } from "../../../services/premiumService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +12,7 @@ import { userIdSelector, userState } from "@/store/atoms/userAtom";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-
-function Payment() {
+const Payment = () => {
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const userId = useRecoilValue(userIdSelector);
@@ -27,13 +27,44 @@ function Payment() {
   const [cvv, setCVV] = useState("");
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const handleDateChange = (date) => {
+  const handleCVVChange = (value: string) => {
+    const cvv = value.replace(/\D/g, "");
+    if (cvv.length <= 3) {
+      setCVV(cvv);
+    }
+  };
+
+  const handleDateChange = (date: Date | null) => {
     setEndDate(date);
   };
 
+  const formatCardNumber = (number: string) => {
+    return number
+      .replace(/\D/g, "")
+      .replace(/(.{4})/g, "$1 ")
+      .trim();
+  };
+
+  const handleCardNumberChange = (value: string) => {
+    setCardNumber(formatCardNumber(value));
+  };
+
+  const handleNameChange = (value: string) => {
+    const name = value.replace(/[^A-Za-z\s]/g, "");
+    setName(name);
+  };
+
   const handlePayment = async (userId: string, isPremium: boolean) => {
+    if (
+      cardNumber.length !== 19 ||
+      endDate === null
+    ) {
+      toast.error("Please fill in all fields correctly.");
+      return;
+    }
+
     if (userId) {
       try {
         await setUserPremiumStatus(userId, isPremium);
@@ -65,38 +96,48 @@ function Payment() {
             Enter your Credit or Debit Card details below
           </p>
           <div className="space-y-4">
-            <TextInput value={name} onChange={setName} label="Full Name" />
+            <TextInput
+              value={name}
+              onChange={handleNameChange}
+              type="text"
+              label="Full Name"
+            />
             <TextInput
               value={cardNumber}
-              onChange={setCardNumber}
+              onChange={handleCardNumberChange}
               label="Card Number"
               placeholder="1234 5678 9012 3456"
+              maxLength={19}
             />
-
             <div className="flex space-x-4">
               <div className="w-1/2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Expiration Date
                 </label>
                 <DatePicker
-                  value={endDate}
+                  selected={endDate}
                   onChange={handleDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
-                  className="w-full border border-gray-300 rounded-md p-2"
+                  className="w-full border border-gray-300 rounded-md p-2 datepicker-input"
                   placeholderText="MM/YYYY"
                 />
               </div>
               <TextInput
-                type="password"
                 value={cvv}
-                onChange={setCVV}
+                onChange={handleCVVChange}
                 label="CVV"
                 placeholder="XXX"
+                maxLength={3}
               />
             </div>
           </div>
-          <Button onClick={() => handlePayment(userId, true)}>Pay Now</Button>
+          <Button
+            buttonClassName="font-bold mt-[20px]"
+            onClick={() => handlePayment(userId, true)}
+          >
+            Pay Now
+          </Button>
         </section>
 
         {/* Features Section */}
@@ -122,6 +163,6 @@ function Payment() {
       </div>
     </main>
   );
-}
+};
 
 export default Payment;

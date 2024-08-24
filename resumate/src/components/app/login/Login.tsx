@@ -77,11 +77,7 @@ export const Login = () => {
             type='password'
             label='Password'
           />
-          <div className='flex pt-2 text-sm items-center'>
-            <div className='flex items-center gap-2'>
-              <input type='checkbox' />
-              <span>Remember me</span>
-            </div>
+          <div className='flex pt-2 mb-2 text-sm items-center'>
             <Link to={'/forgot-password'} className='ml-auto text-primary'>
               Forgot Password?
             </Link>

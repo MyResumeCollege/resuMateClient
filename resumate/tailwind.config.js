@@ -16,7 +16,9 @@ export default {
         dark: 'var(--color-primary-dark)'
       },
       fontFamily: {
-        poppins: ["Poppins"]
+        poppins: ["Poppins"],
+        ptserif: ["PT serif"],
+        lora: ['Lora']
       }
     },
   },

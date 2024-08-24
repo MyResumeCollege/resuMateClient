@@ -130,8 +130,8 @@ export const Dashboard = () => {
           {/* Resume Preview */}
           <div className="flex-1 flex">
             {selectedResumeIndex ? (
-              <div className="flex-1 px-10 flex flex-col">
-                <div className="flex justify-end mb-3 gap-2">
+              <div className="flex-1 px-10 flex flex-col h-full">
+                <div className="flex mb-3 gap-2">
                   <Button
                     dense
                     variant="primary"

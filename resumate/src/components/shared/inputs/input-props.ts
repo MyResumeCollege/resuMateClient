@@ -9,4 +9,5 @@ export type InputProps = {
     type?: React.HTMLInputTypeAttribute;
     placeholder?: string;
     icon?: React.ReactNode;
+    maxLength?: number;
 }

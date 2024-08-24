@@ -12,6 +12,7 @@ export const TextInput = ({
   placeholder,
   icon,
   inputClassName,
+  maxLength
 }: InputProps) => {
   return (
     <div className={`space-y-3 ${wrapperClassName}`}>
@@ -39,6 +40,7 @@ export const TextInput = ({
             icon ? "ps-11" : ""
           } focus:outline outline-2 block w-full border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ${inputClassName}`}
           placeholder={placeholder}
+          maxLength={maxLength}
         />
         {icon && (
           <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none">

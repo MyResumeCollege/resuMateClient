@@ -65,7 +65,7 @@ export const PremiumPlan = () => {
         />
         <PricingCard
           title="Premium"
-          price="$0.5"
+          price="$3.5"
           pricePeriod="per month"
           badge="Recommended"
           features={premiumFeatures}

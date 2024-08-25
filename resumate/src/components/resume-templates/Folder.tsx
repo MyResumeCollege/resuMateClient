@@ -80,19 +80,19 @@ export const FolderTemaplate = ({
       </div>
       <div className="right p-6 bg-[#18203d] w-[300px] text-white text-xs">
         <div className="text-3xl font-bold pr-6">{fullName}</div>
-        <div className="my-3 text-gray-800">
+        <div className="text-sm font-semibold mb-[40px] opacity-60">
+          {jobTitle}
+        </div>
+        <div className="my-3">
           {Title("Contact Info")}
           <div className="flex items-center">
             <FaPhoneAlt className="mr-2" />
-            <span>Phone Number: {phoneNumber}</span>
+            <span>{phoneNumber}</span>
           </div>
           <div className="flex items-center">
             <FaEnvelope className="mr-2" />
-            <span>Email: {email}</span>
+            <span>{email}</span>
           </div>
-        </div>
-        <div className="text-sm font-semibold mb-[40px] opacity-60">
-          {jobTitle}
         </div>
 
         <div className="my-3">

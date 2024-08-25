@@ -67,11 +67,11 @@ export const SeaTemplate = ({
           {Title("Contact Info")}
           <div className="flex items-center">
             <FaPhoneAlt className="mr-2" />
-            <span>Phone Number: {phoneNumber}</span>
+            <span>{phoneNumber}</span>
           </div>
           <div className="flex items-center">
             <FaEnvelope className="mr-2" />
-            <span>Email: {email}</span>
+            <span>{email}</span>
           </div>
         </div>
         <div className="flex flex-col mb-5 text-gray-800">

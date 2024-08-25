@@ -47,18 +47,20 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
     <div className="flex-1 flex flex-col bg-[#05102e] text-white border border-gray-300 overflow-auto relative p-6 font-lora">
       <div className="flex flex-col items-center justify-center py-[30px]">
         <h2 className="font-bold text-3xl">{fullName}</h2>
-        <div className="my-3 text-gray-800">
-          {Title("Contact Info")}
-          <div className="flex items-center">
-            <FaPhoneAlt className="mr-2" />
-            <span>Phone Number: {phoneNumber}</span>
-          </div>
-          <div className="flex items-center">
-            <FaEnvelope className="mr-2" />
-            <span>Email: {email}</span>
-          </div>
-        </div>
         <span className="text-md">{jobTitle}</span>
+      </div>
+      <div className="text-xs flex flex-col items-center">
+        {HorizontalDivider}
+        {/* {Title("Contact Info")} */}
+        <div className="flex items-center mt-2">
+          <FaPhoneAlt className="mr-2" />
+          <span>{phoneNumber}</span>
+        </div>
+        <div className="flex items-center mb-2">
+          <FaEnvelope className="mr-2" />
+          <span>{email}</span>
+        </div>
+        {HorizontalDivider}
       </div>
       {HorizontalDivider}
       <div className="flex flex-1">

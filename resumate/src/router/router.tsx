@@ -1,28 +1,19 @@
 import { Dashboard } from "@/components/app/dashboard/Dashboard";
+import { ForgotPassword } from "@/components/app/forget-password/ForgotPassword";
+import { ResetPassword } from "@/components/app/forget-password/ResetPassword";
 import { BackgroundQuestionnaire } from "@/components/app/generating-proccess/background-questionnaire/BackgroundQuestionnaire";
 import { Generate } from "@/components/app/generating-proccess/generate/Generate";
 import { Start } from "@/components/app/generating-proccess/start/Start";
 import Preview from "@/components/app/generating-proccess/view-cv/Preview";
 import ViewCV from "@/components/app/generating-proccess/view-cv/ViewCV";
 import { Login } from "@/components/app/login/Login";
-import { NavBar } from "@/components/app/nav-bar/NavBar";
+import Payment from "@/components/app/payment/payment";
 import { PremiumPlan } from "@/components/app/premium/PremiumPlan";
 import { Register } from "@/components/app/register/Register";
-import { createBrowserRouter, Outlet } from "react-router-dom";
-import { ForgotPassword } from "@/components/app/forget-password/ForgotPassword";
-import { ResetPassword } from "@/components/app/forget-password/ResetPassword";
-import Payment from "@/components/app/payment/payment";
-
-const NavbarWrapper = () => {
-  return (
-    <div className="flex flex-col flex-1 resumate-app max-h-[100vh]">
-      <NavBar />
-      <main className="resumate">
-        <Outlet />
-      </main>
-    </div>
-  );
-};
+import { createBrowserRouter } from "react-router-dom";
+import { NavbarWrapper } from "./NavBarWrapper";
+import { NotFoundPage } from "./NotFoundPage";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -41,38 +32,39 @@ export const router = createBrowserRouter([
     path: "/reset-password/:token",
     element: <ResetPassword />,
   },
-  { path: "/preview/:id/clear", element: <Preview/> },
-  { path: "/preview/:id/download", element: <Preview readonly/> },
+  { path: "/preview/:id/clear", element: <ProtectedRoute><Preview /></ProtectedRoute> },
+  { path: "/preview/:id/download", element: <ProtectedRoute><Preview readonly /></ProtectedRoute> },
   // Have NavBar on top
   {
     path: "/",
-    element: <NavbarWrapper />,
+    element: <ProtectedRoute><NavbarWrapper /></ProtectedRoute>,
     children: [
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
       },
       {
         path: "/build-cv",
         children: [
-          { path: "", element: <Start /> },
-          { path: "background", element: <BackgroundQuestionnaire /> },
-          { path: "generate", element: <Generate /> },
-          { path: "view", element: <ViewCV /> },
+          { path: "", element: <ProtectedRoute><Start /> </ProtectedRoute> },
+          { path: "background", element: <ProtectedRoute><BackgroundQuestionnaire /></ProtectedRoute> },
+          { path: "generate", element: <ProtectedRoute><Generate /></ProtectedRoute> },
+          { path: "view", element: <ProtectedRoute><ViewCV /></ProtectedRoute> },
         ],
       },
       {
         path: "/pricing",
-        element: <PremiumPlan />, // Add protected Route
+        element: <ProtectedRoute><PremiumPlan /></ProtectedRoute>, // Add protected Route
       },
       {
         path: "/payment",
-        element: <Payment />, // Add protected Route
+        element: <ProtectedRoute><Payment /></ProtectedRoute>, // Add protected Route
       },
       {
         path: "/preview/:id",
-        element: <Preview />, // Add protected Route
+        element: <ProtectedRoute><Preview /></ProtectedRoute>, // Add protected Route
       },
     ],
   },
+  { path: "*", element: <NotFoundPage /> }
 ]);

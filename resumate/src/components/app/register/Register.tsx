@@ -4,7 +4,11 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import { userState } from '../../../store/atoms/userAtom'
-import { registerUser } from '../../../services/authService'
+import {
+  loginUser,
+  registerUser,
+  saveTokens,
+} from '../../../services/authService'
 import { toast } from 'react-hot-toast'
 import { AxiosError } from 'axios'
 
@@ -39,9 +43,11 @@ export const Register = () => {
 
       const response = await registerUser({ email, password, name })
       const { data: registerRes } = response
-
+      saveTokens({
+        accessToken: registerRes.accessToken,
+        refreshToken: registerRes.refreshToken,
+      })
       setUser(registerRes.user)
-      console.log(registerRes.user)
       navigate('/pricing')
     } catch (err) {
       if (

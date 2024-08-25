@@ -2,6 +2,7 @@ import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import { useFormattedData } from "@/hooks/useFormattedData";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -29,6 +30,11 @@ export const SeaTemplate = ({
     educations,
     experiences,
   } = resume;
+
+  const { formattedExperiences, formattedEducations } = useFormattedData(
+    experiences,
+    educations
+  );
 
   const Title = (
     text: string,
@@ -63,7 +69,7 @@ export const SeaTemplate = ({
         <div className="text-sm font-semibold mb-[40px] text-gray-800">
           {jobTitle}
         </div>
-        <div className="my-3 text-gray-800">
+        <div className="my-3">
           {Title("Contact Info")}
           <div className="flex items-center">
             <FaPhoneAlt className="mr-2" />
@@ -83,7 +89,7 @@ export const SeaTemplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("educations", newValue)}
           >
-            {educations.slice(0, 400)}
+            {formattedEducations.join("\n")}
           </EditableText>
         </div>
 
@@ -121,7 +127,7 @@ export const SeaTemplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("experiences", newValue)}
           >
-            {experiences.slice(0, 400)}
+            {formattedExperiences.join("\n")}
           </EditableText>
         </div>
       </div>

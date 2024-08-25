@@ -15,8 +15,8 @@ export const translateCV = async (resumeSections: ResumeSections, languageFrom: 
     translateIfNotEmpty(resumeSections.jobTitle, 'jobTitle'),
     translateIfNotEmpty(resumeSections.bio, 'bio'),
     translateIfNotEmpty(resumeSections.skills, 'skills'),
-    translateIfNotEmpty(resumeSections.experiences, 'experiences'),
-    translateIfNotEmpty(resumeSections.educations, 'educations'),
+    // translateIfNotEmpty(resumeSections.experiences, 'experiences'),
+    // translateIfNotEmpty(resumeSections.educations, 'educations'),
     translateIfNotEmpty(resumeSections.languages, 'languages')
   ]);
 

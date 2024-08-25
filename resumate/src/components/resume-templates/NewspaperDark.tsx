@@ -2,6 +2,7 @@ import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import { useFormattedData } from "@/hooks/useFormattedData";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -21,9 +22,14 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
     jobTitle,
     languages,
     skills,
-    educations,
     experiences,
+    educations
   } = resume;
+
+  const { formattedExperiences, formattedEducations } = useFormattedData(
+    experiences,
+    educations
+  );
 
   const Title = (text: string, options?: { onRegenerate?: () => void }) => {
     return (
@@ -76,7 +82,7 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
               className="text-xs"
               readonly={readonly}
               onChange={newValue => onRephraseSection('educations', newValue)}>
-              {educations}
+            {formattedEducations.join("\n")}
             </EditableText>
           </div>
           {HorizontalDivider}
@@ -103,7 +109,7 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
               className="text-xs"
               readonly={readonly}
               onChange={newValue => onRephraseSection('experiences', newValue)}>
-              {experiences}
+              {formattedExperiences.join("\n")}
             </EditableText>
           </div>
         </div>

@@ -13,7 +13,7 @@ export const Education = () => {
     const [editedEducationPeriod, setEditedEducationPeriod] = useState<EducationPeriod>();
     const [error, setError] = useState<string>();
     const isEducationPeriodsArray = (
-        data: string | EducationPeriod[]
+        data: string[] | EducationPeriod[]
     ): data is EducationPeriod[] => {
         return Array.isArray(data);
     };

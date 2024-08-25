@@ -45,8 +45,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
   );
   const [skills, setSkills] = useState<string>("Skills");
-  const [experiences, setExperiences] = useState<string>("Experience");
-  const [educations, setEducations] = useState<string>("Educations");
+  const [experiences, setExperiences] = useState<string[]>(["Experience"]);
+  const [educations, setEducations] = useState<string[]>(["Educations"]);
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
   const [languageTo, setLanguageTo] = useState("en");
   const [languageFrom, setLanguageFrom] = useState("en");
@@ -58,16 +58,16 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
   // Rephrasing
 
-  const handleRephrasing = (section: keyof ResumeSections, newValue: string) => {
+  const handleRephrasing = (section: keyof ResumeSections, newValue: string[] | string) => {
     switch (section) {
       case "bio":
-        setBio(newValue);
+        setBio(newValue as string);
         break;
       case 'educations':
-        setEducations(newValue);
+        setEducations(newValue as string[]);
         break;
       case 'experiences':
-        setExperiences(newValue);
+        setExperiences(newValue as string[]);
         break;
     }
   }
@@ -91,8 +91,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     setFullName(translatedResume.fullName)
     setJobTitle(translatedResume.jobTitle)
     setBio(translatedResume.bio)
-    setExperiences(translatedResume.experiences)
-    setEducations(translatedResume.educations)
+    setExperiences(translatedResume.experiences as string[])
+    setEducations(translatedResume.educations as string[])
     setSkills(translatedResume.skills)
     setLanguages(translatedResume.languages)
     setLanguageFrom(languageTo);
@@ -107,12 +107,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       case "bio":
         currentSectionValue = bio;
         break;
-      case 'educations':
-        currentSectionValue = educations;
-        break;
-      case 'experiences':
-        currentSectionValue = experiences;
-        break;
+      // case 'educations':
+      //   currentSectionValue = educations;
+      //   break;
+      // case 'experiences':
+      //   currentSectionValue = experiences;
+      //   break;
     }
 
     regenerateSection(section, currentSectionValue);
@@ -131,12 +131,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           case "bio":
             setBio(updatedSectionText);
             break;
-          case "educations":
-            setEducations(updatedSectionText);
-            break;
-          case "experiences":
-            setExperiences(updatedSectionText);
-            break;
+          // case "educations":
+          //   setEducations(updatedSectionText);
+          //   break;
+          // case "experiences":
+          //   setExperiences(updatedSectionText);
+          //   break;
         }
       } else {
         toast.error(
@@ -160,11 +160,11 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         phoneNumber,
         email,
         jobTitle,
-        bio: bio,
-        skills: skills,
-        experiences: experiences,
-        educations: educations,
-        languages: languages,
+        bio,
+        skills,
+        experiences,
+        educations,
+        languages,
         template: selectedTemplate,
         resumeLanguage: languageTo
       };
@@ -209,8 +209,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
         try {
           const response = await previewCV(resumeId);
-          const data = response.data;
-
+          const data = response.data;   
+          
           setFullName(data.fullName);
           setPhoneNumber(data.phoneNumber ?? "")
           setEmail(data.email ?? "")
@@ -218,11 +218,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
           setSkills(data.skills);
           setExperiences(
-            data.experiences.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
+            data.experiences.map(experience => experience.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1").replace(/\*/g, ''))
           );
           setEducations(
-            data.educations.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
+            data.educations.map(education => education.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1").replace(/\*/g, ''))
           );
+          
           setLanguages(data.languages);
           setLanguageTo(data.resumeLanguage || "en");
           setLanguageFrom(data.resumeLanguage || "en");

@@ -13,8 +13,8 @@ export type ResumeSections = {
   phoneNumber?: string;
   bio: string;
   skills: string;
-  experiences: string;
-  educations: string;
+  experiences: string[];
+  educations: string[];
   languages: string;
   template: number;
   resumeLanguage: string

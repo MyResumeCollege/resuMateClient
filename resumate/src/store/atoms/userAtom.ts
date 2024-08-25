@@ -13,8 +13,19 @@ export const userState = atom<User>({
 export const userInitialsSelector = selector<string>({
   key: 'userInitials',
   get: ({ get }) => {
-    const username = get(userState).name;
-    return username.split(' ')[0][0] + username.split(' ')[1][0];
+    const username = get(userState).name
+    const nameParts = username.split(' ')
+
+    if (nameParts.length === 1) {
+      // If there's only one name part, return the first letter of that part twice
+      return nameParts[0][0] + nameParts[0][0]
+    } else if (nameParts.length > 1) {
+      // If there are two or more parts, return the first letter of the first two parts
+      return nameParts[0][0] + nameParts[1][0]
+    } else {
+      // If the username is somehow empty or undefined
+      return ''
+    }
   },
 })
 

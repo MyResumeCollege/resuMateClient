@@ -19,11 +19,11 @@ export const Login = () => {
   const [user, setUser] = useRecoilState(userState)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard')
-    }
-  }, [user, navigate])
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate('/build-cv');
+  //   }
+  // }, [user]);
   const onGoogleLoginSuccess = async (
     credentialResponse: CredentialResponse
   ) => {

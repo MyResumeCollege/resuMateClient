@@ -1,88 +1,80 @@
-import { useState } from "react";
-import { Button } from "@/components/shared/button/Button";
-import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
-import { FaCheckCircle, FaTimes } from "react-icons/fa";
-import { setUserPremiumStatus } from "../../../services/premiumService";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userIdSelector, userState } from "@/store/atoms/userAtom";
+import { useState } from 'react'
+import { Button } from '@/components/shared/button/Button'
+import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
+import { FaCheckCircle, FaTimes } from 'react-icons/fa'
+import { setUserPremiumStatus } from '../../../services/premiumService'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { userIdSelector, userState } from '@/store/atoms/userAtom'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const Payment = () => {
-  const navigate = useNavigate();
-  const setUser = useSetRecoilState(userState);
-  const userId = useRecoilValue(userIdSelector);
+  const navigate = useNavigate()
+  const setUser = useSetRecoilState(userState)
+  const userId = useRecoilValue(userIdSelector)
 
   const features = [
-    { text: "Unlimited Resumes", isAvailable: true },
-    { text: "Support in multiple languages", isAvailable: true },
-    { text: "Cool Templates", isAvailable: true },
-    { text: "Edit Existing Resumes", isAvailable: true },
-  ];
+    { text: 'Unlimited Resumes', isAvailable: true },
+    { text: 'Support in multiple languages', isAvailable: true },
+    { text: 'Cool Templates', isAvailable: true },
+    { text: 'Edit Existing Resumes', isAvailable: true },
+  ]
 
-  const [cvv, setCVV] = useState("");
-  const [name, setName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [cvv, setCVV] = useState('')
+  const [name, setName] = useState('')
+  const [cardNumber, setCardNumber] = useState('')
+  const [endDate, setEndDate] = useState<Date | null>(null) // Using Date type for endDate
 
   const handleCVVChange = (value: string) => {
-    const cvv = value.replace(/\D/g, "");
+    const cvv = value.replace(/\D/g, '')
     if (cvv.length <= 3) {
-      setCVV(cvv);
+      setCVV(cvv)
     }
-  };
+  }
+
   const formatCardNumber = (number: string) => {
     return number
-      .replace(/\D/g, "")
-      .replace(/(.{4})/g, "$1 ")
-      .trim();
-  };
+      .replace(/\D/g, '')
+      .replace(/(.{4})/g, '$1 ')
+      .trim()
+  }
 
   const handleCardNumberChange = (value: string) => {
-    setCardNumber(formatCardNumber(value));
-  };
+    setCardNumber(formatCardNumber(value))
+  }
 
   const handleNameChange = (value: string) => {
-    const name = value.replace(/[^A-Za-z\s]/g, "");
-    setName(name);
-  };
-
-  const handleDateChange = (value: string) => {
-    const numericValue = value.replace(/\D/g, "");
-    if (numericValue.length <= 6) {
-      let formattedValue = numericValue;
-      if (numericValue.length > 2) {
-        formattedValue = numericValue.slice(0, 2) + "/" + numericValue.slice(2);
-      }
-      setEndDate(formattedValue);
-    }
-  };
+    const name = value.replace(/[^A-Za-z\s]/g, '')
+    setName(name)
+  }
 
   const handlePayment = async (userId: string, isPremium: boolean) => {
-    if (cardNumber.length !== 19 || endDate.length !== 7) {
-      toast.error("Please fill in all fields correctly.");
-      return;
+    if (cardNumber.length !== 19 || !endDate) {
+      toast.error('Please fill in all fields correctly.')
+      return
     }
 
     if (userId) {
       try {
-        await setUserPremiumStatus(userId, isPremium);
-        setUser((prevUser) => ({
+        await setUserPremiumStatus(userId, isPremium)
+        setUser(prevUser => ({
           ...prevUser,
           isPremium,
-        }));
+        }))
         toast.success(
-          `Successfully updated to ${isPremium ? "Premium" : "Basic"} plan.`
-        );
-        navigate("/dashboard");
+          `Successfully updated to ${isPremium ? 'Premium' : 'Basic'} plan.`
+        )
+        navigate('/dashboard')
       } catch (error) {
-        console.error("Error updating user premium status:", error);
-        toast.error("Failed to update plan. Please try again.");
+        console.error('Error updating user premium status:', error)
+        toast.error('Failed to update plan. Please try again.')
       }
     } else {
-      toast.error("User ID is not available. Please log in.");
+      toast.error('User ID is not available. Please log in.')
     }
-  };
+  }
 
   return (
     <main className="flex-1 flex items-center justify-center p-10">
@@ -113,13 +105,13 @@ const Payment = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Expiration Date
                 </label>
-                <input
-                  type="text"
-                  value={endDate}
-                  onChange={(e) => handleDateChange(e.target.value)}
-                  maxLength={7}
+                <DatePicker
+                  selected={endDate}
+                  onChange={date => setEndDate(date)}
+                  dateFormat="MM/yyyy"
+                  showMonthYearPicker
                   className="w-full border border-gray-300 rounded-md p-2"
-                  placeholder="MM/YYYY"
+                  placeholderText="MM/YYYY"
                 />
               </div>
               <TextInput
@@ -143,7 +135,7 @@ const Payment = () => {
         <section className="pt-8 px-8 pb-4 flex flex-col items-center gap-6 flex-1 bg-gray-100 rounded-lg">
           <h2 className="text-2xl font-bold">Premium</h2>
           <div className="text-3xl font-semibold text-black text-center mb-4">
-            $0.5{" "}
+            $0.5{' '}
             <span className="text-sm font-regular text-dark">/ per month</span>
           </div>
           <ul className="list-none pl-4 space-y-3 text-left flex-grow">
@@ -161,7 +153,7 @@ const Payment = () => {
         </section>
       </div>
     </main>
-  );
-};
+  )
+}
 
-export default Payment;
+export default Payment

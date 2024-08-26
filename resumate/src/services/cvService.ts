@@ -55,6 +55,7 @@ export const downloadPDF = async (resumeUrl: string, fileName: string) => {
     } else console.error('Response is not a Blob')
   } catch (error) {
     console.error('Error downloading the PDF:', error)
+    throw error;
   }
 }
 

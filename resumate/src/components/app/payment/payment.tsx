@@ -135,7 +135,7 @@ const Payment = () => {
         <section className="pt-8 px-8 pb-4 flex flex-col items-center gap-6 flex-1 bg-gray-100 rounded-lg">
           <h2 className="text-2xl font-bold">Premium</h2>
           <div className="text-3xl font-semibold text-black text-center mb-4">
-            $0.5{' '}
+            $3.5{" "}
             <span className="text-sm font-regular text-dark">/ per month</span>
           </div>
           <ul className="list-none pl-4 space-y-3 text-left flex-grow">

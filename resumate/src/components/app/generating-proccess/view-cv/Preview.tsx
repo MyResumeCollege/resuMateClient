@@ -189,7 +189,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         resumeDownloadFileName
       )
       toast.success('Resume downloaded succesfully')
-    } catch (er) {
+    } catch (err) {
       toast.error('Failed downloading resume')
     } finally {
       setIsDownloading(false);

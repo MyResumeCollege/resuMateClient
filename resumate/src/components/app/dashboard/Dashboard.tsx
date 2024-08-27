@@ -1,9 +1,6 @@
 import Flying from "@/assets/icons/flying.svg";
 import { Button } from "@/components/shared/button/Button";
-import {
-  getUserResume,
-  getUserResumePreviews
-} from "@/services/cvService";
+import { getUserResume, getUserResumePreviews } from "@/services/cvService";
 import { isUserPremiumSelector, userIdSelector } from "@/store/atoms/userAtom";
 import { ResumeOverview } from "@/types/resume";
 import { useEffect, useState } from "react";
@@ -13,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { removeCV } from "../../../services/cvService";
 import Preview from "../generating-proccess/view-cv/Preview";
 import { ResumeOverviewItem } from "./resume-overview-item/ResumeOverview";
+import CrownImage from "@/assets/images/crown.png";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -25,6 +23,7 @@ export const Dashboard = () => {
   const isPremiumUser = useRecoilValue(isUserPremiumSelector);
 
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isPopupVisible, setPopupVisible] = useState(false);
 
   const onResumeSelect = async (resumeIndex: number, resumeId: string) => {
     try {
@@ -33,16 +32,28 @@ export const Dashboard = () => {
       const response = await getUserResume(userId, resumeId);
       if (response.data) setSelectedResumeId(response.data);
     } catch (err) {
-      toast.error("An error occured while fetching resume Data");
+      toast.error("An error occurred while fetching resume Data");
     }
   };
 
   const goToCreateResume = () => {
-    navigate("/build-cv");
+    if (!isPremiumUser && resumes.length >= 3) {
+      setPopupVisible(true);
+    } else {
+      navigate("/build-cv");
+    }
   };
 
   const goToEditResume = () => {
     navigate(`/preview/${selectedResumeId}`);
+  };
+
+  const goToPricing = () => {
+    navigate("/pricing");
+  };
+
+  const closePopup = () => {
+    setPopupVisible(false);
   };
 
   const deleteResume = async () => {
@@ -83,23 +94,48 @@ export const Dashboard = () => {
       const response = await getUserResumePreviews(userId);
       setResumes(response.data);
     } catch (err) {
-      toast.error("An error occured while fetching resumes");
+      toast.error("An error occurred while fetching resumes");
     } finally {
       setLoadingResumes(false);
     }
   };
 
-  const getCountResumes = () => {
-    if (resumes.length >= 3) return true
-    else return false
-  }
-
-  useEffect(() => {    
+  useEffect(() => {
     getResumes();
   }, []);
 
   return (
     <main className="flex-1 flex">
+      {isPopupVisible && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-[500px] md:w-[600px] lg:w-[700px] relative">
+            <button
+              onClick={closePopup}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <div className="flex flex-col items-center mb-6">
+              <img src={CrownImage} className="w-16 h-16 mb-4" alt="Premium" />
+              <h3 className="text-2xl font-bold text-center">
+                Upgrade to Premium
+              </h3>
+            </div>
+            <p className="text-center opacity-60 mb-8">
+              You've reached your maximum number of free resumes.
+              <br />
+              To continue, please get our premium plan for $3.5 per month!
+            </p>
+
+            <div className="flex justify-center">
+              <Button onClick={goToPricing} buttonClassName="!w-fit !mr-4">
+                Upgrade
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {!isLoadingResumes && resumes.length > 0 ? (
         <>
           {/* Resume Select */}
@@ -110,7 +146,6 @@ export const Dashboard = () => {
                 variant="light"
                 onClick={goToCreateResume}
                 dense
-                disabled={isPremiumUser ? false : getCountResumes()}
                 buttonClassName="!w-fit !text-primary"
               >
                 Create
@@ -159,13 +194,16 @@ export const Dashboard = () => {
         </>
       ) : (
         <div className="flex-1 flex items-center flex-col justify-center gap-5">
-          {isLoadingResumes ?
+          {isLoadingResumes ? (
             <>
-              <span className="animate-spin inline-block size-10 border-[3px] border-current border-t-transparent text-primary rounded-full" role="status" aria-label="loading"/>
-              <span className="font-bold">
-                Loading your resumes...
-              </span>
-            </> :
+              <span
+                className="animate-spin inline-block size-10 border-[3px] border-current border-t-transparent text-primary rounded-full"
+                role="status"
+                aria-label="loading"
+              />
+              <span className="font-bold">Loading your resumes...</span>
+            </>
+          ) : (
             <>
               <img src={Flying} className="h-[250px]" />
               <span className="text-lg">
@@ -175,7 +213,8 @@ export const Dashboard = () => {
               <Button buttonClassName="!w-[300px]" onClick={goToCreateResume}>
                 Let's start building your resume
               </Button>
-            </>}
+            </>
+          )}
         </div>
       )}
     </main>

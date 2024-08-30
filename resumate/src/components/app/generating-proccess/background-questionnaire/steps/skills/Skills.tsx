@@ -2,7 +2,7 @@ import { Button } from "@/components/shared/button/Button";
 import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { SKILL_LEVEL_COLOR, SKILL_LEVEL_COLOR_LIGHTEN, SKILL_LEVEL_NAME, Skill } from "@/types/skill";
-import { CSSProperties, useEffect, useState } from "react";
+import { CSSProperties, useState } from "react";
 import { useRecoilState } from "recoil";
 import { skillsState } from "../../../store/state";
 import { uniqueId } from "lodash";

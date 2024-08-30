@@ -9,6 +9,7 @@ import { useRecoilState } from 'recoil'
 import { educationState } from '../../../store/state'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import './Education.css'
 
 export const Education = () => {
   const [educationPeriods, setEducationPeriods] = useRecoilState(educationState)
@@ -167,7 +168,8 @@ export const Education = () => {
                   onChange={handleStartDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
-                  className="bg-[#C8C8C8] outline-none focus:online-none"
+                  wrapperClassName="date_picker"
+                  className="bg-[#C8C8C8] outline-none focus:online-none w-full"
                   placeholderText="MM/YYYY"
                   onKeyDown={e => e.preventDefault()} // Prevent typing
                 />
@@ -187,10 +189,11 @@ export const Education = () => {
                   onChange={handleEndDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
+                  wrapperClassName="date_picker"
                   className={
                     editedEducationPeriod.isCurrent
                       ? 'bg-[#c8c8c8] cursor-not-allowed'
-                      : 'bg-[#c8c8c8] outline-none focus:online-none'
+                      : 'bg-[#c8c8c8] outline-none focus:online-none w-full'
                   }
                   placeholderText="MM/YYYY"
                   onKeyDown={e => e.preventDefault()} // Prevent typing

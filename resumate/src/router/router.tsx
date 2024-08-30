@@ -37,15 +37,13 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Preview />
-      </ProtectedRoute>
+     </ProtectedRoute>
     ),
   },
   {
     path: '/preview/:id/download',
     element: (
-      <ProtectedRoute>
         <Preview readonly />
-      </ProtectedRoute>
     ),
   },
   // Have NavBar on top

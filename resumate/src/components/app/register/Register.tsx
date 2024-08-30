@@ -58,7 +58,7 @@ export const Register = () => {
       ) {
         toast.error('User already exists')
       } else {
-        console.log(err)
+        throw err
       }
     }
   }

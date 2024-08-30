@@ -2,6 +2,10 @@ import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import Experiences from "./shared/Experiences";
+import { ExperiencePeriod } from "@/types/experience-period";
+import Educations from "./shared/Educations";
+import { EducationPeriod } from "@/types/education-period";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -12,7 +16,12 @@ const List = (listedText: string) => {
   ));
 };
 
-export const NewspaperTemplate = ({ resume, onRegenerateSection, onRephraseSection, readonly = false }: TemplateProps) => {
+export const NewspaperTemplate = ({
+  resume,
+  onRegenerateSection,
+  onRephraseSection,
+  readonly = false,
+}: TemplateProps) => {
   const {
     fullName,
     email,
@@ -30,11 +39,12 @@ export const NewspaperTemplate = ({ resume, onRegenerateSection, onRephraseSecti
       <div className="flex flex-col mb-2">
         <h2 className="text-lg font-semibold uppercase">
           {text}
-          {options?.onRegenerate && !readonly &&
+          {options?.onRegenerate && !readonly && (
             <RegenerateButton
               onClick={options.onRegenerate}
               style={{ marginLeft: 10 }}
-            />}
+            />
+          )}
         </h2>
       </div>
     );
@@ -47,6 +57,17 @@ export const NewspaperTemplate = ({ resume, onRegenerateSection, onRephraseSecti
     <div className="flex-1 flex flex-col bg-white border border-gray-300 overflow-auto relative p-6 font-lora">
       <div className="flex flex-col items-center justify-center py-[30px]">
         <h2 className="font-bold text-3xl">{fullName}</h2>
+        <div className="my-3 text-gray-800">
+          {Title("Contact")}
+          <div className="flex items-center">
+            <FaPhoneAlt className="mr-2" />
+            <span>Phone Number: {phoneNumber}</span>
+          </div>
+          <div className="flex items-center">
+            <FaEnvelope className="mr-2" />
+            <span>Email: {email}</span>
+          </div>
+        </div>
         <span className="text-md">{jobTitle}</span>
       </div>
       <div className="text-xs flex flex-col items-center">
@@ -65,45 +86,50 @@ export const NewspaperTemplate = ({ resume, onRegenerateSection, onRephraseSecti
       <div className="flex flex-1">
         <div className="left flex-[2] pt-[20px] pr-5">
           <div className="mb-3">
-            {Title('Skills')}
+            {Title("Skills")}
             {List(skills)}
           </div>
           {HorizontalDivider}
           <div className="mb-3 mt-3">
-            {Title('Education', { onRegenerate: () => onRegenerateSection('educations') })}
-            <EditableText
-              className="text-xs"
+            {Title("Education", {
+              onRegenerate: () => onRegenerateSection("educations"),
+            })}
+            <Educations
+              educations={educations}
+              onRephraseSection={onRephraseSection}
               readonly={readonly}
-              onChange={newValue => onRephraseSection('educations', newValue)}>
-              {educations}
-            </EditableText>
+            />
           </div>
           {HorizontalDivider}
           <div className="mb-3 mt-3">
-            {Title('Languages')}
+            {Title("Languages")}
             {List(languages)}
           </div>
         </div>
         {VerticalDivider}
         <div className="right flex-[3] shrink-0 pt-[20px] pl-5">
           <div className="mb-3">
-            {Title('About Me', { onRegenerate: () => onRegenerateSection('bio') })}
+            {Title("About Me", {
+              onRegenerate: () => onRegenerateSection("bio"),
+            })}
             <EditableText
               className="text-xs"
               readonly={readonly}
-              onChange={newValue => onRephraseSection('bio', newValue)}>
+              onChange={(newValue) => onRephraseSection("bio", newValue)}
+            >
               {bio}
             </EditableText>
           </div>
           {HorizontalDivider}
           <div className="mb-3 mt-3">
-            {Title('Experience', { onRegenerate: () => onRegenerateSection('experiences') })}
-            <EditableText
-              className="text-xs"
+            {Title("Experience", {
+              onRegenerate: () => onRegenerateSection("experiences"),
+            })}
+            <Experiences
+              experiences={experiences}
+              onRephraseSection={onRephraseSection}
               readonly={readonly}
-              onChange={newValue => onRephraseSection('experiences', newValue)}>
-              {experiences}
-            </EditableText>
+            />
           </div>
         </div>
       </div>

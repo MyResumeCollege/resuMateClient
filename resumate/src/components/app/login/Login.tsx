@@ -38,7 +38,7 @@ export const Login = () => {
       setUser(loginGoogleRes.user)
       navigate('/pricing')
     } catch (err) {
-      console.log(err)
+      throw err
     }
   }
 

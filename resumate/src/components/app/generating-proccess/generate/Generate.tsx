@@ -6,7 +6,7 @@ import Lottie from 'react-lottie'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { uploadResume } from '../../../../services/uploadResume'
-import { educationState, experienceState, languagesState, skillsState, summaryState } from '../store/state'
+import { educationState, experienceState, summaryState } from '../store/state'
 
 export const Generate = () => {
   const location = useLocation()
@@ -14,10 +14,8 @@ export const Generate = () => {
   const { existCV } = location.state || {}
 
   const bio = useRecoilValue(summaryState)
-  const skills = useRecoilValue(skillsState)
-  const experiences = useRecoilValue(experienceState)
-  const educations = useRecoilValue(educationState)
-  const languages = useRecoilValue(languagesState)
+  const experiencePeriods = useRecoilValue(experienceState)
+  const educationPeriods = useRecoilValue(educationState)
 
   const generateCV = async () => {
     let resumeText;
@@ -37,12 +35,10 @@ export const Generate = () => {
       try {
         const generateResume = await generateCVFromScratch({
           bio,
-          skills,
-          experiences: Array.isArray(experiences) ? experiences : [],
-          educations: Array.isArray(educations) ? educations : [],
-          languages
+          experiences: experiencePeriods.map(experiencePeriod => experiencePeriod.description),
+          educations: educationPeriods.map(educationPeriod => educationPeriod.description)
         })
-        resumeText = generateResume.data
+        resumeText = generateResume.data     
 
         if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
       } catch (error) {

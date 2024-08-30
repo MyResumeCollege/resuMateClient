@@ -19,7 +19,7 @@ export const Education = () => {
   const [error, setError] = useState<string>()
 
   const isEducationPeriodsArray = (
-    data: string | EducationPeriod[]
+    data: EducationPeriod[]
   ): data is EducationPeriod[] => {
     return Array.isArray(data)
   }
@@ -246,11 +246,11 @@ export const Education = () => {
         <span className="font-bold text-md mr-[7px]">{eduPeriod.degree}</span>
         <span className="text-sm opacity-60">| {eduPeriod.school} </span>
         <span className="text-sm opacity-60 ml-[5px]">
-          ({eduPeriod.startDate.month} {eduPeriod.startDate.year}{' '}
+          ({eduPeriod.startDate.month} / {eduPeriod.startDate.year}{' '}
           {!eduPeriod?.isCurrent && (
             <>
               {' '}
-              - {eduPeriod.endDate.month} {eduPeriod.endDate.year}
+              - {eduPeriod.endDate.month} / {eduPeriod.endDate.year}
             </>
           )}
           )

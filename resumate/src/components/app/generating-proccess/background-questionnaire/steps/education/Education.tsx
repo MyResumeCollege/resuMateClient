@@ -97,7 +97,7 @@ export const Education = () => {
       updateEditedPeriod({
         startDate: {
           year: date?.getFullYear().toString() || '',
-          month: (date?.getMonth() + 1).toString() || '',
+          month: ((date?.getMonth() || 0) + 1).toString() || '',
         },
       })
     }
@@ -117,7 +117,7 @@ export const Education = () => {
         updateEditedPeriod({
           endDate: {
             year: date?.getFullYear().toString() || '',
-            month: (date?.getMonth() + 1).toString() || '',
+            month: ((date?.getMonth() || 0) + 1).toString() || '',
           },
         })
       }

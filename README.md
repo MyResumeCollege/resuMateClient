@@ -30,6 +30,6 @@ npm install
 npm start
 
 ### Usage
-**Create a New Resume**: Fill in your details, and let the AI generate a professional resume for you.
-**Import from LinkedIn**: Connect your LinkedIn account and import your profile data to quickly create a resume.
-**Translate Your Resume**: Select the desired languages and translate your resume with a click.
+- **Create a New Resume**: Fill in your details, and let the AI generate a professional resume for you.
+- **Import from LinkedIn**: Connect your LinkedIn account and import your profile data to quickly create a resume.
+- **Translate Your Resume**: Select the desired languages and translate your resume with a click.

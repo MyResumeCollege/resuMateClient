@@ -2,7 +2,6 @@ import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
-// import { useFormattedData } from "@/hooks/useFormattedData";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (

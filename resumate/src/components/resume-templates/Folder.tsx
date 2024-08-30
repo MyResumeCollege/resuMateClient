@@ -138,7 +138,6 @@ export const FolderTemaplate = ({
           })}
           <>
         {Experiences()}
-        {experiences.length}
       </>
         </div>
         <div className="my-3">

@@ -160,24 +160,19 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
   // Regenerate
 
-  const handleRegenerate = (section: keyof ResumeSections) => {
-    let currentSectionValue = "";
-
+  const handleRegenerate = async (section: keyof ResumeSections) => {
     switch (section) {
       case "bio":
-        currentSectionValue = bio;
+        await regenerateSection(section, bio);
         break;
-      // case 'educations':
-      //   currentSectionValue = educations;
-      //   break;
-      // case 'experiences':
-      //   currentSectionValue = experiences;
-      //   break;
+      case "educations":
+      case "experiences":
+        const items = section === "educations" ? educations : experiences;
+        await regenerateItems(section, items);
+        break;
     }
-
-    regenerateSection(section, currentSectionValue);
   };
-
+  
   const regenerateSection = async (
     section: keyof ResumeSections,
     existSectionData: string
@@ -185,28 +180,52 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     try {
       const response = await generateSection({ data: existSectionData });
       const updatedSectionText = response.data.replace(/^[^\:]*:\s*/, "");
-
+  
       if (updatedSectionText !== "" && updatedSectionText !== ".") {
-        switch (section) {
-          case "bio":
-            setBio(updatedSectionText);
-            break;
-          // case "educations":
-          //   setEducations(updatedSectionText);
-          //   break;
-          // case "experiences":
-          //   setExperiences(updatedSectionText);
-          //   break;
+        if (section === "bio") {
+          setBio(updatedSectionText);
         }
       } else {
         toast.error(
-          "Sorry, we encounter too many requests from your user. Please try again in 30 seconds"
+          "Sorry, we encountered too many requests from your user. Please try again in 30 seconds"
         );
       }
     } catch (error) {
       console.error("Error regenerating section:", error);
     }
   };
+  
+  const regenerateItems = async (
+    section: keyof ResumeSections,
+    items: Array<{ id: string; description: string }>
+  ) => {
+    try {
+      const updatedItems = await Promise.all(
+        items.map(async (item) => {
+          const response = await generateSection({ data: item.description });
+          const updatedDescription = response.data.replace(/^[^\:]*:\s*/, "");
+  
+          if (updatedDescription !== "" && updatedDescription !== ".") {
+            return { ...item, description: updatedDescription };
+          } else {
+            toast.error(
+              "Sorry, we encountered too many requests from your user. Please try again in 30 seconds"
+            );
+            return item;
+          }
+        })
+      );
+  
+      if (section === "educations") {
+        setEducations(updatedItems as EducationPeriod[]);
+      } else if (section === "experiences") {
+        setExperiences(updatedItems as ExperiencePeriod[]);
+      }
+    } catch (error) {
+      console.error("Error regenerating items:", error);
+    }
+  };
+  
 
   // Toolbar Actions
 

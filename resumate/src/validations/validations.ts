@@ -9,10 +9,15 @@ const validateJobTitle = (jobTitle: string): string[] => {
   return errors;
 };
 
-const validateNameAndBio = (fullName: string, bio: string): string[] => {
+const validateNameAndBio = (fullName?: string, bio?: string): string[] => {
   const errors: string[] = [];
-  if (fullName.length < 2) errors.push("Name must be 2 characters long.");
-  if (bio.length < 20) errors.push("Bio must be 20 characters long.");
+  
+  if (fullName != undefined && fullName.length < 2) {
+    errors.push("Name must be 2 characters long.");
+  }
+  if (bio !== undefined && bio.length < 20) {
+    errors.push("Bio must be 20 characters long.");
+  }
   return errors;
 };
 

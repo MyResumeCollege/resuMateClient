@@ -1,16 +1,15 @@
 import { Button } from '@/components/shared/button/Button'
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
+import { AxiosError } from 'axios'
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
-import { userState } from '../../../store/atoms/userAtom'
 import {
-  loginUser,
   registerUser,
-  saveTokens,
+  saveTokens
 } from '../../../services/authService'
-import { toast } from 'react-hot-toast'
-import { AxiosError } from 'axios'
+import { userState } from '../../../store/atoms/userAtom'
 
 export const Register = () => {
   const [email, setEmail] = useState('')

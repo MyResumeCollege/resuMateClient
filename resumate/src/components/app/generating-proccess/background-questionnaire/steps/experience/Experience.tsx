@@ -9,7 +9,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { Button } from '@/components/shared/button/Button'
 import { TextArea } from '@/components/shared/inputs/textarea/TextArea'
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
-
+import './Experience.css'
 export const Experience = () => {
   const [experiencePeriods, setExperiencePeriods] = useRecoilState<
     ExperiencePeriod[] | string
@@ -143,7 +143,8 @@ export const Experience = () => {
                   }
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
-                  className="bg-[#c8c8c8] outline-none focus:online-none"
+                  wrapperClassName="date_picker"
+                  className="bg-[#c8c8c8] outline-none focus:online-none w-full"
                   placeholderText="MM/YYYY"
                   onKeyDown={e => e.preventDefault()} // Prevent typing
                 />
@@ -170,10 +171,11 @@ export const Experience = () => {
                   }}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
+                  wrapperClassName="date_picker"
                   className={
                     editedExperiencePeriod.isCurrent
                       ? 'bg-[#c8c8c8] cursor-not-allowed'
-                      : 'bg-[#c8c8c8] outline-none focus:online-none'
+                      : 'bg-[#c8c8c8] outline-none focus:online-none w-full'
                   }
                   placeholderText="MM/YYYY"
                   onKeyDown={e => e.preventDefault()} // Prevent typing

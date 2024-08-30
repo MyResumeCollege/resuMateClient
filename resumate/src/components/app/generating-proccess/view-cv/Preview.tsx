@@ -35,6 +35,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const resetTemplate = useResetRecoilState(templateState);
   const resetSkills = useResetRecoilState(skillsState)
 
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [fullName, setFullName] = useState<string>("Full Name");
   const [phoneNumber, setPhoneNumber] = useState<string>("052-0000000")
   const [email, setEmail] = useState<string>("test@gmail.com")
@@ -189,7 +190,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         resumeDownloadFileName
       )
       toast.success('Resume downloaded succesfully')
-    } catch (er) {
+    } catch (err) {
       toast.error('Failed downloading resume')
     } finally {
       setIsDownloading(false);
@@ -209,7 +210,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
         try {
           const response = await previewCV(resumeId);
-          const data = response.data;          
+          const data = response.data;
 
           setFullName(data.fullName);
           setPhoneNumber(data.phoneNumber ?? "")
@@ -229,6 +230,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           if (data.template) {
             setSelectedTemplate(data.template || 1)
           }
+
+          setHasLoaded(true);
         } catch (error) {
           toast.error("Sorry, we encountered some issues");
         } finally {
@@ -332,12 +335,14 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         </div>
       )}
       <div className="preview flex" style={{ aspectRatio: "1/1.41", height: '100%' }}>
-        {cloneElement(currentTemplate!.component({
+        {hasLoaded ? cloneElement(currentTemplate!.component({
           resume: { bio, email, phoneNumber, educations, experiences, fullName, jobTitle, languages, skills, template: selectedTemplate, resumeLanguage: languageFrom },
           onRegenerateSection: handleRegenerate,
           onRephraseSection: debounce(handleRephrasing, 1000),
           readonly
-        }))}
+        })) : <div className="bg-[#cfcfcf] flex-1 flex items-center justify-center">
+          <span className="animate-spin inline-block size-[60px] border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading"></span>
+        </div>}
       </div>
     </div>
   );

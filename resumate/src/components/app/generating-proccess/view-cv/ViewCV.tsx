@@ -66,7 +66,7 @@ const ViewCV: React.FC = () => {
 
   return (
     <div className="flex flex-col flex-1 items-center">
-      {pdfUrl ? (
+      {pdfUrl &&
         <embed
           id="previewCV"
           src={pdfUrl}
@@ -74,9 +74,7 @@ const ViewCV: React.FC = () => {
           width="100%"
           height="100%"
         />
-      ) : (
-        <p>Loading Preview..</p> // TODO
-      )}
+      }
     </div>
   );
 };

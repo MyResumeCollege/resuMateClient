@@ -92,8 +92,33 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     setFullName(translatedResume.fullName)
     setJobTitle(translatedResume.jobTitle)
     setBio(translatedResume.bio)
-    // setExperienceDescriptions(translatedResume.experiences as string[])
-    // setEducationDescriptions(translatedResume.educations as string[])
+
+    const updatedEducations = educations.map((education, index) => {
+      const translatedEducation = (translatedResume.educations as EducationPeriod[])[index] || {};
+  
+      return {
+        ...education,
+        description: translatedEducation.description || education.description,
+        school: translatedEducation.school || education.school,
+        degree: translatedEducation.degree || education.degree
+      };
+    });
+  
+    setEducations(updatedEducations);
+
+    const updatedExperiences = experiences.map((experience, index) => {
+      const translatedExperience = (translatedResume.experiences as ExperiencePeriod[])[index] || {};
+  
+      return {
+        ...experience,
+        description: translatedExperience.description || experience.description,
+        employer: translatedExperience.employer || experience.employer,
+        jobTitle: translatedExperience.jobTitle || experience.jobTitle
+      };
+    });
+  
+    setExperiences(updatedExperiences);
+
     setSkills(translatedResume.skills)
     setLanguages(translatedResume.languages)
     setLanguageFrom(languageTo);

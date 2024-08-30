@@ -15,18 +15,18 @@ ResumeMate is a tool that allows you to create, edit, and manage resumes with th
 
 ### Installation
 
-Clone the repository:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/MyResumeCollege/resuMateClient.git
 
-Navigate to the project directory:
+2. Navigate to the project directory:
 cd resumeMate
 
-Install dependencies:
+3. Install dependencies:
 npm install
 
-Start the development server:
+4. Start the development server:
 npm start
 
 ### Usage

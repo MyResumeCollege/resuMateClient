@@ -151,7 +151,7 @@ export const Dashboard = () => {
                 Create
               </Button>
             </div>
-            <div className="flex flex-col gap-2 w-[300px]">
+            <div className="flex flex-col gap-2 w-[300px] h-[700px] overflow-y-auto">
               {resumes.map((resume, index) => (
                 <ResumeOverviewItem
                   key={index}

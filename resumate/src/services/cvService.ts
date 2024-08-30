@@ -12,8 +12,8 @@ type cvData = {
   jobTitle: string;
   bio: string;
   skills: string;
-  experiences: ExperiencePeriod[];
-  educations: EducationPeriod[];
+  experiences?: ExperiencePeriod[];
+  educations?: EducationPeriod[];
   languages: string;
   template: number;
   resumeLanguage: string
@@ -34,12 +34,12 @@ export const handleDownloadCV = async (url: string): Promise<Blob> => {
     {
       responseType: "blob",
     }
-  );  
+  );
   return response.data;
 };
 
 export const downloadPDF = async (resumeUrl: string, fileName: string) => {
-  try {    
+  try {        
     const response = await handleDownloadCV(resumeUrl)
     if (response instanceof Blob) {
       const downloadUrl = window.URL.createObjectURL(response)
@@ -64,8 +64,8 @@ export const generatePreviewUrl = async (
   jobTitle: string,
   bio: string,
   skills: string,
-  experiences: string[],
-  educations: string[],
+  experiences: ExperiencePeriod[],
+  educations: EducationPeriod[],
   languages: string,
   template: number,
   resumeLanguage: string

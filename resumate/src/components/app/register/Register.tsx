@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import { userState } from '../../../store/atoms/userAtom'
 import {
-  loginUser,
   registerUser,
   saveTokens,
 } from '../../../services/authService'

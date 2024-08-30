@@ -31,7 +31,6 @@ export const FolderTemaplate = ({
     educations,
     experiences,
   } = resume;
-
   const Title = (text: string, options?: { onRegenerate?: () => void }) => {
     return (
       <div className="flex flex-col mb-2">
@@ -51,87 +50,81 @@ export const FolderTemaplate = ({
   const Experiences = () => {
     return (
       <>
-        {experiences.map((experience, index) => {
-          const startMonth = (experience as ExperiencePeriod).startDate.month;
-          const startYear = (experience as ExperiencePeriod).startDate.year;
-          const endMonth = (experience as ExperiencePeriod).endDate?.month || "current";
-          const endYear = (experience as ExperiencePeriod).endDate?.year || "";
-  
+        {(experiences as ExperiencePeriod[]).map((experience, index) => {
+          const { startDate, endDate, jobTitle, employer, description } = experience as ExperiencePeriod;
+          const startMonth = startDate.month;
+          const startYear = startDate.year;
+          const endMonth = endDate?.month || "current";
+          const endYear = endDate?.year || "";
+            
           const formattedStartDate = `${startMonth}/${startYear}`;
-          const formattedEndDate = endYear
-            ? `${endMonth}/${endYear}`
-            : endMonth;
+          const formattedEndDate = endYear ? `${endMonth}/${endYear}` : endMonth;
   
           return (
-            <EditableText
-              key={index}
-              className="text-xs"
-              readonly={readonly}
-              onChange={(newValue) =>
-                onRephraseSection("experiences", newValue, index)
-              }
-            >
-              <div className="my-3">
-                <div className="font-semibold text-sm">
-                  {(experience as ExperiencePeriod).jobTitle}
-                </div>
-                <div className="text-xs italic text-gray-600">
-                  {(experience as ExperiencePeriod).employer}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {formattedStartDate} - {formattedEndDate}
-                </div>
-                <div className="text-xs mt-1">
-                  {(experience as ExperiencePeriod).description}
-                </div>
+            <div key={index} className="my-3">
+              <div className="font-semibold text-sm">
+                {jobTitle}
               </div>
-            </EditableText>
-          );
+              <div className="text-xs italic text-gray-600">
+                {employer}
+              </div>
+              <div className="text-xs text-gray-500">
+                {formattedStartDate} - {formattedEndDate}
+              </div>
+              <EditableText
+                className="text-xs"
+                readonly={readonly}
+                onChange={(newValue) =>
+                  onRephraseSection("experiences", newValue, index)
+                }
+              >
+                {description}
+              </EditableText> 
+            </div>
+          )
         })}
       </>
+
     );
   };  
 
   const Educations = () => {
     return (
       <>
-        {educations.map((education, index) => {
-          const startMonth = (education as EducationPeriod).startDate.month;
-          const startYear = (education as EducationPeriod).startDate.year;
-          const endMonth = (education as EducationPeriod).endDate?.month || "current";
-          const endYear = (education as EducationPeriod).endDate?.year || "";
+        {/* {educations.map((education, index) => {
+          const { startDate, endDate, degree, school, description } = education as EducationPeriod;
+  
+          const startMonth = startDate.month;
+          const startYear = startDate.year;
+          const endMonth = endDate?.month || "current";
+          const endYear = endDate?.year || "";
   
           const formattedStartDate = `${startMonth}/${startYear}`;
-          const formattedEndDate = endYear
-            ? `${endMonth}/${endYear}`
-            : endMonth;
+          const formattedEndDate = endYear ? `${endMonth}/${endYear}` : endMonth;
   
           return (
-            <EditableText
-              key={index}
-              className="text-xs"
-              readonly={readonly}
-              onChange={(newValue) =>
-                onRephraseSection("educations", newValue, index)
-              }
-            >
-              <div className="my-3">
-                <div className="font-semibold text-sm">
-                  {(education as EducationPeriod).degree}
-                </div>
-                <div className="text-xs italic text-gray-600">
-                  {(education as EducationPeriod).school}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {formattedStartDate} - {formattedEndDate}
-                </div>
-                <div className="text-xs mt-1">
-                  {(education as EducationPeriod).description}
-                </div>
+            <div key={index} className="my-3">
+              <div className="font-semibold text-sm">
+                {degree}
               </div>
-            </EditableText>
+              <div className="text-xs italic text-gray-600">
+                {school}
+              </div>
+              <div className="text-xs text-gray-500">
+                {formattedStartDate} - {formattedEndDate}
+              </div>
+              <EditableText
+                className="text-xs"
+                readonly={readonly}
+                onChange={(newValue) =>
+                  onRephraseSection("educations", newValue, index)
+                }
+              >
+                {description}
+              </EditableText>
+            </div>
           );
-        })}
+        })} */}
       </>
     );
   };  
@@ -143,7 +136,10 @@ export const FolderTemaplate = ({
           {Title("Experience", {
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
-          {Experiences()}
+          <>
+        {Experiences()}
+        {experiences.length}
+      </>
         </div>
         <div className="my-3">
           {Title("Education", {

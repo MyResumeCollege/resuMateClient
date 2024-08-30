@@ -137,7 +137,7 @@ export const Experience = () => {
                     updateEditedPeriod({
                       startDate: {
                         year: date?.getFullYear().toString() || '',
-                        month: (date?.getMonth() + 1).toString() || '',
+                        month: ((date?.getMonth() || 0) + 1).toString() || '',
                       },
                     })
                   }
@@ -164,7 +164,7 @@ export const Experience = () => {
                     updateEditedPeriod({
                       endDate: {
                         year: date?.getFullYear().toString() || '',
-                        month: (date?.getMonth() + 1).toString() || '',
+                        month: ((date?.getMonth() || 0) + 1).toString() || '',
                       },
                     })
                   }}

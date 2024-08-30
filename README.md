@@ -15,7 +15,7 @@ ResumeMate is a tool that allows you to create, edit, and manage resumes with th
 
 ### Installation
 
-1. Clone the repository:
+Clone the repository:
 
    ```bash
    git clone https://github.com/MyResumeCollege/resuMateClient.git

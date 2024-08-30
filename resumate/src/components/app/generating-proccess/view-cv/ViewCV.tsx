@@ -26,15 +26,15 @@ const ViewCV: React.FC = () => {
   const userLanguages = useRecoilValue(languagesState);
   const template = useRecoilValue(templateState);
 
-  useEffect(() => {
-    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2]);
+  useEffect(() => {    
+    if (resumeText) previewPdf(resumeText.bio, resumeText.experiences, resumeText.educations);
   }, [resumeText]);
 
   const previewPdf = async (
     bio: string,
-    experiences: string,
-    educations: string
-  ) => {
+    experiences: string[],
+    educations: string[]
+  ) => {    
     try {
       const response = await generatePreviewUrl(
         fullName,
@@ -58,6 +58,7 @@ const ViewCV: React.FC = () => {
         "en"
       );
       const { url } = response.data;
+      
       setPdfUrl(url);
     } catch (error) {
       console.error("Error fetching PDF preview:", error);

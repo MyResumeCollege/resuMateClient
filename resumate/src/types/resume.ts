@@ -1,3 +1,6 @@
+import { EducationPeriod } from "./education-period";
+import { ExperiencePeriod } from "./experience-period";
+
 export type GenerateResumeInput = {
   name: string;
   job: string;
@@ -13,11 +16,11 @@ export type ResumeSections = {
   phoneNumber?: string;
   bio: string;
   skills: string;
-  experiences: string;
-  educations: string;
+  experiences: string[] | ExperiencePeriod[];
+  educations: string[] | EducationPeriod[];
   languages: string;
   template: number;
-  resumeLanguage: string
+  resumeLanguage: string;
 };
 
 export type ResumeOverview = {

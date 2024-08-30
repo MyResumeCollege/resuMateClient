@@ -2,6 +2,7 @@ import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+// import { useFormattedData } from "@/hooks/useFormattedData";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -58,7 +59,7 @@ export const FolderTealTemaplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("experiences", newValue)}
           >
-            {experiences}
+            {/* {formattedExperiences.join("\n")} */}
           </EditableText>
         </div>
         <div className="my-3">
@@ -70,7 +71,7 @@ export const FolderTealTemaplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("educations", newValue)}
           >
-            {educations}
+            {/* {formattedEducations.join("\n")} */}
           </EditableText>
         </div>
         <div className="my-3">
@@ -84,7 +85,7 @@ export const FolderTealTemaplate = ({
           {jobTitle}
         </div>
         <div className="my-3">
-          {Title("Contact Info")}
+          {Title("Contact")}
           <div className="flex items-center">
             <FaPhoneAlt className="mr-2" />
             <span>{phoneNumber}</span>
@@ -109,10 +110,6 @@ export const FolderTealTemaplate = ({
         <div className="my-3">
           {Title("Languages")}
           {List(languages)}
-        </div>
-        <div className="my-3">
-          {Title("Contact")}
-          bla bla bla contact details here
         </div>
       </div>
     </div>

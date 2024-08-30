@@ -1,6 +1,8 @@
 import { AxiosResponse } from "axios";
 import apiClient from "./httpCommon";
 import { ResumeOverview, ResumeSections } from "@/types/resume";
+import { ExperiencePeriod } from "@/types/experience-period";
+import { EducationPeriod } from "@/types/education-period";
 
 type cvData = {
   resumePreviewId?: string;
@@ -10,16 +12,12 @@ type cvData = {
   jobTitle: string;
   bio: string;
   skills: string;
-  experiences?: string;
-  educations: string;
+  experiences: ExperiencePeriod[];
+  educations: EducationPeriod[];
   languages: string;
   template: number;
   resumeLanguage: string
 }
-
-type SetUrlForPreviewResponse = {
-  url: string;
-};
 
 export const previewCV = async (
   id: string
@@ -66,16 +64,16 @@ export const generatePreviewUrl = async (
   jobTitle: string,
   bio: string,
   skills: string,
-  experiences: string,
-  educations: string,
+  experiences: string[],
+  educations: string[],
   languages: string,
   template: number,
   resumeLanguage: string
-): Promise<AxiosResponse<{ url: string }>> => {
+): Promise<AxiosResponse<{ url: string }>> => {  
   return await apiClient.post("/preview/create-preview", {
     fullName,
-    email,
     phoneNumber,
+    email,
     jobTitle,
     bio,
     skills,
@@ -86,22 +84,6 @@ export const generatePreviewUrl = async (
     resumeLanguage
   });
 };
-
-export const updateCvPreview = async(cvData: cvData) => {
-  await apiClient.post<SetUrlForPreviewResponse>(
-    `/preview/create-preview/${cvData.resumePreviewId}`,
-    {
-    fullName: cvData.fullName,
-    jobTitle: cvData.jobTitle,
-    bio: cvData.bio,
-    skills: cvData.skills,
-    experiences: cvData.experiences,
-    educations: cvData.educations,
-    languages: cvData.languages,
-    template: cvData.template,
-    resumeLanguage: cvData.resumeLanguage
-  });
-}
 
 export const upsertResume = async (userId: string, cvData: cvData) => {
   return await apiClient.post(`/user/${userId}/upsert`, cvData); 

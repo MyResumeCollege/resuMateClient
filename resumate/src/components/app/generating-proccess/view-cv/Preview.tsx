@@ -13,6 +13,8 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { downloadPDF, previewCV, upsertResume } from "../../../../services/cvService";
 import { educationState, emailState, experienceState, fullNameState, jobTitleState, languagesState, phoneNumberState, skillsState, summaryState, templateState } from "../store/state";
 import "./Preview.css";
+import { ExperiencePeriod } from "@/types/experience-period";
+import { EducationPeriod } from "@/types/education-period";
 
 type PreviewProps = {
   id?: string;
@@ -35,6 +37,9 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const resetTemplate = useResetRecoilState(templateState);
   const resetSkills = useResetRecoilState(skillsState)
 
+  const expeirencePeriods = useRecoilState(experienceState)
+  const educationPeriods = useRecoilState(educationState)
+
   const [hasLoaded, setHasLoaded] = useState(false);
   const [fullName, setFullName] = useState<string>("Full Name");
   const [phoneNumber, setPhoneNumber] = useState<string>("052-0000000")
@@ -42,32 +47,28 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const [jobTitle, setJobTitle] = useState<string>("Job Title");
   const [bio, setBio] = useState<string>(
     "A brief bio about yourself goes here."
-
   );
   const [skills, setSkills] = useState<string>("Skills");
-  const [experiences, setExperiences] = useState<string>("Experience");
-  const [educations, setEducations] = useState<string>("Educations");
+  const [experiences, setExperiences] = useState<ExperiencePeriod[]>([]);
+  const [educations, setEducations] = useState<EducationPeriod[]>([]);
   const [languages, setLanguages] = useState<string>("Language 1, Language 2");
   const [languageTo, setLanguageTo] = useState("en");
   const [languageFrom, setLanguageFrom] = useState("en");
   const [selectedTemplate, setSelectedTemplate] = useRecoilState(templateState);
 
-  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  // Rephrasing
-
-  const handleRephrasing = (section: keyof ResumeSections, newValue: string) => {
+  const handleRephrasing = (section: keyof ResumeSections, newValue: string[] | string) => {
     switch (section) {
       case "bio":
-        setBio(newValue);
+        setBio(newValue as string);
         break;
       case 'educations':
-        setEducations(newValue);
+        // setEducationDescriptions(newValue);
         break;
       case 'experiences':
-        setExperiences(newValue);
+        // setExperienceDescriptions(newValue as string[]);
         break;
     }
   }
@@ -91,8 +92,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
     setFullName(translatedResume.fullName)
     setJobTitle(translatedResume.jobTitle)
     setBio(translatedResume.bio)
-    setExperiences(translatedResume.experiences)
-    setEducations(translatedResume.educations)
+    // setExperienceDescriptions(translatedResume.experiences as string[])
+    // setEducationDescriptions(translatedResume.educations as string[])
     setSkills(translatedResume.skills)
     setLanguages(translatedResume.languages)
     setLanguageFrom(languageTo);
@@ -107,12 +108,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       case "bio":
         currentSectionValue = bio;
         break;
-      case 'educations':
-        currentSectionValue = educations;
-        break;
-      case 'experiences':
-        currentSectionValue = experiences;
-        break;
+      // case 'educations':
+      //   currentSectionValue = educations;
+      //   break;
+      // case 'experiences':
+      //   currentSectionValue = experiences;
+      //   break;
     }
 
     regenerateSection(section, currentSectionValue);
@@ -131,12 +132,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           case "bio":
             setBio(updatedSectionText);
             break;
-          case "educations":
-            setEducations(updatedSectionText);
-            break;
-          case "experiences":
-            setExperiences(updatedSectionText);
-            break;
+          // case "educations":
+          //   setEducations(updatedSectionText);
+          //   break;
+          // case "experiences":
+          //   setExperiences(updatedSectionText);
+          //   break;
         }
       } else {
         toast.error(
@@ -160,11 +161,11 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         phoneNumber,
         email,
         jobTitle,
-        bio: bio,
-        skills: skills,
-        experiences: experiences,
-        educations: educations,
-        languages: languages,
+        bio,
+        skills,
+        experiences,
+        educations,
+        languages,
         template: selectedTemplate,
         resumeLanguage: languageTo
       };
@@ -205,36 +206,56 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
     const fetchData = async () => {
       if (resumeId) {
-        setIsLoading(true);
-
         try {
           const response = await previewCV(resumeId);
-          const data = response.data;
-
+          const data = response.data;   
+          
           setFullName(data.fullName);
           setPhoneNumber(data.phoneNumber ?? "")
           setEmail(data.email ?? "")
           setJobTitle(data.jobTitle);
           setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
           setSkills(data.skills);
+                    
           setExperiences(
-            data.experiences.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
+            expeirencePeriods[0].map((period, index) => {
+              const experience: ExperiencePeriod = {
+                id: (period as unknown as ExperiencePeriod).id,
+                jobTitle: (period as unknown as ExperiencePeriod).jobTitle,
+                employer: (period as unknown as ExperiencePeriod).employer,
+                city: (period as unknown as ExperiencePeriod).city,
+                startDate: (period as unknown as ExperiencePeriod).startDate,
+                endDate: (period as unknown as ExperiencePeriod).endDate,
+                isCurrent:(period as unknown as ExperiencePeriod).isCurrent,
+                description: (data.experiences as string[])[index]
+              };
+              return experience;
+            })
           );
           setEducations(
-            data.educations.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1")
+            educationPeriods[0].map((period, index) => {
+              const education: EducationPeriod = {
+                id: (period as unknown as EducationPeriod).id,
+                degree: (period as unknown as EducationPeriod).degree,
+                school: (period as unknown as EducationPeriod).school,
+                startDate: (period as unknown as EducationPeriod).startDate,
+                endDate: (period as unknown as EducationPeriod).endDate,
+                isCurrent:(period as unknown as ExperiencePeriod).isCurrent,
+                description: (data.educations as string[])[index]
+              };
+              return education;
+            })
           );
+          
           setLanguages(data.languages);
           setLanguageTo(data.resumeLanguage || "en");
           setLanguageFrom(data.resumeLanguage || "en");
           if (data.template) {
             setSelectedTemplate(data.template || 1)
           }
-
           setHasLoaded(true);
         } catch (error) {
           toast.error("Sorry, we encountered some issues");
-        } finally {
-          setIsLoading(false)
         }
       }
     };
@@ -243,7 +264,6 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       fetchData();
     }
   }, [id, proppedId]);
-
 
   useEffect(() => {
     return () => {

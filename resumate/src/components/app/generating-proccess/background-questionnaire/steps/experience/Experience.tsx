@@ -11,32 +11,25 @@ import { TextArea } from '@/components/shared/inputs/textarea/TextArea'
 import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
 import './Experience.css'
 export const Experience = () => {
-  const [experiencePeriods, setExperiencePeriods] = useRecoilState<
-    ExperiencePeriod[] | string
-  >(experienceState)
+  const [experiencePeriods, setExperiencePeriods] = useRecoilState<ExperiencePeriod[] | string[]>(experienceState);
 
   const [editedExperiencePeriod, setEditedExperiencePeriod] =
     useState<ExperiencePeriod>()
   const [error, setError] = useState<string>()
 
   const isExperiencePeriodsArray = Array.isArray(experiencePeriods)
-  const isEditedExperienceNew =
-    isExperiencePeriodsArray &&
-    !experiencePeriods.find(period => period.id === editedExperiencePeriod?.id)
-
+  const isEditedExperienceNew = isExperiencePeriodsArray && !experiencePeriods.find(period => (period as ExperiencePeriod).id === editedExperiencePeriod?.id);
   const removePeriod = (experience: ExperiencePeriod) => {
     if (isExperiencePeriodsArray) {
-      const newPeriods = experiencePeriods.filter(
-        currentExperience => currentExperience.id !== experience.id
-      )
-      setExperiencePeriods(newPeriods)
+      const newPeriods = experiencePeriods.filter(currentExperience => (currentExperience as ExperiencePeriod).id !== experience.id);
+      setExperiencePeriods(newPeriods as ExperiencePeriod[]);
     }
   }
 
   const addPeriod = (period: ExperiencePeriod) => {
     if (isExperiencePeriodsArray) {
       const newPeriods = [...experiencePeriods, period]
-      setExperiencePeriods(newPeriods)
+      setExperiencePeriods(newPeriods as ExperiencePeriod[]);
     }
   }
 
@@ -72,14 +65,11 @@ export const Experience = () => {
   const handleDoneEditPeriod = () => {
     if (editedExperiencePeriod && isExperiencePeriodsArray) {
       const clonedPeriods = [...experiencePeriods]
-
-      const periodIndex = clonedPeriods.findIndex(
-        expPeriod => expPeriod.id === editedExperiencePeriod.id
-      )
+      const periodIndex = clonedPeriods.findIndex(expPeriod => (expPeriod as ExperiencePeriod).id === editedExperiencePeriod.id);
       // updating existing period
       if (periodIndex !== -1) {
         clonedPeriods[periodIndex] = { ...editedExperiencePeriod }
-        setExperiencePeriods(clonedPeriods)
+        setExperiencePeriods(clonedPeriods as ExperiencePeriod[]);
       } else {
         // creating new period
         addPeriod(editedExperiencePeriod)
@@ -276,8 +266,8 @@ export const Experience = () => {
         Your Experience
       </h2>
       <main className="flex-1 px-10 flex flex-col gap-2 overflow-y-scroll">
-        {isExperiencePeriodsArray && experiencePeriods.map(periodRenderer)}
-        {isEditedExperienceNew && renderEditPeriod()}
+      {isExperiencePeriodsArray && (experiencePeriods as ExperiencePeriod[]).map(periodRenderer)}        
+      {isEditedExperienceNew && renderEditPeriod()}
         <Button onClick={openAddNewPeriod} disabled={!!editedExperiencePeriod}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

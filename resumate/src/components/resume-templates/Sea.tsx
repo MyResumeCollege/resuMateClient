@@ -63,7 +63,7 @@ export const SeaTemplate = ({
         <div className="text-sm font-semibold mb-[40px] text-gray-800">
           {jobTitle}
         </div>
-        <div className="my-3 text-gray-800">
+        <div className="my-3">
           {Title("Contact Info")}
           <div className="flex items-center">
             <FaPhoneAlt className="mr-2" />
@@ -83,7 +83,7 @@ export const SeaTemplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("educations", newValue)}
           >
-            {educations.slice(0, 400)}
+            {/* {formattedEducations.join("\n")} */}
           </EditableText>
         </div>
 
@@ -108,7 +108,7 @@ export const SeaTemplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("bio", newValue)}
           >
-            {bio.slice(0, 400)}
+            {bio}
           </EditableText>
         </div>
         <div>
@@ -121,7 +121,7 @@ export const SeaTemplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("experiences", newValue)}
           >
-            {experiences.slice(0, 400)}
+            {/* {formattedExperiences.join("\n")} */}
           </EditableText>
         </div>
       </div>

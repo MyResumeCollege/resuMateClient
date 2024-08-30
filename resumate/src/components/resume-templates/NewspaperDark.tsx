@@ -21,8 +21,8 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
     jobTitle,
     languages,
     skills,
-    educations,
     experiences,
+    educations
   } = resume;
 
   const Title = (text: string, options?: { onRegenerate?: () => void }) => {
@@ -76,7 +76,7 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
               className="text-xs"
               readonly={readonly}
               onChange={newValue => onRephraseSection('educations', newValue)}>
-              {educations}
+            {/* {formattedEducations.join("\n")} */}
             </EditableText>
           </div>
           {HorizontalDivider}
@@ -103,7 +103,7 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
               className="text-xs"
               readonly={readonly}
               onChange={newValue => onRephraseSection('experiences', newValue)}>
-              {experiences}
+              {/* {formattedExperiences.join("\n")} */}
             </EditableText>
           </div>
         </div>

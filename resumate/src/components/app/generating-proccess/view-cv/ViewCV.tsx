@@ -34,14 +34,14 @@ const ViewCV: React.FC = () => {
 
   useEffect(() => { 
 
-    const updatedExperiencePeriod = (experiencePeriods as ExperiencePeriod[]).map((experience, index) => ({
+    const updatedExperiencePeriod = experiencePeriods.map((experience, index) => ({
       ...experience,
-      description: resumeText.experiences[index] || experience.description,
+      description: resumeText.experiences[index].replace(/^[^\:]*:\s*/, "") || experience.description,
     }));
 
-    const updatedEducationPeriods = (educationPeriods as EducationPeriod[]).map((education, index) => ({
+    const updatedEducationPeriods = educationPeriods.map((education, index) => ({
       ...education,
-      description: resumeText.educations[index] || education.description,
+      description: resumeText.educations[index].replace(/^[^\:]*:\s*/, "") || education.description,
     }));
     
     if (resumeText) previewPdf(resumeText.bio, updatedExperiencePeriod, updatedEducationPeriods);

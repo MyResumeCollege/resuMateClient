@@ -54,8 +54,8 @@ export const translateCV = async (
     translateIfNotEmpty(resumeSections.languages, 'languages')
   ]);
 
-  const experiences = await translateArray(resumeSections.experiences as ExperiencePeriod[], translateExperiencePeriod);
-  const educations = await translateArray(resumeSections.educations as EducationPeriod[], translateEducationPeriod);
+  const experiences = await translateArray(resumeSections.experiences, translateExperiencePeriod);
+  const educations = await translateArray(resumeSections.educations, translateEducationPeriod);
   
   return {
     fullName: fullName.fullName || resumeSections.fullName,

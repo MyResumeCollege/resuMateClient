@@ -77,7 +77,7 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
           <div className="mb-3 mt-3">
             {Title('Education', { onRegenerate: () => onRegenerateSection('educations') })}
             <Educations
-              educations={educations as EducationPeriod[]}
+              educations={educations}
               onRephraseSection={onRephraseSection}
               readonly={readonly}
             />
@@ -103,7 +103,7 @@ export const NewspaperDarkTemplate = ({ resume, onRegenerateSection, onRephraseS
           <div className="mb-3 mt-3">
             {Title('Experience', { onRegenerate: () => onRegenerateSection('experiences') })}
             <Experiences
-              experiences={experiences as ExperiencePeriod[]}
+              experiences={experiences}
               onRephraseSection={onRephraseSection}
               readonly={readonly}
             />

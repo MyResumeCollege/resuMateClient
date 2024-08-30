@@ -7,8 +7,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { uploadResume } from '../../../../services/uploadResume'
 import { educationState, experienceState, summaryState } from '../store/state'
-import { EducationPeriod } from '@/types/education-period'
-import { ExperiencePeriod } from '@/types/experience-period'
 
 export const Generate = () => {
   const location = useLocation()
@@ -37,8 +35,8 @@ export const Generate = () => {
       try {
         const generateResume = await generateCVFromScratch({
           bio,
-          experiences: Array.isArray(experiencePeriods) ? experiencePeriods.map(experiencePeriod => (experiencePeriod as ExperiencePeriod).description) : [],
-          educations: Array.isArray(educationPeriods) ? educationPeriods.map(educationPeriod => (educationPeriod as EducationPeriod).description) : [],
+          experiences: experiencePeriods.map(experiencePeriod => experiencePeriod.description),
+          educations: educationPeriods.map(educationPeriod => educationPeriod.description)
         })
         resumeText = generateResume.data     
 

@@ -13,8 +13,6 @@ import {
   validatePhoneNumberAndEmail,
   validateSkills,
 } from '../../../../validations/validations'
-import { ExperiencePeriod } from '@/types/experience-period'
-import { EducationPeriod } from '@/types/education-period'
 import {
   educationState,
   emailState,
@@ -64,10 +62,10 @@ const useValidation = (currentStep: number): string[] => {
       errors = validatePhoneNumberAndEmail(phoneNumber, email)   
       break;
     case 3:
-      errors = validateExperiencePeriods(experiencePeriods as ExperiencePeriod[])
+      errors = validateExperiencePeriods(experiencePeriods)
       break
     case 4:
-      errors = validateEducationPeriods(educationPeriods as EducationPeriod[])
+      errors = validateEducationPeriods(educationPeriods)
       break
     case 5:
       errors = validateLanguages(languages)

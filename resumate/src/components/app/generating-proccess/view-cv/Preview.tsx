@@ -127,7 +127,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
     const updatedEducations = educations.map((education, index) => {
       const translatedEducation =
-        (translatedResume.educations as EducationPeriod[])[index] || {};
+        (translatedResume.educations)[index] || {};
 
       return {
         ...education,
@@ -141,7 +141,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
 
     const updatedExperiences = experiences.map((experience, index) => {
       const translatedExperience =
-        (translatedResume.experiences as ExperiencePeriod[])[index] || {};
+        translatedResume.experiences[index] || {};
 
       return {
         ...experience,
@@ -284,10 +284,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       if (resumeId) {
         try {
           const response = await previewCV(resumeId);
-          const data = response.data;
-
-          console.log("experiences ", response.data.experiences);
-          
+          const data = response.data;          
 
           setFullName(data.fullName);
           setPhoneNumber(data.phoneNumber ?? "");
@@ -295,8 +292,8 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
           setJobTitle(data.jobTitle);
           setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
           setSkills(data.skills);
-          setExperiences(data.experiences as ExperiencePeriod[]);
-          setEducations(data.educations as EducationPeriod[])
+          setExperiences(data.experiences);
+          setEducations(data.educations)
 
           setLanguages(data.languages);
           setLanguageTo(data.resumeLanguage || "en");
@@ -422,6 +419,7 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
                     <option value="it">Italian</option>
+                    <option value="fr">French</option>
                   </select>
                 </div>
                 <Button

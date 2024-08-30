@@ -83,7 +83,7 @@ export const SeaTemplate = ({
             onRegenerate: () => onRegenerateSection("educations"),
           })}
           <Educations
-            educations={educations as EducationPeriod[]}
+            educations={educations}
             onRephraseSection={onRephraseSection}
             readonly={readonly}
           />
@@ -119,7 +119,7 @@ export const SeaTemplate = ({
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
           <Experiences
-            experiences={experiences as ExperiencePeriod[]}
+            experiences={experiences}
             onRephraseSection={onRephraseSection}
             readonly={readonly}
           />

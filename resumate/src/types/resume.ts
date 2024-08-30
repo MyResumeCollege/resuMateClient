@@ -16,8 +16,8 @@ export type ResumeSections = {
   phoneNumber?: string;
   bio: string;
   skills: string;
-  experiences: string[] | ExperiencePeriod[];
-  educations: string[] | EducationPeriod[];
+  experiences: ExperiencePeriod[];
+  educations: EducationPeriod[];
   languages: string;
   template: number;
   resumeLanguage: string;

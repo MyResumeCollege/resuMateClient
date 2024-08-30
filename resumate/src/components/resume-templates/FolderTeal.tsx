@@ -58,7 +58,7 @@ export const FolderTealTemaplate = ({
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
           <Experiences
-            experiences={experiences as ExperiencePeriod[]}
+            experiences={experiences}
             onRephraseSection={onRephraseSection}
             readonly={readonly}
           />
@@ -68,7 +68,7 @@ export const FolderTealTemaplate = ({
             onRegenerate: () => onRegenerateSection("educations"),
           })}
           <Educations
-            educations={educations as EducationPeriod[]}
+            educations={educations}
             onRephraseSection={onRephraseSection}
             readonly={readonly}
           />

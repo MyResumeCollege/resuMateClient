@@ -4,6 +4,8 @@ import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { EducationPeriod } from "@/types/education-period";
 import { ExperiencePeriod } from "@/types/experience-period";
+import Experiences from "./shared/Experiences";
+import Educations from "./shared/Educations";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -47,88 +49,6 @@ export const FolderTemaplate = ({
     );
   };
 
-  const Experiences = () => {
-    return (
-      <>
-        {(experiences as ExperiencePeriod[]).map((experience, index) => {
-          const { startDate, endDate, jobTitle, employer, description } = experience as ExperiencePeriod;
-          const startMonth = startDate.month;
-          const startYear = startDate.year;
-          const endMonth = endDate?.month || "current";
-          const endYear = endDate?.year || "";
-            
-          const formattedStartDate = `${startMonth}/${startYear}`;
-          const formattedEndDate = endYear ? `${endMonth}/${endYear}` : endMonth;
-  
-          return (
-            <div key={index} className="my-3">
-              <div className="font-semibold text-sm">
-                {jobTitle}
-              </div>
-              <div className="text-xs italic text-gray-600">
-                {employer}
-              </div>
-              <div className="text-xs text-gray-500">
-                {formattedStartDate} - {formattedEndDate}
-              </div>
-              <EditableText
-                className="text-xs"
-                readonly={readonly}
-                onChange={(newValue) =>
-                  onRephraseSection("experiences", newValue, index)
-                }
-              >
-                {description}
-              </EditableText> 
-            </div>
-          )
-        })}
-      </>
-
-    );
-  };  
-
-  const Educations = () => {
-    return (
-      <>
-        {/* {educations.map((education, index) => {
-          const { startDate, endDate, degree, school, description } = education as EducationPeriod;
-  
-          const startMonth = startDate.month;
-          const startYear = startDate.year;
-          const endMonth = endDate?.month || "current";
-          const endYear = endDate?.year || "";
-  
-          const formattedStartDate = `${startMonth}/${startYear}`;
-          const formattedEndDate = endYear ? `${endMonth}/${endYear}` : endMonth;
-  
-          return (
-            <div key={index} className="my-3">
-              <div className="font-semibold text-sm">
-                {degree}
-              </div>
-              <div className="text-xs italic text-gray-600">
-                {school}
-              </div>
-              <div className="text-xs text-gray-500">
-                {formattedStartDate} - {formattedEndDate}
-              </div>
-              <EditableText
-                className="text-xs"
-                readonly={readonly}
-                onChange={(newValue) =>
-                  onRephraseSection("educations", newValue, index)
-                }
-              >
-                {description}
-              </EditableText>
-            </div>
-          );
-        })} */}
-      </>
-    );
-  };  
-
   return (
     <div className="flex-1 flex bg-white border border-gray-300 overflow-auto relative">
       <div className="left p-6 flex-1 flex flex-col">
@@ -136,19 +56,21 @@ export const FolderTemaplate = ({
           {Title("Experience", {
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
-          <>
-        {Experiences()}
-      </>
+          <Experiences
+            experiences={experiences as ExperiencePeriod[]}
+            onRephraseSection={onRephraseSection}
+            readonly={readonly}
+          />
         </div>
         <div className="my-3">
           {Title("Education", {
             onRegenerate: () => onRegenerateSection("educations"),
           })}
-          {Educations()}
-        </div>
-        <div className="my-3">
-          {Title("Skills")}
-          {List(skills)}
+          <Educations
+            educations={educations as EducationPeriod[]}
+            onRephraseSection={onRephraseSection}
+            readonly={readonly}
+          />
         </div>
       </div>
       <div className="right p-6 bg-[#18203d] w-[300px] text-white text-xs">
@@ -182,6 +104,10 @@ export const FolderTemaplate = ({
         <div className="my-3">
           {Title("Languages")}
           {List(languages)}
+        </div>
+        <div className="my-3">
+          {Title("Skills")}
+          {List(skills)}
         </div>
       </div>
     </div>

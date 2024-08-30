@@ -2,6 +2,10 @@ import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import Educations from "./shared/Educations";
+import { EducationPeriod } from "@/types/education-period";
+import Experiences from "./shared/Experiences";
+import { ExperiencePeriod } from "@/types/experience-period";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -53,25 +57,21 @@ export const FolderTealTemaplate = ({
           {Title("Experience", {
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
-          <EditableText
-            className="text-xs"
+          <Experiences
+            experiences={experiences as ExperiencePeriod[]}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("experiences", newValue)}
-          >
-            {/* {formattedExperiences.join("\n")} */}
-          </EditableText>
+          />
         </div>
         <div className="my-3">
           {Title("Education", {
             onRegenerate: () => onRegenerateSection("educations"),
           })}
-          <EditableText
-            className="text-xs"
+          <Educations
+            educations={educations as EducationPeriod[]}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("educations", newValue)}
-          >
-            {/* {formattedEducations.join("\n")} */}
-          </EditableText>
+          />
         </div>
         <div className="my-3">
           {Title("Skills")}

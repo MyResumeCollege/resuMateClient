@@ -2,6 +2,10 @@ import { TemplateProps } from "@/types/template-props";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import Experiences from "./shared/Experiences";
+import { ExperiencePeriod } from "@/types/experience-period";
+import Educations from "./shared/Educations";
+import { EducationPeriod } from "@/types/education-period";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -78,13 +82,11 @@ export const SeaTemplate = ({
           {Title("Education", {
             onRegenerate: () => onRegenerateSection("educations"),
           })}
-          <EditableText
-            className="pr-6 whitespace-break-spaces"
+          <Educations
+            educations={educations as EducationPeriod[]}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("educations", newValue)}
-          >
-            {/* {formattedEducations.join("\n")} */}
-          </EditableText>
+          />
         </div>
 
         <div className="flex flex-col mb-5 text-gray-800">
@@ -116,13 +118,11 @@ export const SeaTemplate = ({
             color: "black",
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
-          <EditableText
-            className="pr-6 whitespace-break-spaces"
+          <Experiences
+            experiences={experiences as ExperiencePeriod[]}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("experiences", newValue)}
-          >
-            {/* {formattedExperiences.join("\n")} */}
-          </EditableText>
+          />
         </div>
       </div>
     </div>

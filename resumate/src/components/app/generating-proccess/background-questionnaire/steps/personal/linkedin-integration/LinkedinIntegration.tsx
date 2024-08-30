@@ -33,7 +33,6 @@ export const LinkedinIntegration = () => {
             setIsLoading(true);
             try {
                 const linkedinData = (await getLinkedinData(profileUrl)).data;
-                console.log("linkedinData ", linkedinData);
                 
                 setName(linkedinData.name);
                 setSummary(linkedinData.bio);
@@ -44,9 +43,7 @@ export const LinkedinIntegration = () => {
 
                 setProfileUrl('');
                 setIsProfileDialogOpen(false);
-            } catch (e) {
-                console.log("error ?");
-                
+            } catch (e) {                
                 toast.error('An error occured while importing data from Linkedin');
             } finally {
                 setIsLoading(false);

@@ -41,7 +41,7 @@ export const handleDownloadCV = async (url: string): Promise<Blob> => {
 };
 
 export const downloadPDF = async (resumeUrl: string, fileName: string) => {
-  try {
+  try {    
     const response = await handleDownloadCV(resumeUrl)
     if (response instanceof Blob) {
       const downloadUrl = window.URL.createObjectURL(response)

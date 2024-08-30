@@ -51,7 +51,6 @@ const Payment = () => {
   }
 
   const handlePayment = async (userId: string, isPremium: boolean) => {
-    console.log(endDate)
     if (cardNumber.length !== 19 || !endDate) {
       toast.error('Please fill in all fields correctly.')
       return

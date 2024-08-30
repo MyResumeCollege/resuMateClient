@@ -3,7 +3,7 @@ import path from "path";
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  ...(process.env.VITE_ENV !== 'dev' && { base: "http://resumate.cs.colman.ac.il/public/client" }),
+  ...(process.env.VITE_ENV !== 'dev' && { base: "https://resumate.cs.colman.ac.il/public/client" }),
   plugins: [react()],
   resolve: {
     alias: {

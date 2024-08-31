@@ -1,11 +1,9 @@
 import { TemplateProps } from "@/types/template-props";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
-import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import Educations from "./shared/Educations";
-import { EducationPeriod } from "@/types/education-period";
 import Experiences from "./shared/Experiences";
-import { ExperiencePeriod } from "@/types/experience-period";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (

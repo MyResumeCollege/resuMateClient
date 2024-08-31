@@ -43,7 +43,7 @@ const ViewCV: React.FC = () => {
       ...education,
       description: resumeText.educations[index].replace(/^[^\:]*:\s*/, "") || education.description,
     }));
-    
+
     if (resumeText) previewPdf(resumeText.bio, updatedExperiencePeriod, updatedEducationPeriods);
   }, [resumeText]);
 
@@ -51,7 +51,7 @@ const ViewCV: React.FC = () => {
     bio: string,
     experiences: ExperiencePeriod[],
     educations: EducationPeriod[]
-  ) => {    
+  ) => {
     try {
       const response = await generatePreviewUrl(
         fullName,

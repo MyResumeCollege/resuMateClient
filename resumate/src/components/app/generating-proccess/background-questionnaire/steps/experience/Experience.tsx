@@ -12,25 +12,20 @@ import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
 import './Experience.css'
 export const Experience = () => {
   const [experiencePeriods, setExperiencePeriods] = useRecoilState<ExperiencePeriod[]>(experienceState);
-
-  const [editedExperiencePeriod, setEditedExperiencePeriod] =
-    useState<ExperiencePeriod>()
+  const [editedExperiencePeriod, setEditedExperiencePeriod] = useState<ExperiencePeriod>()
   const [error, setError] = useState<string>()
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
 
-  const isExperiencePeriodsArray = Array.isArray(experiencePeriods)
-  const isEditedExperienceNew = isExperiencePeriodsArray && !experiencePeriods.find(period => period.id === editedExperiencePeriod?.id);
+  const isEditedExperienceNew = !experiencePeriods.find(period => period.id === editedExperiencePeriod?.id);
   const removePeriod = (experience: ExperiencePeriod) => {
-    if (isExperiencePeriodsArray) {
-      const newPeriods = experiencePeriods.filter(currentExperience => currentExperience.id !== experience.id);
-      setExperiencePeriods(newPeriods);
-    }
+    const newPeriods = experiencePeriods.filter(currentExperience => currentExperience.id !== experience.id);
+    setExperiencePeriods(newPeriods);
   }
 
   const addPeriod = (period: ExperiencePeriod) => {
-    if (isExperiencePeriodsArray) {
-      const newPeriods = [...experiencePeriods, period]
-      setExperiencePeriods(newPeriods);
-    }
+    const newPeriods = [...experiencePeriods, period]
+    setExperiencePeriods(newPeriods);
   }
 
   const openAddNewPeriod = () => {
@@ -63,7 +58,7 @@ export const Experience = () => {
   const ref = useClickOutside(closeAddNewPeriod)
 
   const handleDoneEditPeriod = () => {
-    if (editedExperiencePeriod && isExperiencePeriodsArray) {
+    if (editedExperiencePeriod) {
       const clonedPeriods = [...experiencePeriods]
       const periodIndex = clonedPeriods.findIndex(expPeriod => expPeriod.id === editedExperiencePeriod.id);
       // updating existing period
@@ -116,6 +111,7 @@ export const Experience = () => {
                   Start Date
                 </label>
                 <DatePicker
+                  maxDate={endDate !== null ? endDate : undefined}
                   selected={
                     editedExperiencePeriod.startDate.year
                       ? new Date(
@@ -123,7 +119,8 @@ export const Experience = () => {
                         )
                       : null
                   }
-                  onChange={date =>
+                  onChange={date => {
+                    setStartDate(date)
                     updateEditedPeriod({
                       startDate: {
                         year: date?.getFullYear().toString() || '',
@@ -131,6 +128,7 @@ export const Experience = () => {
                       },
                     })
                   }
+                }
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   wrapperClassName="date_picker"
@@ -144,6 +142,7 @@ export const Experience = () => {
                   End Date
                 </label>
                 <DatePicker
+                  minDate={startDate !== null ? startDate : undefined}
                   selected={
                     editedExperiencePeriod.endDate.year
                       ? new Date(
@@ -152,6 +151,7 @@ export const Experience = () => {
                       : null
                   }
                   onChange={date => {
+                    setEndDate(date)
                     updateEditedPeriod({
                       endDate: {
                         year: date?.getFullYear().toString() || '',

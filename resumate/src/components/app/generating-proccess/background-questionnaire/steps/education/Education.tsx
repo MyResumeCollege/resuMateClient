@@ -1,121 +1,136 @@
-import { Button } from '@/components/shared/button/Button'
-import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
-import { TextArea } from '@/components/shared/inputs/textarea/TextArea'
-import { useClickOutside } from '@/hooks/useClickOutside'
-import { EducationPeriod } from '@/types/education-period'
-import { uniqueId } from 'lodash'
-import { useState } from 'react'
-import { useRecoilState } from 'recoil'
-import { educationState } from '../../../store/state'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import './Education.css'
+import { Button } from "@/components/shared/button/Button";
+import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
+import { TextArea } from "@/components/shared/inputs/textarea/TextArea";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { EducationPeriod, EducationPeriodTime } from "@/types/education-period";
+import { uniqueId } from "lodash";
+import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { educationState } from "../../../store/state";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "./Education.css";
 
 export const Education = () => {
-  const [educationPeriods, setEducationPeriods] = useRecoilState(educationState)
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
+  const [educationPeriods, setEducationPeriods] =
+    useRecoilState(educationState);
   const [editedEducationPeriod, setEditedEducationPeriod] =
-    useState<EducationPeriod>()
-  const [error, setError] = useState<string>()
+    useState<EducationPeriod>();
+  const [error, setError] = useState<string>();
   const isEditedEducationNew = !educationPeriods.find(
-    period => period.id === editedEducationPeriod?.id
-  )
+    (period) => period.id === editedEducationPeriod?.id
+  );
+
+  const toDate = (time: EducationPeriodTime | null): Date | null => {
+    if (time && time.year && time.month) {
+      const year = parseInt(time.year, 10);
+      const month = parseInt(time.month, 10) - 1;
+      if (!isNaN(year) && month >= 0 && month <= 11) {
+        return new Date(year, month);
+      }
+    }
+    return null;
+  };
+
+  const toEducationPeriodTime = (date: Date | null): EducationPeriodTime => {
+    if (date) {
+      return {
+        year: date.getFullYear().toString(),
+        month: (date.getMonth() + 1).toString(),
+      };
+    } else {
+      const now = new Date();
+      return {
+        year: now.getFullYear().toString(),
+        month: (now.getMonth() + 1).toString(),
+      };
+    }
+  };
 
   const removePeriod = (education: EducationPeriod) => {
     const newPeriods = educationPeriods.filter(
-      currentEducation => currentEducation.id !== education.id
-    )
-    setEducationPeriods(newPeriods)
-  }
+      (currentEducation) => currentEducation.id !== education.id
+    );
+    setEducationPeriods(newPeriods);
+  };
 
   const addPeriod = (period: EducationPeriod) => {
     if (
       !educationPeriods.find(
-        existingPeriod => existingPeriod.id === period.id
+        (existingPeriod) => existingPeriod.id === period.id
       )
     ) {
-      const newPeriods = [...educationPeriods, period]
-      setEducationPeriods(newPeriods)
+      const newPeriods = [...educationPeriods, period];
+      setEducationPeriods(newPeriods);
     }
-  }
+  };
 
   const openAddNewPeriod = () => {
     setEditedEducationPeriod({
-      id: uniqueId('periodid'),
-      degree: '',
-      school: '',
-      description: '',
-      endDate: { year: '', month: '' },
-      startDate: { year: '', month: '' },
+      id: uniqueId("periodid"),
+      degree: "",
+      school: "",
+      description: "",
+      endDate: { year: "", month: "" },
+      startDate: { year: "", month: "" },
       isCurrent: false,
-    })
-  }
+    });
+  };
 
   const updateEditedPeriod = (educationPart: Partial<EducationPeriod>) => {
     if (editedEducationPeriod) {
-      setEditedEducationPeriod({ ...editedEducationPeriod, ...educationPart })
+      setEditedEducationPeriod({ ...editedEducationPeriod, ...educationPart });
     }
-  }
+  };
 
   const closeAddNewPeriod = () => {
-    setEditedEducationPeriod(undefined)
-    setError(undefined)
-  }
+    setEditedEducationPeriod(undefined);
+    setError(undefined);
+  };
 
-  const ref = useClickOutside(closeAddNewPeriod)
+  const ref = useClickOutside(closeAddNewPeriod);
 
   const handleDoneEditPeriod = () => {
     if (editedEducationPeriod) {
-      const clonedPeriods = [...educationPeriods]
+      const clonedPeriods = [...educationPeriods];
       const periodIndex = clonedPeriods.findIndex(
-        eduPeriod => eduPeriod.id === editedEducationPeriod.id
-      )
+        (eduPeriod) => eduPeriod.id === editedEducationPeriod.id
+      );
       if (periodIndex !== -1) {
-        clonedPeriods[periodIndex] = { ...editedEducationPeriod }
-        setEducationPeriods(clonedPeriods)
+        clonedPeriods[periodIndex] = { ...editedEducationPeriod };
+        setEducationPeriods(clonedPeriods);
       } else {
         // Creating new period
-        addPeriod(editedEducationPeriod)
+        addPeriod(editedEducationPeriod);
       }
-      setEditedEducationPeriod(undefined)
-      setError(undefined)
+      setEditedEducationPeriod(undefined);
+      setError(undefined);
     }
-  }
+  };
 
   const handleStartDateChange = (date: Date | null) => {
-    setStartDate(date)
     if (editedEducationPeriod) {
       updateEditedPeriod({
-        startDate: {
-          year: date?.getFullYear().toString() || '',
-          month: ((date?.getMonth() || 0) + 1).toString() || '',
-        },
-      })
+        startDate: toEducationPeriodTime(date),
+      });
     }
-  }
+  };
 
   const handleEndDateChange = (date: Date | null) => {
-    setEndDate(date)
     if (editedEducationPeriod) {
       if (editedEducationPeriod.isCurrent) {
         // Clear endDate if currently studying
         updateEditedPeriod({
           endDate: {
-            year: '',
-            month: '',
+            year: "",
+            month: "",
           },
-        })
+        });
       } else {
-        updateEditedPeriod({
-          endDate: {
-            year: date?.getFullYear().toString() || '',
-            month: ((date?.getMonth() || 0) + 1).toString() || '',
-          },
-        })
+        updateEditedPeriod({ endDate: toEducationPeriodTime(date) });
       }
     }
-  }
+  };
 
   const renderEditPeriod = () => {
     return (
@@ -129,7 +144,7 @@ export const Education = () => {
                 wrapperClassName="flex-1"
                 inputClassName="bg-[#C8C8C8] outline-none focus:online-none"
                 value={editedEducationPeriod.degree}
-                onChange={newDegreeName =>
+                onChange={(newDegreeName) =>
                   updateEditedPeriod({ degree: newDegreeName })
                 }
               />
@@ -139,7 +154,7 @@ export const Education = () => {
                 wrapperClassName="flex-1"
                 inputClassName="bg-[#C8C8C8] outline-none focus:online-none"
                 value={editedEducationPeriod.school}
-                onChange={newSchool =>
+                onChange={(newSchool) =>
                   updateEditedPeriod({ school: newSchool })
                 }
               />
@@ -150,21 +165,15 @@ export const Education = () => {
                   Start Date
                 </label>
                 <DatePicker
-                  maxDate={endDate !== null ? endDate : undefined}
-                  selected={
-                    editedEducationPeriod.startDate.year
-                      ? new Date(
-                          `${editedEducationPeriod.startDate.year}-${editedEducationPeriod.startDate.month}`
-                        )
-                      : null
-                  }
+                  maxDate={toDate(editedEducationPeriod.endDate) || undefined}
+                  selected={toDate(editedEducationPeriod.startDate)}
                   onChange={handleStartDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   wrapperClassName="date_picker"
                   className="bg-[#C8C8C8] outline-none focus:online-none w-full"
                   placeholderText="MM/YYYY"
-                  onKeyDown={e => e.preventDefault()} // Prevent typing
+                  onKeyDown={(e) => e.preventDefault()} // Prevent typing
                 />
               </div>
               <div className="flex-1">
@@ -172,38 +181,35 @@ export const Education = () => {
                   End Date
                 </label>
                 <DatePicker
-                  selected={
-                    editedEducationPeriod.endDate.year
-                      ? new Date(
-                          `${editedEducationPeriod.endDate.year}-${editedEducationPeriod.endDate.month}`
-                        )
-                      : null
-                  }
-                  minDate={startDate !== null ? startDate : undefined}
+                  minDate={toDate(editedEducationPeriod.startDate) || undefined}
+                  selected={toDate(editedEducationPeriod.endDate)}
                   onChange={handleEndDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   wrapperClassName="date_picker"
                   className={
-                    editedEducationPeriod.isCurrent
-                      ? 'bg-[#c8c8c8] cursor-not-allowed w-full'
-                      : 'bg-[#c8c8c8] outline-none focus:online-none w-full'
+                    editedEducationPeriod?.isCurrent
+                      ? "bg-[#c8c8c8] cursor-not-allowed w-full"
+                      : "bg-[#c8c8c8] outline-none focus:online-none w-full"
                   }
                   placeholderText="MM/YYYY"
-                  onKeyDown={e => e.preventDefault()} // Prevent typing
-                  disabled={editedEducationPeriod.isCurrent}
+                  onKeyDown={(e) => e.preventDefault()} // Prevent typing
+                  disabled={editedEducationPeriod?.isCurrent}
                 />
               </div>
             </div>
             <div className="flex items-center gap-[10px]">
               <input
                 type="checkbox"
-                checked={editedEducationPeriod.isCurrent}
-                onChange={e => {
-                  updateEditedPeriod({ isCurrent: e.target.checked })
-                }}
+                checked={editedEducationPeriod?.isCurrent ?? false}
+                onChange={(e) =>
+                  updateEditedPeriod({
+                    isCurrent: e.target.checked,
+                    endDate: undefined,
+                  })
+                }
               />
-              <span className="text-sm">I currently study here</span>
+              <span className="text-sm">I am currently studying here</span>
             </div>
             <div className="flex gap-[10px]">
               <TextArea
@@ -212,7 +218,7 @@ export const Education = () => {
                 label="Description"
                 value={editedEducationPeriod.description}
                 rows={5}
-                onChange={newDescription =>
+                onChange={(newDescription) =>
                   updateEditedPeriod({ description: newDescription })
                 }
               />
@@ -226,8 +232,8 @@ export const Education = () => {
           )}
         </div>
       )
-    )
-  }
+    );
+  };
 
   const periodRenderer = (eduPeriod: EducationPeriod) => {
     return editedEducationPeriod?.id === eduPeriod.id ? (
@@ -238,18 +244,18 @@ export const Education = () => {
         className="group flex items-center py-2 px-4 bg-[#DBDBDB] hover:bg-[#CACACA] transition-all rounded-md"
       >
         <span className="font-bold text-md mr-[7px]">{eduPeriod.degree}</span>
-        <span className="text-sm opacity-60">| {eduPeriod.school} </span>
+        <span className="text-sm opacity-60">| {eduPeriod.school}</span>
         <span className="text-sm opacity-60 ml-[5px]">
-          ({eduPeriod.startDate.month} / {eduPeriod.startDate.year}{' '}
-          {!eduPeriod?.isCurrent && (
-            <>
-              {' '}
-              - {eduPeriod.endDate.month} / {eduPeriod.endDate.year}
-            </>
-          )}
-          )
+          {eduPeriod.startDate?.month && eduPeriod.startDate?.year
+            ? `${eduPeriod.startDate.month}/${eduPeriod.startDate.year}`
+            : ""}
+          {eduPeriod.isCurrent
+            ? " - Current"
+            : eduPeriod.endDate?.month && eduPeriod.endDate?.year
+            ? ` - ${eduPeriod.endDate.month}/${eduPeriod.endDate.year}`
+            : ""}
         </span>
-        <div className="flex items-center gap-1 ml-auto opacity-0  group-hover:opacity-100 transition-all">
+        <div className="flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-all">
           <svg
             onClick={() => setEditedEducationPeriod(eduPeriod)}
             className="size-5 cursor-pointer"
@@ -282,8 +288,8 @@ export const Education = () => {
           </svg>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <section className="personal flex-1 flex flex-col pt-[70px] items-stretch">
@@ -295,7 +301,10 @@ export const Education = () => {
       <main className="flex-1 px-10 flex flex-col gap-2 overflow-y-scroll">
         {educationPeriods.map(periodRenderer)}
         {isEditedEducationNew && renderEditPeriod()}
-        <Button onClick={openAddNewPeriod} disabled={!!editedEducationPeriod || educationPeriods.length >= 4}>
+        <Button
+          onClick={openAddNewPeriod}
+          disabled={!!editedEducationPeriod || educationPeriods.length >= 4}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -314,5 +323,5 @@ export const Education = () => {
         </Button>
       </main>
     </section>
-  )
-}
+  );
+};

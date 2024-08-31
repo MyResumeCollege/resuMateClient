@@ -30,7 +30,7 @@ export const ForgotPassword: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await apiClient.post('/auth/forgot-password', { email });
+      await apiClient.post('/auth/forget-password', { email });
       toast.success('Password reset email sent. Please check your inbox.');
     } catch (error) {
       toast.error('Failed to send reset email. Please try again.');

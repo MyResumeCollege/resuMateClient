@@ -24,10 +24,13 @@ ResumeMate is a tool that allows you to create, edit, and manage resumes with th
 cd resumeMate
 
 3. Install dependencies:
+```bash
 npm install
-
+```
 4. Start the development server:
-npm start
+```bash
+npm run dev
+```
 
 ### Usage
 - **Create a New Resume**: Fill in your details, and let the AI generate a professional resume for you.

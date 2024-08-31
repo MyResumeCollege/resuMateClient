@@ -13,27 +13,17 @@ import './Education.css'
 
 export const Education = () => {
   const [educationPeriods, setEducationPeriods] = useRecoilState(educationState)
-
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
   const [editedEducationPeriod, setEditedEducationPeriod] =
     useState<EducationPeriod>()
   const [error, setError] = useState<string>()
-
-  const isEducationPeriodsArray = (
-    data: EducationPeriod[]
-  ): data is EducationPeriod[] => {
-    return Array.isArray(data)
-  }
-
-  const educationPeriodsArray = isEducationPeriodsArray(educationPeriods)
-    ? educationPeriods
-    : []
-
-  const isEditedEducationNew = !educationPeriodsArray.find(
+  const isEditedEducationNew = !educationPeriods.find(
     period => period.id === editedEducationPeriod?.id
   )
 
   const removePeriod = (education: EducationPeriod) => {
-    const newPeriods = educationPeriodsArray.filter(
+    const newPeriods = educationPeriods.filter(
       currentEducation => currentEducation.id !== education.id
     )
     setEducationPeriods(newPeriods)
@@ -41,11 +31,11 @@ export const Education = () => {
 
   const addPeriod = (period: EducationPeriod) => {
     if (
-      !educationPeriodsArray.find(
+      !educationPeriods.find(
         existingPeriod => existingPeriod.id === period.id
       )
     ) {
-      const newPeriods = [...educationPeriodsArray, period]
+      const newPeriods = [...educationPeriods, period]
       setEducationPeriods(newPeriods)
     }
   }
@@ -77,7 +67,7 @@ export const Education = () => {
 
   const handleDoneEditPeriod = () => {
     if (editedEducationPeriod) {
-      const clonedPeriods = [...educationPeriodsArray]
+      const clonedPeriods = [...educationPeriods]
       const periodIndex = clonedPeriods.findIndex(
         eduPeriod => eduPeriod.id === editedEducationPeriod.id
       )
@@ -94,6 +84,7 @@ export const Education = () => {
   }
 
   const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date)
     if (editedEducationPeriod) {
       updateEditedPeriod({
         startDate: {
@@ -105,6 +96,7 @@ export const Education = () => {
   }
 
   const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date)
     if (editedEducationPeriod) {
       if (editedEducationPeriod.isCurrent) {
         // Clear endDate if currently studying
@@ -158,6 +150,7 @@ export const Education = () => {
                   Start Date
                 </label>
                 <DatePicker
+                  maxDate={endDate !== null ? endDate : undefined}
                   selected={
                     editedEducationPeriod.startDate.year
                       ? new Date(
@@ -186,6 +179,7 @@ export const Education = () => {
                         )
                       : null
                   }
+                  minDate={startDate !== null ? startDate : undefined}
                   onChange={handleEndDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
@@ -299,8 +293,7 @@ export const Education = () => {
         Your Education
       </h2>
       <main className="flex-1 px-10 flex flex-col gap-2 overflow-y-scroll">
-        {isEducationPeriodsArray(educationPeriods) &&
-          educationPeriods.map(periodRenderer)}
+        {educationPeriods.map(periodRenderer)}
         {isEditedEducationNew && renderEditPeriod()}
         <Button onClick={openAddNewPeriod} disabled={!!editedEducationPeriod}>
           <svg

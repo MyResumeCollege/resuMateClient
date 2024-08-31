@@ -38,7 +38,7 @@ export const Generate = () => {
           experiences: experiencePeriods.map(experiencePeriod => experiencePeriod.description),
           educations: educationPeriods.map(educationPeriod => educationPeriod.description)
         })
-        resumeText = generateResume.data     
+        resumeText = generateResume.data
 
         if (resumeText) navigate('/build-cv/view', { state: { resumeText } })
       } catch (error) {

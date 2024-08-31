@@ -285,12 +285,12 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
         try {
           const response = await previewCV(resumeId);
           const data = response.data;          
-
+          
           setFullName(data.fullName);
           setPhoneNumber(data.phoneNumber ?? "");
           setEmail(data.email ?? "");
           setJobTitle(data.jobTitle);
-          setBio(data.bio.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
+          setBio(data.bio?.replace(/^[^\n]*:\s*"?([^"]*)"?$/, "$1"));
           setSkills(data.skills);
           setExperiences(data.experiences);
           setEducations(data.educations)

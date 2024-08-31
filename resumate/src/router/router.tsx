@@ -36,9 +36,9 @@ export const router = createBrowserRouter([
   {
     path: '/preview/:id/clear',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
         <Preview />
-      </ProtectedRoute>
+      // </ProtectedRoute>
     ),
   },
   {

@@ -164,7 +164,7 @@ export const Experience = () => {
                   wrapperClassName="date_picker"
                   className={
                     editedExperiencePeriod.isCurrent
-                      ? 'bg-[#c8c8c8] cursor-not-allowed'
+                      ? 'bg-[#c8c8c8] cursor-not-allowed w-full'
                       : 'bg-[#c8c8c8] outline-none focus:online-none w-full'
                   }
                   placeholderText="MM/YYYY"

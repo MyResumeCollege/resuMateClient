@@ -76,6 +76,12 @@ const Payment = () => {
     }
   }
 
+  const getMinDate = () => {
+    const today = new Date()
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
+    return nextMonth
+  }
+
   return (
     <main className="flex-1 flex items-center justify-center p-10">
       <div className="flex gap-10 bg-white p-10 rounded-lg shadow-lg">
@@ -106,6 +112,7 @@ const Payment = () => {
                   Expiration Date
                 </label>
                 <DatePicker
+                  minDate={getMinDate()}
                   selected={endDate}
                   onChange={date => setEndDate(date)}
                   dateFormat="MM/yyyy"

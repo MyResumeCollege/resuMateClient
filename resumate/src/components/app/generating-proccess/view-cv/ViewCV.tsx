@@ -36,21 +36,28 @@ const ViewCV: React.FC = () => {
   useEffect(() => {
     if (resumeText !== undefined) {
       const updatedExperiencePeriod = experiencePeriods.map(
-        (experience, index) => ({
-          ...experience,
-          description:
-            resumeText.experiences[index].replace(/^[^\:]*:\s*/, "") ||
-            experience.description,
-        })
+        (experience, index) =>
+          resumeText.experiences[index] !== undefined
+            ? {
+                ...experience,
+                description: resumeText.experiences[index].replace(
+                  /^[^\:]*:\s*/,
+                  ""
+                ),
+              }
+            : experience
       );
 
-      const updatedEducationPeriods = educationPeriods.map(
-        (education, index) => ({
-          ...education,
-          description:
-            resumeText.educations[index].replace(/^[^\:]*:\s*/, "") ||
-            education.description,
-        })
+      const updatedEducationPeriods = educationPeriods.map((education, index) =>
+        resumeText.educations[index] !== undefined
+          ? {
+              ...education,
+              description: resumeText.educations[index].replace(
+                /^[^\:]*:\s*/,
+                ""
+              ),
+            }
+          : education
       );
 
       if (resumeText)
@@ -59,7 +66,7 @@ const ViewCV: React.FC = () => {
           updatedExperiencePeriod,
           updatedEducationPeriods
         );
-    } else navigate("/not-found"); 
+    } else navigate("/not-found");
   }, [resumeText]);
 
   const previewPdf = async (

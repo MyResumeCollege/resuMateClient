@@ -9,6 +9,7 @@ import ViewCV from '@/components/app/generating-proccess/view-cv/ViewCV'
 import { Login } from '@/components/app/login/Login'
 import Payment from '@/components/app/payment/payment'
 import { PremiumPlan } from '@/components/app/premium/PremiumPlan'
+import { Profile } from '@/components/app/profile/Profile'
 import { Register } from '@/components/app/register/Register'
 import { createBrowserRouter } from 'react-router-dom'
 import { NavbarWrapper } from './NavBarWrapper'
@@ -37,13 +38,13 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Preview />
-     </ProtectedRoute>
+      </ProtectedRoute>
     ),
   },
   {
     path: '/preview/:id/download',
     element: (
-        <Preview readonly />
+      <Preview readonly />
     ),
   },
   // Have NavBar on top
@@ -114,7 +115,15 @@ export const router = createBrowserRouter([
           <ProtectedRoute>
             <Payment />
           </ProtectedRoute>
-        ), // Add protected Route
+        ),
+      },
+      {
+        path: '/profile',
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/preview/:id',

@@ -9,23 +9,14 @@ import { debounce } from "lodash";
 import { cloneElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   downloadPDF,
   previewCV,
   upsertResume,
 } from "../../../../services/cvService";
 import {
-  educationState,
-  emailState,
-  experienceState,
-  fullNameState,
-  jobTitleState,
-  languagesState,
-  phoneNumberState,
-  skillsState,
-  summaryState,
-  templateState,
+  templateState
 } from "../store/state";
 import "./Preview.css";
 import { ExperiencePeriod } from "@/types/experience-period";
@@ -40,17 +31,6 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
   const { id } = useParams<{ id: string }>();
   const user = useRecoilValue(userState);
   const isPremiumUser = useRecoilValue(isUserPremiumSelector);
-
-  const resetName = useResetRecoilState(fullNameState);
-  const resetJobTitle = useResetRecoilState(jobTitleState);
-  const resetEmail = useResetRecoilState(emailState);
-  const resetPhoneNumber = useResetRecoilState(phoneNumberState);
-  const resetBio = useResetRecoilState(summaryState);
-  const resetEducation = useResetRecoilState(educationState);
-  const resetExperience = useResetRecoilState(experienceState);
-  const resetLanguages = useResetRecoilState(languagesState);
-  const resetTemplate = useResetRecoilState(templateState);
-  const resetSkills = useResetRecoilState(skillsState);
 
   const [hasLoaded, setHasLoaded] = useState(false);
   const [fullName, setFullName] = useState<string>("Full Name");
@@ -312,21 +292,6 @@ const Preview = ({ id: proppedId, readonly = false }: PreviewProps) => {
       fetchData();
     }
   }, [id, proppedId]);
-
-  useEffect(() => {
-    return () => {
-      resetName();
-      resetEmail();
-      resetPhoneNumber();
-      resetBio();
-      resetEducation();
-      resetExperience();
-      resetJobTitle();
-      resetLanguages();
-      resetSkills();
-      resetTemplate();
-    };
-  }, []);
 
   const currentTemplate = templates.find((tmp) => tmp._id === selectedTemplate);
 

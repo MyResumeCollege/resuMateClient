@@ -1,11 +1,35 @@
 import QuestionsIcon from "@/assets/icons/questions.svg";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import styles from "./Start.module.css";
+import { useResetRecoilState } from "recoil";
+import {
+  educationState,
+  emailState,
+  experienceState,
+  fullNameState,
+  jobTitleState,
+  languagesState,
+  phoneNumberState,
+  skillsState,
+  summaryState,
+  templateState,
+} from "../store/state";
 
 export const Start = () => {
+  
   const navigate = useNavigate();
+  const resetName = useResetRecoilState(fullNameState);
+  const resetJobTitle = useResetRecoilState(jobTitleState);
+  const resetEmail = useResetRecoilState(emailState);
+  const resetPhoneNumber = useResetRecoilState(phoneNumberState);
+  const resetBio = useResetRecoilState(summaryState);
+  const resetEducation = useResetRecoilState(educationState);
+  const resetExperience = useResetRecoilState(experienceState);
+  const resetLanguages = useResetRecoilState(languagesState);
+  const resetTemplate = useResetRecoilState(templateState);
+  const resetSkills = useResetRecoilState(skillsState);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const continueToBackground = () => {
@@ -30,11 +54,20 @@ export const Start = () => {
     navigate("generate", { state: { existCV } });
   };
 
-  const handleUpdatePdfChange = async () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  useEffect(() => {    
+    return () => {
+      resetName();
+      resetEmail();
+      resetPhoneNumber();
+      resetBio();
+      resetEducation();
+      resetExperience();
+      resetJobTitle();
+      resetLanguages();
+      resetSkills();
+      resetTemplate();      
+    };
+  }, []);
 
   const openLink = (link: string) => {
     window?.open(link, '_blank');
@@ -45,11 +78,6 @@ export const Start = () => {
       <h1 className="font-bold text-3xl text-center height-fit">
         Let's Start Building Your Resume
       </h1>
-      {/* <div className="bg-[lightgray] text-sm p-5 rounded-md m-3 mb-6 max-w-[490px]">
-        <span className="font-bold mr-2">Did you know?</span>
-        The First CV was written by Leonardo Da Vinci, He wrote a detailed synopsis of his career to date in order to secure patronage from the wealthy Duke of Milan.
-        <br /> Leonardo included his engineering and weaponry experience as well as his sculpting and artistic abilities.
-      </div> */}
       <section className={`${styles.startOptions} flex gap-[30px] mt-[30px] mb-[40px]`}>
         <div onClick={continueToBackground}>
           <img src={QuestionsIcon} alt="Your SVG" />

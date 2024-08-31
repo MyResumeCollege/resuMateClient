@@ -33,7 +33,6 @@ const ViewCV: React.FC = () => {
   const template = useRecoilValue(templateState);
 
   useEffect(() => { 
-
     const updatedExperiencePeriod = experiencePeriods.map((experience, index) => ({
       ...experience,
       description: resumeText.experiences[index].replace(/^[^\:]*:\s*/, "") || experience.description,

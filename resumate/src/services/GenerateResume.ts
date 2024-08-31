@@ -1,12 +1,10 @@
-import { ExperiencePeriod } from "@/types/experience-period"
 import apiClient from "./httpCommon";
 import { AxiosResponse } from "axios";
-import { EducationPeriod } from "@/types/education-period";
 
 type Resume = {
   bio: string;
-  experiences: ExperiencePeriod[];
-  educations: EducationPeriod[];
+  experiences: string[];
+  educations: string[];
 };
 
 type GenerateSectionData = {
@@ -17,8 +15,7 @@ export const generateCVFromScratch = async ({
   bio,
   experiences,
   educations,
-}: Resume): Promise<AxiosResponse<string[]>> => {
-  
+}: Resume): Promise<AxiosResponse<Resume>> => {    
   return apiClient.post("/resume/generate-resume", {
     bio: bio,
     experiences: experiences,

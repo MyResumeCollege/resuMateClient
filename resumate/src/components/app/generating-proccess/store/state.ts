@@ -65,7 +65,7 @@ export const languagesState = atom<LanguageKnowledge[]>({
 
 // experience
 
-export const experienceState = atom<ExperiencePeriod[] | string>({
+export const experienceState = atom<ExperiencePeriod[]>({
     key: "experience",
     default: [],
     effects_UNSTABLE: [persistAtom],
@@ -73,7 +73,7 @@ export const experienceState = atom<ExperiencePeriod[] | string>({
 
 // education
 
-export const educationState = atom<EducationPeriod[] | string>({
+export const educationState = atom<EducationPeriod[]>({
     key: 'education',
     default: [],
     effects_UNSTABLE: [persistAtom],

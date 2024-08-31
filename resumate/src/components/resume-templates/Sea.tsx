@@ -1,11 +1,13 @@
 import { TemplateProps } from "@/types/template-props";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
-import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import Educations from "./shared/Educations";
+import Experiences from "./shared/Experiences";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
-    <div key={item}>
+    <div key={item} className="text-white">
       <span className="font-bold">{item.split("-")[0]}</span> -
       <span>{item.split("-")[1]}</span>
     </div>
@@ -63,7 +65,7 @@ export const SeaTemplate = ({
         <div className="text-sm font-semibold mb-[40px] text-gray-800">
           {jobTitle}
         </div>
-        <div className="my-3 text-gray-800">
+        <div className="my-3">
           {Title("Contact Info")}
           <div className="flex items-center">
             <FaPhoneAlt className="mr-2" />
@@ -78,13 +80,11 @@ export const SeaTemplate = ({
           {Title("Education", {
             onRegenerate: () => onRegenerateSection("educations"),
           })}
-          <EditableText
-            className="pr-6 whitespace-break-spaces"
+          <Educations
+            educations={educations}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("educations", newValue)}
-          >
-            {educations.slice(0, 400)}
-          </EditableText>
+          />
         </div>
 
         <div className="flex flex-col mb-5 text-gray-800">
@@ -108,7 +108,7 @@ export const SeaTemplate = ({
             readonly={readonly}
             onChange={(newValue) => onRephraseSection("bio", newValue)}
           >
-            {bio.slice(0, 400)}
+            {bio}
           </EditableText>
         </div>
         <div>
@@ -116,13 +116,11 @@ export const SeaTemplate = ({
             color: "black",
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
-          <EditableText
-            className="pr-6 whitespace-break-spaces"
+          <Experiences
+            experiences={experiences}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("experiences", newValue)}
-          >
-            {experiences.slice(0, 400)}
-          </EditableText>
+          />
         </div>
       </div>
     </div>

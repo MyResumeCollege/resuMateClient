@@ -1,5 +1,5 @@
-import { InputProps } from "../input-props";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { InputProps } from '../input-props'
+import { AiOutlineQuestionCircle } from 'react-icons/ai'
 
 export const TextInput = ({
   value,
@@ -8,11 +8,11 @@ export const TextInput = ({
   label,
   wrapperClassName,
   onChange,
-  type = "text",
+  type = 'text',
   placeholder,
   icon,
   inputClassName,
-  maxLength
+  maxLength,
 }: InputProps) => {
   return (
     <div className={`space-y-3 ${wrapperClassName}`}>
@@ -20,7 +20,7 @@ export const TextInput = ({
         {label && (
           <label className="text-sm flex items-center">
             {label}
-            {(type === "password" && inputClassName === "password-register") && (
+            {type === 'password' && inputClassName === 'password-register' && (
               <div className="relative ml-2 group">
                 <AiOutlineQuestionCircle className="text-gray-500 hover:text-gray-700 cursor-pointer" />
                 <span className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 w-max p-2 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -35,9 +35,9 @@ export const TextInput = ({
           type={type}
           value={value}
           disabled={disabled}
-          onChange={(e) => onChange && onChange(e.target.value)}
+          onChange={e => onChange && onChange(e.target.value)}
           className={`peer py-3 px-4 ${
-            icon ? "ps-11" : ""
+            icon ? 'ps-11' : ''
           } focus:outline outline-2 block w-full border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ${inputClassName}`}
           placeholder={placeholder}
           maxLength={maxLength}
@@ -49,5 +49,5 @@ export const TextInput = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}

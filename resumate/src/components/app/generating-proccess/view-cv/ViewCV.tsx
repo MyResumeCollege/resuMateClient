@@ -5,7 +5,9 @@ import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { generatePreviewUrl } from "../../../../services/cvService";
 import {
+  educationState,
   emailState,
+  experienceState,
   fullNameState,
   jobTitleState,
   languagesState,
@@ -13,6 +15,8 @@ import {
   skillsState,
   templateState,
 } from "../store/state";
+import { ExperiencePeriod } from "@/types/experience-period";
+import { EducationPeriod } from "@/types/education-period";
 
 const ViewCV: React.FC = () => {
   const location = useLocation();
@@ -23,17 +27,29 @@ const ViewCV: React.FC = () => {
   const phoneNumber = useRecoilValue(phoneNumberState)
   const jobTitle = useRecoilValue(jobTitleState);
   const userSkills = useRecoilValue(skillsState);
+  const experiencePeriods = useRecoilValue(experienceState)
+  const educationPeriods = useRecoilValue(educationState)
   const userLanguages = useRecoilValue(languagesState);
   const template = useRecoilValue(templateState);
 
-  useEffect(() => {
-    if (resumeText) previewPdf(resumeText[0], resumeText[1], resumeText[2]);
+  useEffect(() => { 
+    const updatedExperiencePeriod = experiencePeriods.map((experience, index) => ({
+      ...experience,
+      description: resumeText.experiences[index].replace(/^[^\:]*:\s*/, "") || experience.description,
+    }));
+
+    const updatedEducationPeriods = educationPeriods.map((education, index) => ({
+      ...education,
+      description: resumeText.educations[index].replace(/^[^\:]*:\s*/, "") || education.description,
+    }));
+
+    if (resumeText) previewPdf(resumeText.bio, updatedExperiencePeriod, updatedEducationPeriods);
   }, [resumeText]);
 
   const previewPdf = async (
     bio: string,
-    experiences: string,
-    educations: string
+    experiences: ExperiencePeriod[],
+    educations: EducationPeriod[]
   ) => {
     try {
       const response = await generatePreviewUrl(
@@ -58,6 +74,7 @@ const ViewCV: React.FC = () => {
         "en"
       );
       const { url } = response.data;
+      
       setPdfUrl(url);
     } catch (error) {
       console.error("Error fetching PDF preview:", error);

@@ -24,12 +24,17 @@ ResumeMate is a tool that allows you to create, edit, and manage resumes with th
 cd resumeMate
 
 3. Install dependencies:
+```bash
 npm install
-
+```
 4. Start the development server:
-npm start
+```bash
+npm run dev
+```
 
 ### Usage
-**Create a New Resume**: Fill in your details, and let the AI generate a professional resume for you.
-**Import from LinkedIn**: Connect your LinkedIn account and import your profile data to quickly create a resume.
-**Translate Your Resume**: Select the desired languages and translate your resume with a click.
+- **Create a New Resume**: Fill in your details, and let the AI generate a professional resume for you.
+- **Import from LinkedIn**: Connect your LinkedIn account and import your profile data to quickly create a resume.
+- **Translate Your Resume**: Select the desired languages and translate your resume with a click.
+
+ResumeMate was developed by Amit Brickman, Hadar Zaguri, Omer Ben Arieh, Dor Sonego and Nofar Shapir.

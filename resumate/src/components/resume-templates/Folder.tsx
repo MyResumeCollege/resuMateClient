@@ -1,7 +1,9 @@
 import { TemplateProps } from "@/types/template-props";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
-import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import Educations from "./shared/Educations";
+import Experiences from "./shared/Experiences";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -29,7 +31,6 @@ export const FolderTemaplate = ({
     educations,
     experiences,
   } = resume;
-
   const Title = (text: string, options?: { onRegenerate?: () => void }) => {
     return (
       <div className="flex flex-col mb-2">
@@ -53,29 +54,21 @@ export const FolderTemaplate = ({
           {Title("Experience", {
             onRegenerate: () => onRegenerateSection("experiences"),
           })}
-          <EditableText
-            className="text-xs"
+          <Experiences
+            experiences={experiences}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("experiences", newValue)}
-          >
-            {experiences}
-          </EditableText>
+          />
         </div>
         <div className="my-3">
           {Title("Education", {
             onRegenerate: () => onRegenerateSection("educations"),
           })}
-          <EditableText
-            className="text-xs"
+          <Educations
+            educations={educations}
+            onRephraseSection={onRephraseSection}
             readonly={readonly}
-            onChange={(newValue) => onRephraseSection("educations", newValue)}
-          >
-            {educations}
-          </EditableText>
-        </div>
-        <div className="my-3">
-          {Title("Skills")}
-          {List(skills)}
+          />
         </div>
       </div>
       <div className="right p-6 bg-[#18203d] w-[300px] text-white text-xs">
@@ -84,7 +77,7 @@ export const FolderTemaplate = ({
           {jobTitle}
         </div>
         <div className="my-3">
-          {Title("Contact Info")}
+          {Title("Contact")}
           <div className="flex items-center">
             <FaPhoneAlt className="mr-2" />
             <span>{phoneNumber}</span>
@@ -94,7 +87,6 @@ export const FolderTemaplate = ({
             <span>{email}</span>
           </div>
         </div>
-
         <div className="my-3">
           {Title("About Me", {
             onRegenerate: () => onRegenerateSection("bio"),
@@ -112,8 +104,8 @@ export const FolderTemaplate = ({
           {List(languages)}
         </div>
         <div className="my-3">
-          {Title("Contact")}
-          bla bla bla contact details here
+          {Title("Skills")}
+          {List(skills)}
         </div>
       </div>
     </div>

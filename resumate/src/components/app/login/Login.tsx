@@ -10,6 +10,7 @@ import {
   saveTokens,
   googleSignIn,
   loginUser,
+  ACCESS_TOKEN_KEY,
 } from '../../../services/authService'
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
 
@@ -18,9 +19,10 @@ export const Login = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useRecoilState(userState)
   const navigate = useNavigate()
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY)
 
   useEffect(() => {
-    if (user) {
+    if (user && token) {
       navigate('/dashboard')
     }
   }, [user])
@@ -39,7 +41,7 @@ export const Login = () => {
       setUser(loginGoogleRes.user)
       navigate('/pricing')
     } catch (err) {
-      console.log(err)
+      throw err
     }
   }
 

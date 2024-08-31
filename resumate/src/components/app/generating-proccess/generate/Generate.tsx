@@ -14,8 +14,8 @@ export const Generate = () => {
   const { existCV } = location.state || {}
 
   const bio = useRecoilValue(summaryState)
-  const experiences = useRecoilValue(experienceState)
-  const educations = useRecoilValue(educationState)
+  const experiencePeriods = useRecoilValue(experienceState)
+  const educationPeriods = useRecoilValue(educationState)
 
   const generateCV = async () => {
     let resumeText;
@@ -35,8 +35,8 @@ export const Generate = () => {
       try {
         const generateResume = await generateCVFromScratch({
           bio,
-          experiences: Array.isArray(experiences) ? experiences : [],
-          educations: Array.isArray(educations) ? educations : [],
+          experiences: experiencePeriods.map(experiencePeriod => experiencePeriod.description),
+          educations: educationPeriods.map(educationPeriod => educationPeriod.description)
         })
         resumeText = generateResume.data
 

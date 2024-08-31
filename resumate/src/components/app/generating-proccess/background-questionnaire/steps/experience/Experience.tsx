@@ -77,6 +77,18 @@ export const Experience = () => {
     });
   };
 
+  const handleStartDateChange = (date: Date | null) => {
+    updateEditedPeriod({
+      startDate: toExperiencePeriodTime(date),
+    });
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    if (editedExperiencePeriod) {
+      updateEditedPeriod({ endDate: toExperiencePeriodTime(date) });
+    }
+  };
+
   const updateEditedPeriod = (experiencePart: Partial<ExperiencePeriod>) => {
     if (editedExperiencePeriod) {
       setEditedExperiencePeriod({
@@ -150,11 +162,7 @@ export const Experience = () => {
                 <DatePicker
                   maxDate={toDate(editedExperiencePeriod.endDate) || undefined}
                   selected={toDate(editedExperiencePeriod.startDate)}
-                  onChange={(date) =>
-                    updateEditedPeriod({
-                      startDate: toExperiencePeriodTime(date),
-                    })
-                  }
+                  onChange={handleStartDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   wrapperClassName="date_picker"
@@ -172,11 +180,7 @@ export const Experience = () => {
                     toDate(editedExperiencePeriod.startDate) || undefined
                   }
                   selected={toDate(editedExperiencePeriod.endDate)}
-                  onChange={(date) =>
-                    updateEditedPeriod({
-                      endDate: toExperiencePeriodTime(date),
-                    })
-                  }
+                  onChange={handleEndDateChange}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   wrapperClassName="date_picker"
@@ -196,7 +200,10 @@ export const Experience = () => {
                 type="checkbox"
                 checked={editedExperiencePeriod.isCurrent ?? false}
                 onChange={(e) =>
-                  updateEditedPeriod({ isCurrent: e.target.checked, endDate: undefined })
+                  updateEditedPeriod({
+                    isCurrent: e.target.checked,
+                    endDate: undefined,
+                  })
                 }
               />
               <span className="text-sm">I currently work here</span>
@@ -236,12 +243,12 @@ export const Experience = () => {
         <span className="font-bold text-md mr-[7px]">{expPeriod.jobTitle}</span>
         <span className="text-sm opacity-60">| {expPeriod.employer} </span>
         <span className="text-sm opacity-60 ml-[5px]">
-          {expPeriod.startDate.month && expPeriod.startDate.year
+          {expPeriod.startDate?.month && expPeriod.startDate?.year
             ? `${expPeriod.startDate.month}/${expPeriod.startDate.year}`
             : ""}
           {expPeriod.isCurrent
             ? " - Current"
-            : expPeriod.endDate.month != "" && expPeriod.endDate.year != ""
+            : expPeriod.endDate?.month && expPeriod.endDate?.year
             ? ` - ${expPeriod.endDate.month}/${expPeriod.endDate.year}`
             : ""}
         </span>

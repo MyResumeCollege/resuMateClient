@@ -113,7 +113,9 @@ export const Dashboard = () => {
               onClick={closePopup}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
             >
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true" className="text-2xl">
+                &times;
+              </span>
             </button>
             <div className="flex flex-col items-center mb-6">
               <img src={CrownImage} className="w-16 h-16 mb-4" alt="Premium" />

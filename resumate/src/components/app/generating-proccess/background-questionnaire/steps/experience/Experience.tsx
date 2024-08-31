@@ -1,79 +1,117 @@
-import { useRecoilState } from 'recoil'
-import { experienceState } from '../../../store/state'
-import { useState } from 'react'
-import { ExperiencePeriod } from '@/types/experience-period'
-import { uniqueId } from 'lodash'
-import { useClickOutside } from '@/hooks/useClickOutside'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { Button } from '@/components/shared/button/Button'
-import { TextArea } from '@/components/shared/inputs/textarea/TextArea'
-import { TextInput } from '@/components/shared/inputs/text-input/TextInput'
-import './Experience.css'
-export const Experience = () => {
-  const [experiencePeriods, setExperiencePeriods] = useRecoilState<ExperiencePeriod[]>(experienceState);
-  const [editedExperiencePeriod, setEditedExperiencePeriod] = useState<ExperiencePeriod>()
-  const [error, setError] = useState<string>()
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
+import { useRecoilState } from "recoil";
+import { experienceState } from "../../../store/state";
+import { useState } from "react";
+import {
+  ExperiencePeriod,
+  ExperiencePeriodTime,
+} from "@/types/experience-period";
+import { uniqueId } from "lodash";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { Button } from "@/components/shared/button/Button";
+import { TextArea } from "@/components/shared/inputs/textarea/TextArea";
+import { TextInput } from "@/components/shared/inputs/text-input/TextInput";
+import "./Experience.css";
 
-  const isEditedExperienceNew = !experiencePeriods.find(period => period.id === editedExperiencePeriod?.id);
+export const Experience = () => {
+  const [experiencePeriods, setExperiencePeriods] =
+    useRecoilState<ExperiencePeriod[]>(experienceState);
+  const [editedExperiencePeriod, setEditedExperiencePeriod] = useState<
+    ExperiencePeriod | undefined
+  >();
+  const [error, setError] = useState<string>();
+
+  const isEditedExperienceNew = !experiencePeriods.find(
+    (period) => period.id === editedExperiencePeriod?.id
+  );
+
+  const toDate = (time: ExperiencePeriodTime | null): Date | null => {
+    if (time && time.year && time.month) {
+      const year = parseInt(time.year, 10);
+      const month = parseInt(time.month, 10) - 1;
+      if (!isNaN(year) && month >= 0 && month <= 11) {
+        return new Date(year, month);
+      }
+    }
+    return null;
+  };
+
+  const toExperiencePeriodTime = (date: Date | null): ExperiencePeriodTime => {
+    if (date) {
+      return {
+        year: date.getFullYear().toString(),
+        month: (date.getMonth() + 1).toString(),
+      };
+    } else {
+      const now = new Date();
+      return {
+        year: now.getFullYear().toString(),
+        month: (now.getMonth() + 1).toString(),
+      };
+    }
+  };
+
   const removePeriod = (experience: ExperiencePeriod) => {
-    const newPeriods = experiencePeriods.filter(currentExperience => currentExperience.id !== experience.id);
+    const newPeriods = experiencePeriods.filter(
+      (currentExperience) => currentExperience.id !== experience.id
+    );
     setExperiencePeriods(newPeriods);
-  }
+  };
 
   const addPeriod = (period: ExperiencePeriod) => {
-    const newPeriods = [...experiencePeriods, period]
+    const newPeriods = [...experiencePeriods, period];
     setExperiencePeriods(newPeriods);
-  }
+  };
 
   const openAddNewPeriod = () => {
     setEditedExperiencePeriod({
-      id: uniqueId('periodid'),
-      jobTitle: '',
-      city: '',
-      description: '',
-      employer: '',
-      endDate: { year: '', month: '' },
-      startDate: { year: '', month: '' },
+      id: uniqueId("periodid"),
+      jobTitle: "",
+      city: "",
+      description: "",
+      employer: "",
+      endDate: { year: "", month: "" },
+      startDate: { year: "", month: "" },
       isCurrent: false,
-    })
-  }
+    });
+  };
 
   const updateEditedPeriod = (experiencePart: Partial<ExperiencePeriod>) => {
     if (editedExperiencePeriod) {
       setEditedExperiencePeriod({
         ...editedExperiencePeriod,
         ...experiencePart,
-      })
+      });
     }
-  }
+  };
 
   const closeAddNewPeriod = () => {
-    setEditedExperiencePeriod(undefined)
-    setError(undefined)
-  }
+    setEditedExperiencePeriod(undefined);
+    setError(undefined);
+  };
 
-  const ref = useClickOutside(closeAddNewPeriod)
+  const ref = useClickOutside(closeAddNewPeriod);
 
   const handleDoneEditPeriod = () => {
     if (editedExperiencePeriod) {
-      const clonedPeriods = [...experiencePeriods]
-      const periodIndex = clonedPeriods.findIndex(expPeriod => expPeriod.id === editedExperiencePeriod.id);
+      const clonedPeriods = [...experiencePeriods];
+      const periodIndex = clonedPeriods.findIndex(
+        (expPeriod) => expPeriod.id === editedExperiencePeriod.id
+      );
       // updating existing period
       if (periodIndex !== -1) {
-        clonedPeriods[periodIndex] = { ...editedExperiencePeriod }
+        clonedPeriods[periodIndex] = { ...editedExperiencePeriod };
         setExperiencePeriods(clonedPeriods);
       } else {
         // creating new period
-        addPeriod(editedExperiencePeriod)
+        addPeriod(editedExperiencePeriod);
       }
 
-      setEditedExperiencePeriod(undefined)
-      setError(undefined)
+      setEditedExperiencePeriod(undefined);
+      setError(undefined);
     }
-  }
+  };
 
   const renderEditPeriod = () => {
     return (
@@ -90,17 +128,16 @@ export const Experience = () => {
                 wrapperClassName="flex-1"
                 inputClassName="bg-[#c8c8c8] outline-none focus:online-none"
                 value={editedExperiencePeriod.jobTitle}
-                onChange={newJobTitle =>
+                onChange={(newJobTitle) =>
                   updateEditedPeriod({ jobTitle: newJobTitle })
                 }
               />
               <TextInput
-                autoFocus
                 label="Employer"
                 wrapperClassName="flex-1"
                 inputClassName="bg-[#c8c8c8] outline-none focus:online-none"
                 value={editedExperiencePeriod.employer}
-                onChange={newEmployer =>
+                onChange={(newEmployer) =>
                   updateEditedPeriod({ employer: newEmployer })
                 }
               />
@@ -111,30 +148,19 @@ export const Experience = () => {
                   Start Date
                 </label>
                 <DatePicker
-                  maxDate={endDate !== null ? endDate : undefined}
-                  selected={
-                    editedExperiencePeriod.startDate.year
-                      ? new Date(
-                          `${editedExperiencePeriod.startDate.year}-${editedExperiencePeriod.startDate.month}`
-                        )
-                      : null
-                  }
-                  onChange={date => {
-                    setStartDate(date)
+                  maxDate={toDate(editedExperiencePeriod.endDate) || undefined}
+                  selected={toDate(editedExperiencePeriod.startDate)}
+                  onChange={(date) =>
                     updateEditedPeriod({
-                      startDate: {
-                        year: date?.getFullYear().toString() || '',
-                        month: ((date?.getMonth() || 0) + 1).toString() || '',
-                      },
+                      startDate: toExperiencePeriodTime(date),
                     })
                   }
-                }
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   wrapperClassName="date_picker"
                   className="bg-[#c8c8c8] outline-none focus:online-none w-full"
                   placeholderText="MM/YYYY"
-                  onKeyDown={e => e.preventDefault()} // Prevent typing
+                  onKeyDown={(e) => e.preventDefault()} // Prevent typing
                 />
               </div>
               <div className="flex-1">
@@ -142,33 +168,25 @@ export const Experience = () => {
                   End Date
                 </label>
                 <DatePicker
-                  minDate={startDate !== null ? startDate : undefined}
-                  selected={
-                    editedExperiencePeriod.endDate.year
-                      ? new Date(
-                          `${editedExperiencePeriod.endDate.year}-${editedExperiencePeriod.endDate.month}`
-                        )
-                      : null
+                  minDate={
+                    toDate(editedExperiencePeriod.startDate) || undefined
                   }
-                  onChange={date => {
-                    setEndDate(date)
+                  selected={toDate(editedExperiencePeriod.endDate)}
+                  onChange={(date) =>
                     updateEditedPeriod({
-                      endDate: {
-                        year: date?.getFullYear().toString() || '',
-                        month: ((date?.getMonth() || 0) + 1).toString() || '',
-                      },
+                      endDate: toExperiencePeriodTime(date),
                     })
-                  }}
+                  }
                   dateFormat="MM/yyyy"
                   showMonthYearPicker
                   wrapperClassName="date_picker"
                   className={
                     editedExperiencePeriod.isCurrent
-                      ? 'bg-[#c8c8c8] cursor-not-allowed w-full'
-                      : 'bg-[#c8c8c8] outline-none focus:online-none w-full'
+                      ? "bg-[#c8c8c8] cursor-not-allowed w-full"
+                      : "bg-[#c8c8c8] outline-none focus:online-none w-full"
                   }
                   placeholderText="MM/YYYY"
-                  onKeyDown={e => e.preventDefault()} // Prevent typing
+                  onKeyDown={(e) => e.preventDefault()} // Prevent typing
                   disabled={editedExperiencePeriod.isCurrent}
                 />
               </div>
@@ -177,8 +195,8 @@ export const Experience = () => {
               <input
                 type="checkbox"
                 checked={editedExperiencePeriod.isCurrent ?? false}
-                onChange={e =>
-                  updateEditedPeriod({ isCurrent: e.target.checked })
+                onChange={(e) =>
+                  updateEditedPeriod({ isCurrent: e.target.checked, endDate: undefined })
                 }
               />
               <span className="text-sm">I currently work here</span>
@@ -190,7 +208,7 @@ export const Experience = () => {
                 label="Description"
                 value={editedExperiencePeriod.description}
                 rows={5}
-                onChange={newDescription =>
+                onChange={(newDescription) =>
                   updateEditedPeriod({ description: newDescription })
                 }
               />
@@ -204,8 +222,8 @@ export const Experience = () => {
           )}
         </div>
       )
-    )
-  }
+    );
+  };
 
   const periodRenderer = (expPeriod: ExperiencePeriod) => {
     return editedExperiencePeriod?.id === expPeriod.id ? (
@@ -218,9 +236,14 @@ export const Experience = () => {
         <span className="font-bold text-md mr-[7px]">{expPeriod.jobTitle}</span>
         <span className="text-sm opacity-60">| {expPeriod.employer} </span>
         <span className="text-sm opacity-60 ml-[5px]">
-          ({expPeriod.startDate.month} / {expPeriod.startDate.year} -{' '}
-          {expPeriod.endDate.month}{' '}
-          {expPeriod.endDate.year !== '' ? " / "+expPeriod.endDate.year : 'Current'})
+          {expPeriod.startDate.month && expPeriod.startDate.year
+            ? `${expPeriod.startDate.month}/${expPeriod.startDate.year}`
+            : ""}
+          {expPeriod.isCurrent
+            ? " - Current"
+            : expPeriod.endDate.month != "" && expPeriod.endDate.year != ""
+            ? ` - ${expPeriod.endDate.month}/${expPeriod.endDate.year}`
+            : ""}
         </span>
         <div className="flex items-center gap-1 ml-auto opacity-0  group-hover:opacity-100 transition-all">
           <svg
@@ -255,8 +278,8 @@ export const Experience = () => {
           </svg>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <section className="personal flex-1 flex flex-col pt-[70px] items-stretch">
@@ -266,9 +289,12 @@ export const Experience = () => {
         Your Experience
       </h2>
       <main className="flex-1 px-10 flex flex-col gap-2 overflow-y-scroll">
-      {experiencePeriods.map(periodRenderer)}        
-      {isEditedExperienceNew && renderEditPeriod()}
-        <Button onClick={openAddNewPeriod} disabled={!!editedExperiencePeriod || experiencePeriods.length >= 4}>
+        {experiencePeriods.map(periodRenderer)}
+        {isEditedExperienceNew && renderEditPeriod()}
+        <Button
+          onClick={openAddNewPeriod}
+          disabled={!!editedExperiencePeriod || experiencePeriods.length >= 4}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -287,5 +313,5 @@ export const Experience = () => {
         </Button>
       </main>
     </section>
-  )
-}
+  );
+};

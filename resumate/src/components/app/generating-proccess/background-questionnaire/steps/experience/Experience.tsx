@@ -268,7 +268,7 @@ export const Experience = () => {
       <main className="flex-1 px-10 flex flex-col gap-2 overflow-y-scroll">
       {experiencePeriods.map(periodRenderer)}        
       {isEditedExperienceNew && renderEditPeriod()}
-        <Button onClick={openAddNewPeriod} disabled={!!editedExperiencePeriod}>
+        <Button onClick={openAddNewPeriod} disabled={!!editedExperiencePeriod || experiencePeriods.length >= 4}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

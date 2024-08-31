@@ -295,7 +295,7 @@ export const Education = () => {
       <main className="flex-1 px-10 flex flex-col gap-2 overflow-y-scroll">
         {educationPeriods.map(periodRenderer)}
         {isEditedEducationNew && renderEditPeriod()}
-        <Button onClick={openAddNewPeriod} disabled={!!editedEducationPeriod}>
+        <Button onClick={openAddNewPeriod} disabled={!!editedEducationPeriod || educationPeriods.length >= 4}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

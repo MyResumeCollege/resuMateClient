@@ -49,7 +49,7 @@ export const FolderTemaplate = ({
 
   return (
     <div className="flex-1 bg-white border border-gray-300 overflow-auto relative">
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-h-full">
         <div className="left p-6 flex-1 flex flex-col mb-[auto]">
           <div className="my-3">
             {Title("Experience", {

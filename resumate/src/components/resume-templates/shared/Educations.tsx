@@ -2,6 +2,8 @@ import React from 'react';
 import { EditableText } from "../../shared/editable-text/EditableText";
 import { EducationPeriod } from "@/types/education-period";
 import { ResumeSections } from '@/types/resume';
+import { useRecoilValue } from 'recoil';
+import { educationState } from '@/components/app/generating-proccess/store/state';
 
 interface EducationsProps {
   educations: EducationPeriod[];
@@ -10,6 +12,8 @@ interface EducationsProps {
 }
 
 const Educations: React.FC<EducationsProps> = ({ educations, onRephraseSection, readonly }) => {
+  const educationPeriods = useRecoilValue(educationState);
+
   return (
     <>
       {educations.map((education, index) => {
@@ -31,7 +35,7 @@ const Educations: React.FC<EducationsProps> = ({ educations, onRephraseSection, 
               readonly={readonly}
               onChange={(newValue) => onRephraseSection("educations", newValue, index)}
             >
-              {description}
+              {educationPeriods[index].description !== "" ? description: ""}
             </EditableText>
           </div>
         );

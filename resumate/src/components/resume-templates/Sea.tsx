@@ -59,7 +59,8 @@ export const SeaTemplate = ({
   };
 
   return (
-    <div className="flex-1 flex bg-white border border-gray-300 overflow-auto relative text-xs">
+    <div className="flex-1 bg-white border border-gray-300 overflow-auto relative text-xs">
+       <div className="flex flex-1">
       <div className="bg-primary p-8 pr-0 text-white" style={{ maxWidth: 300 }}>
         <div className="text-3xl font-bold pr-6">{fullName}</div>
         <div className="text-sm font-semibold mb-[40px] text-gray-800">
@@ -122,6 +123,7 @@ export const SeaTemplate = ({
             readonly={readonly}
           />
         </div>
+      </div>
       </div>
     </div>
   );

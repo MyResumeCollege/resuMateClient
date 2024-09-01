@@ -1,11 +1,9 @@
 import { TemplateProps } from "@/types/template-props";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { EditableText } from "../shared/editable-text/EditableText";
 import { RegenerateButton } from "../shared/regenerate-button/RegenerateButton";
-import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import Educations from "./shared/Educations";
-import { EducationPeriod } from "@/types/education-period";
 import Experiences from "./shared/Experiences";
-import { ExperiencePeriod } from "@/types/experience-period";
 
 const List = (listedText: string) => {
   return (listedText || "").split("\n").map((item) => (
@@ -51,64 +49,66 @@ export const FolderTealTemaplate = ({
   };
 
   return (
-    <div className="flex-1 flex bg-white border border-gray-300 overflow-auto relative">
-      <div className="left p-6 flex-1 flex flex-col">
-        <div className="my-3">
-          {Title("Experience", {
-            onRegenerate: () => onRegenerateSection("experiences"),
-          })}
-          <Experiences
-            experiences={experiences}
-            onRephraseSection={onRephraseSection}
-            readonly={readonly}
-          />
-        </div>
-        <div className="my-3">
-          {Title("Education", {
-            onRegenerate: () => onRegenerateSection("educations"),
-          })}
-          <Educations
-            educations={educations}
-            onRephraseSection={onRephraseSection}
-            readonly={readonly}
-          />
-        </div>
-        <div className="my-3">
-          {Title("Skills")}
-          {List(skills)}
-        </div>
-      </div>
-      <div className="right p-6 bg-[#9b948e] w-[300px] text-white text-xs">
-        <div className="text-3xl font-bold pr-6">{fullName}</div>
-        <div className="text-sm font-semibold mb-[40px] opacity-60">
-          {jobTitle}
-        </div>
-        <div className="my-3">
-          {Title("Contact")}
-          <div className="flex items-center">
-            <FaPhoneAlt className="mr-2" />
-            <span>{phoneNumber}</span>
+    <div className="flex-1 bg-white border border-gray-300 overflow-auto relative">
+      <div className="flex flex-1">
+        <div className="left p-6 flex-1 flex flex-col">
+          <div className="my-3">
+            {Title("Experience", {
+              onRegenerate: () => onRegenerateSection("experiences"),
+            })}
+            <Experiences
+              experiences={experiences}
+              onRephraseSection={onRephraseSection}
+              readonly={readonly}
+            />
           </div>
-          <div className="flex items-center">
-            <FaEnvelope className="mr-2" />
-            <span>{email}</span>
+          <div className="my-3">
+            {Title("Education", {
+              onRegenerate: () => onRegenerateSection("educations"),
+            })}
+            <Educations
+              educations={educations}
+              onRephraseSection={onRephraseSection}
+              readonly={readonly}
+            />
+          </div>
+          <div className="my-3">
+            {Title("Skills")}
+            {List(skills)}
           </div>
         </div>
-        <div className="my-3">
-          {Title("About Me", {
-            onRegenerate: () => onRegenerateSection("bio"),
-          })}
-          <EditableText
-            className="text-xs"
-            readonly={readonly}
-            onChange={(newValue) => onRephraseSection("bio", newValue)}
-          >
-            {bio}
-          </EditableText>
-        </div>
-        <div className="my-3">
-          {Title("Languages")}
-          {List(languages)}
+        <div className="right p-6 bg-[#9b948e] w-[300px] text-white text-xs">
+          <div className="text-3xl font-bold pr-6">{fullName}</div>
+          <div className="text-sm font-semibold mb-[40px] opacity-60">
+            {jobTitle}
+          </div>
+          <div className="my-3">
+            {Title("Contact")}
+            <div className="flex items-center">
+              <FaPhoneAlt className="mr-2" />
+              <span>{phoneNumber}</span>
+            </div>
+            <div className="flex items-center">
+              <FaEnvelope className="mr-2" />
+              <span>{email}</span>
+            </div>
+          </div>
+          <div className="my-3">
+            {Title("About Me", {
+              onRegenerate: () => onRegenerateSection("bio"),
+            })}
+            <EditableText
+              className="text-xs"
+              readonly={readonly}
+              onChange={(newValue) => onRephraseSection("bio", newValue)}
+            >
+              {bio}
+            </EditableText>
+          </div>
+          <div className="my-3">
+            {Title("Languages")}
+            {List(languages)}
+          </div>
         </div>
       </div>
     </div>

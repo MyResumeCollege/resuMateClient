@@ -149,7 +149,6 @@ export const Education = () => {
                 }
               />
               <TextInput
-                autoFocus
                 label="Institution"
                 wrapperClassName="flex-1"
                 inputClassName="bg-[#C8C8C8] outline-none focus:online-none"

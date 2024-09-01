@@ -29,7 +29,6 @@ const validateExperiencePeriods = (
 
   experiencePeriods.forEach((experience) => {
     if (
-      !experience.description ||
       experience.description.length < 10 ||
       !experience.employer ||
       experience.employer.length < 1 ||
@@ -42,7 +41,7 @@ const validateExperiencePeriods = (
 
   if (hasError)
     errors.push(
-      "One or more experiences have invalid fields. Description must be at least 10 characters long, job title must be at least 2 characters long and employer must be at least 1 character long."
+      "One or more experiences have invalid fields. Job title must be at least 2 characters long and employer must be at least 1 character long."
     );
 
   return errors;
@@ -58,8 +57,6 @@ const validateEducationPeriods = (
     let hasError = false;
     educationPeriods.forEach((education) => {
       if (
-        !education.description ||
-        education.description.length < 10 ||
         !education.school ||
         education.school.length < 3 ||
         !education.degree ||
@@ -70,7 +67,7 @@ const validateEducationPeriods = (
     });
     if (hasError)
       errors.push(
-        "One or more education entries have invalid fields. Description must be at least 10 characters long, Institution and degree must be at least 3 characters long."
+        "One or more education entries have invalid fields. Institution and degree must be at least 3 characters long."
       );
   }
 

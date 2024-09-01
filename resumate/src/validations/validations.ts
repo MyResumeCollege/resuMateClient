@@ -29,7 +29,6 @@ const validateExperiencePeriods = (
 
   experiencePeriods.forEach((experience) => {
     if (
-      experience.description.length < 10 ||
       !experience.employer ||
       experience.employer.length < 1 ||
       !experience.jobTitle ||

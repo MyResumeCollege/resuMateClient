@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { EditableText } from "../../shared/editable-text/EditableText";
+import { experienceState } from "@/components/app/generating-proccess/store/state";
 import { ExperiencePeriod } from "@/types/experience-period";
 import { ResumeSections } from "@/types/resume";
+import React from "react";
 import { useRecoilValue } from "recoil";
-import { experienceState } from "@/components/app/generating-proccess/store/state";
+import { EditableText } from "../../shared/editable-text/EditableText";
 
 interface ExperiencesProps {
   experiences: ExperiencePeriod[];
@@ -48,7 +48,7 @@ const Experiences: React.FC<ExperiencesProps> = ({
                 onRephraseSection("experiences", newValue, index)
               }
             >
-              {experiencePeriods[index].description !== "" ? description: ""}
+              {experiencePeriods[index].description !== "" ? description : ""}
             </EditableText>
           </div>
         );

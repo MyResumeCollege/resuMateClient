@@ -37,4 +37,5 @@ npm run dev
 - **Import from LinkedIn**: Connect your LinkedIn account and import your profile data to quickly create a resume.
 - **Translate Your Resume**: Select the desired languages and translate your resume with a click.
 
+### Acknowledgements
 ResumeMate was developed by Amit Brickman, Hadar Zaguri, Omer Ben Arieh, Dor Sonego and Nofar Shapir.

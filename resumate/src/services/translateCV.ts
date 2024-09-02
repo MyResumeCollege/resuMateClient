@@ -9,7 +9,7 @@ export const translateCV = async (
   languageTo: string
 ) => {
   const translateIfNotEmpty = async (text: string, key: string) => {
-    if (text.trim().length > 0) {
+    if (text?.trim().length > 0) {
       const translatedText = await translate(text, { from: languageFrom, to: languageTo });
       return { [key]: translatedText };
     }
